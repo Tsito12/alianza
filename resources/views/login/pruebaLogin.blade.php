@@ -12,6 +12,7 @@
         <div class="logo-contenedor">
             <img src="{{ asset('img/sacimex.png') }}">
         </div>
+        <h2>Tu crédito de confianza.</h2>
     </header>
     <section>
     <form action="{{ route('login') }}" method="post" id="form-login" autocomplete="off" class="form">
@@ -37,6 +38,8 @@
                 </span>
             @enderror
             <span class="bar"></span>
+            <input id="checkbox" name="checkbox" type="checkbox">
+            <label for="checkbox" class="label-checkbox"><img id="ojo" src="{{ asset('img/view.png')}}"></label>
             <p id="alerta-correo" class="alerta"></p>
         </div>
         <div class="inp-contenedor">
@@ -58,7 +61,22 @@
             <a href="  {{ route('register') }}  " class="lnk">Regístrate</a>
         </div>
     </form>
+    <div id="bot-ayuda" class="bot-ayuda">
+        <img id="img-bot" src="{{asset('img/BotAyuda1.png')}}" alt="Bot de ayuda"/>
+    </div>
     </section>
 </body>
 <script src="{{asset('js/validarLogin.js')}}"></script>
+
+<script>
+    document.getElementById('bot-ayuda').addEventListener('click', () => {
+        document.getElementById('img-bot').src = "{{asset('img/BotAyuda2.png')}}";
+        document.getElementById('bot-ayuda').style.cursor = "auto";
+    });
+</script>
+<script>
+    document.getElementById('checkbox').addEventListener("change", function () {
+        document.getElementById('ojo').src = this.checked ? "{{ asset('img/hide.png')}}" : "{{ asset('img/view.png')}}";
+        document.getElementById('password').type = this.checked ? "text" : "password";
+    });
 </html>

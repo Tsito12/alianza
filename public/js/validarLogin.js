@@ -1,9 +1,7 @@
-const formLogin = document.getElementById('form-login');
-const emailInput = document.getElementById('email');
-const convenioInput = document.getElementById('convenio');
-const loginBoton = document.getElementById('boton-login');
-const alertaCorreo = document.getElementById('alerta-correo');
-const alertaConvenio = document.getElementById('alerta-convenio');
+const emailInput = document.getElementById('email'),
+      loginBoton = document.getElementById('boton-login'),
+      alertaCorreo = document.getElementById('alerta-correo'),
+      alertaConvenio = document.getElementById('alerta-convenio');
 
 const validarEmail = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,14 +14,14 @@ const validarEmail = () => {
 };
 
 const validarConvenio = () => {
-  if(convenioInput.value.trim() === '') return {valido : false, error: "Complete este espacio"};
+  if(document.getElementById('convenio').value.trim() === '') return {valido : false, error: "Complete este espacio"};
 
   return {valido : true, error : ''};
 };
 
 loginBoton.addEventListener('click', ev =>{
 
-  if(validarEmail().valido && validarConvenio().valido){
+  if(validarEmail().valido && validarConvenio.valido){
     alertaCorreo.textContent = '';
     alertaConvenio.textContent = '';
   }else {

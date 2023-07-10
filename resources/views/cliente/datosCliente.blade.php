@@ -29,7 +29,7 @@
                             {{Form::hidden('confirmaciontelefono', rand(1,1000000))}}
                             <p class="d-none" id="paso"></p>
                             <div class="inp-contenedor">
-                                <input type="text" id="nombre" name="nombre" value="{{ $cliente->nombre }}" class="inp sa" required>
+                                <input type="text" id="nombre" name="nombre" value="{{ $cliente->nombre }}" class="inp sa" tabindex="-1" required>
                                 <label for="nombre" class="etq">Nombre completo</label>
                                 @error('nombre')
                                     <span class="invalid-feedback" role="alert">
@@ -40,7 +40,7 @@
                                 <p id="alerta-nombre" class="alerta"></p>   
                             </div> 
                             <div class="inp-contenedor">
-                                <input type="number" id="telefono" value="{{ $cliente->telefono }}" name="telefono" class="inp sa" maxlength="10" required>
+                                <input type="number" id="telefono" value="{{ $cliente->telefono }}" name="telefono" class="inp sa" maxlength="10" tabindex="-1" required>
                                 <label for="telefono" class="etq">WhatsApp</label>
                                 @error('telefono')
                                     <span class="invalid-feedback" role="alert">
@@ -59,7 +59,7 @@
                         <!-- PASO 2 -->
                         <div class="paso">
                             <div class="inp-contenedor">
-                                <input type="number" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}" name="ingresoquincenal" class="inp sa" required>
+                                <input type="number" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}" name="ingresoquincenal" class="inp sa" tabindex="-1" required>
                                 <label for="ingresoquincenal" class="etq">Ingresos quincenales</label>
                                 @error('ingresoquincenal')
                                     <span class="invalid-feedback" role="alert">
@@ -71,7 +71,7 @@
                                 <p id="alerta-quincena" class="alerta"></p> 
                             </div>
                             <div class="inp-contenedor">
-                                <input type="number" id="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}" name="disponiblequincenal" class="inp sa" required>
+                                <input type="number" id="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}" name="disponiblequincenal" class="inp sa" tabindex="-1" required>
                                 <label for="disponiblequincenal" class="etq">¿Cuánto te queda disponible?</label>
                                 @error('disponiblequincenal')
                                     <span class="invalid-feedback" role="alert">
@@ -96,23 +96,23 @@
                                     <label for="pagominimo" class="pagos-etiqueta">Pago mínimo (quincenal)</label>
                                     <div class="pagos-ssc">
                                         <span class="pagos-span">$</span>
-                                        <input type="number" name="pagominimo" id="pagominimo" class="pagos-input" required readonly>
+                                        <input type="number" name="pagominimo" id="pagominimo" class="pagos-input" tabindex="-1" required readonly>
                                     </div>
                                 </div>
                                 <div class="pagos-subcontenedor">
                                     <label for="pagomaximo" class="pagos-etiqueta">Pago máximo (quincenal)</label>
                                     <div class="pagos-ssc">
                                         <span class="pagos-span">$</span>
-                                        <input type="number" name="pagomaximo" id="pagomaximo" class="pagos-input" required readonly>
+                                        <input type="number" name="pagomaximo" id="pagomaximo" class="pagos-input" tabindex="-1" required readonly>
                                     </div>
                                 </div>                           
                             </div>
                             <div class="range-contenedor">
                                 <label for="range" class="pagos-etiqueta">Pago quincenal deseado</label>
-                                <input type="range" name="range" id="range" step="50">
+                                <input type="range" name="range" id="range" step="50" tabindex="-1">
                                 <div class="pagos-ssc">
                                     <span class="pagos-span">$</span>
-                                    <input type="number" name="pagodeseado" id="pagodeseado" class="pagos-input" readonly required>
+                                    <input type="number" name="pagodeseado" id="pagodeseado" class="pagos-input" tabindex="-1" readonly required>
                                 </div>
                             </div>
                             <div>
@@ -121,7 +121,7 @@
                                     <div id="boton-menos" class="meses-boton gris">-</div>
                                     <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
                                     <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
-                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="3" required readonly>
+                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="3" tabindex="-1" required readonly>
                                     <div id="boton-mas" class="meses-boton">+</div>
                                     <span> meses</span>                                
                                 </div>
@@ -133,12 +133,12 @@
                                 <label for="creditomaximo" class="pagos-etiqueta">Crédito máximo</label>
                                 <div class="pagos-ssc">
                                     <span class="pagos-span">$</span>
-                                    <input type="number" name="creditomaximo" id="creditomaximo" class="pagos-input" required readonly>
+                                    <input type="number" name="creditomaximo" id="creditomaximo" class="pagos-input" tabindex="-1" required readonly>
                                 </div>
                                 <p id="meses-etq" class="pagos-etiqueta"></p>
                             </div>
                             <div class="inp-contenedor">
-                                <input type="number" id="prestamosolicitado" name="prestamosolicitado" class="inp sa" required>
+                                <input type="number" id="prestamosolicitado" name="prestamosolicitado" class="inp sa" tabindex="-1" required>
                                 <label for="prestamosolicitado" class="etq">Prestamo solicitado:</label>
                                 <span class="bar sa"></span>
                                 <span class="quincena-span">$</span>
@@ -147,7 +147,7 @@
                             <div class="meses-contenedor d-none">
                                 <span>Pagando el día</span>  
                                 <div id="boton-menos-dias" class="meses-boton dias gris">-</div>
-                                <input type="number" name="días-mes" id="días-mes" min="1" max="30" class="meses-input" value="1" required readonly>
+                                <input type="number" name="días-mes" id="días-mes" min="1" max="30" class="meses-input" value="1" tabindex="-1" required readonly>
                                 <div id="boton-mas-dias" class="meses-boton">+</div>
                                 <span>de cada mes.</span>                                
                             </div>                  
@@ -155,8 +155,8 @@
                     </div>
                 </form>        
             </div>
-            <button id="btn-desp-atr" class="button oculto">Volver</button>
-            <button id="btn-desp-sig" class="button der">Siguiente</button>
+            <button id="btn-desp-atr" class="button oculto" tabindex="-1">Volver</button>
+            <button id="btn-desp-sig" class="button der" tabindex="-1">Siguiente</button>
         </div>
     </section>
     

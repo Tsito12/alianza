@@ -15,8 +15,9 @@ header{
     display: flex;
     align-items: center;
     width: 100vw;
-    height: 100px;
+    height: 60px;
     padding-left: 35px;
+    border: 1px solid #CCC;
 }
 
 section{    
@@ -85,11 +86,11 @@ input[type="range"]:focus::-moz-range-thumb{
 
 img{
     object-fit: cover;
-    width:100%;
+    width: 100%;
 }
 
 .logo-contenedor{
-    width: 250px;
+    width: 150px;
 }
 
 .form-contenedor{
@@ -182,7 +183,7 @@ img{
     font-size: 1.25em;
     font-weight: 500;
     color: #F8FAFC;
-    z-index: 1;
+    z-index: 0;
     user-select: none;
     transition: color .2s;
 }
@@ -291,7 +292,6 @@ img{
 
     .form-contenedor{
         width: 100vw;
-        border: none;
     }
 
     .titulo{
@@ -305,10 +305,6 @@ img{
 
     .paso{
         width: 100vw;
-    }
-
-    .logo-contenedor{
-        width: 150px;
     }
 }
 

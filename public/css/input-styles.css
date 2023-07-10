@@ -21,6 +21,7 @@
     position: absolute;
     left: 5px;
     top: 10px;
+    z-index: 1;
     color: #757575; 
     font-size: 1.25em;
     font-weight: 500;
@@ -28,7 +29,6 @@
     transition: 0.2s ease all; 
     -moz-transition: 0.2s ease all; 
     -webkit-transition: 0.2s ease all;
-    z-index: 20;
 }
 
 .bar{
@@ -68,11 +68,15 @@
 }
 
 @media (max-width: 300px){
+    .inp-contenedor {
+        width: 240px;
+    }
+
     .inp{
-        width: 80%;
+        width: 240px;
     }
 
     .bar{
-        width: 80%;
+        width: 240px;
     }
 }
