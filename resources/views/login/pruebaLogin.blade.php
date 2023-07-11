@@ -79,4 +79,5 @@
         document.getElementById('ojo').src = this.checked ? "{{ asset('img/hide.png')}}" : "{{ asset('img/view.png')}}";
         document.getElementById('password').type = this.checked ? "text" : "password";
     });
+</script>
 </html>

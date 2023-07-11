@@ -59,8 +59,21 @@ class ClienteController extends Controller
         $creditoMaximo=$request->input('creditomaximo');
         if($creditoMaximo!=0||!is_null($creditoMaximo)||$creditoMaximo!="")
         {
+
+
+            $solicitud = Solicitude::where('idcliente',$request->input('idcliente'))->first();
+            if(is_null($solicitud))
+            {
+                $resultado = (new SolicitudeController)->store($request);
+                
+            } else
+            {
+                $resultado = (new SolicitudeController)->update($request,$solicitud);
+            }
+            return $resultado;
+
             $solicitud = new Solicitude();
-            $solicitud->pagominimo=500;
+            $solicitud->pagominimo=$request->input('pagominimo');
             $solicitud->pagomaximo=$request->input('pagomaximo');
             $solicitud->pagodeseado=$request->input('pagodeseado');
             $solicitud->plazo=$request->input('plazo');
@@ -76,8 +89,28 @@ class ClienteController extends Controller
         $ingresoquincenal = $request->input('ingresoquincenal');
         $iduser = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
         
+        if($request->input('idcliente')!==""&&!is_null($request->input('idcliente')))
+        {
+            $cliente = Cliente::find($request->input('idcliente'));
+            request()->validate(Cliente::$rules);
+            $cliente->update($request->all());
+        } else
+        {
+            request()->validate(Cliente::$rules);
+            $cliente = Cliente::create($request->all());
+            $usuario = User::find($iduser);
+            $usuario->name=$cliente->nombre;
+            $usuario->save();
+        }
         
-        $cliente = new Cliente();
+
+
+        $numeroConfirmacion = $request->input('confirmaciontelefono');
+        $telefono = "52".$cliente->telefono;
+
+        
+        //$cliente = new Cliente();
+        /*
         if($ingresoquincenal==""||is_null($ingresoquincenal)||$ingresoquincenal=0)
         {
             request()->validate(Cliente::$rules);
@@ -89,7 +122,7 @@ class ClienteController extends Controller
 
             $numeroConfirmacion = $request->input('confirmaciontelefono');
             $telefono = "52".$cliente->telefono;
-            $this->enviarMensajeConfirmacionNumero($telefono, $numeroConfirmacion);
+            //$this->enviarMensajeConfirmacionNumero($telefono, $numeroConfirmacion);
             return redirect()->route('confirmarTelefono');
         }else{
             $cliente = Cliente::where('user_id',$iduser)->first();
@@ -100,80 +133,16 @@ class ClienteController extends Controller
             $cliente->save();
             return redirect()->route('home');
         }
+        */
         
         
-        
+        return $cliente->id;
         return redirect()->route('home');
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente created successfully.');
     }
 
-    private function enviarMensajeConfirmacionNumero($telefono, $numeroConfirmacion)
-    {
-        // ***************     Area de mensajes **********************
-            //TOKEN QUE NOS DA FACEBOOK
-            $token = 'EAADTQdf3uewBAJl9FWezKtsBDlODZCaYMvCaeZAuaaV5ZAQ3tS4kMDXG0lxaZBIOlZCakW8P86lMrfGfIFWJToKtQtDxOfAZAjweSsjpJP0sgymdDNCewj2KMQulqKQPddLxBDyU6xbjQHAhAZBGPnypqIGasA9k5weuZAEgyjW8fZBe3lVHTKyf7F5L4bBKgPOibJ0b8ROQY4QZDZD';
-            //Telefono del cliente
-            
-            //$telefono = "52".$cliente->telefono;
-            //URL A DONDE SE MANDARA EL MENSAJE
-            $url = 'https://graph.facebook.com/v17.0/116652391481178/messages';
-
-            //CONFIGURACION DEL MENSAJE
-            $mensaje = ''
-                    . '{'
-                    . '"messaging_product": "whatsapp", '
-                    . '"to": "'.$telefono.'", '
-                    . '"type": "template", '
-                    . '"template": {'
-                    . '    "name": "prueba_auth",'
-                    . '    "language": { '
-                    . '     "code": "es_MX"'
-                    . '    },'
-                    . '"components": [
-                        {
-                            "type": "body",
-                            "parameters": [
-                            {
-                                "type": "text",
-                                "text": "'.$numeroConfirmacion.'"
-                            },
-                            ]
-                        },
-                        {
-                            "type": "button",
-                            "sub_type": "url",
-                            "index": "0",
-                            "parameters": [
-                            {
-                                "type": "text",
-                                "text": "'. $numeroConfirmacion .'"
-                            }
-                            ]
-                        }
-                        ]
-                    }
-                    }';
-
-
-
-            //DECLARAMOS LAS CABECERAS
-            $header = array("Authorization: Bearer " . $token, "Content-Type: application/json",);
-            //INICIAMOS EL CURL
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
-            $response = json_decode(curl_exec($curl), true);
-            //IMPRIMIMOS LA RESPUESTA 
-            print_r($response);
-            //OBTENEMOS EL CODIGO DE LA RESPUESTA
-            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            //CERRAMOS EL CURL
-            curl_close($curl);
-    }
+    
 
     /**
      * Display the specified resource.

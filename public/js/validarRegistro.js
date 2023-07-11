@@ -43,7 +43,7 @@ const validarConfirmacion = () => {
 
 document.getElementById('boton-registrar').addEventListener('click', ev =>{
 
-  if(validarEmail().valido && validarContrasena.valido && validarConfirmacion.valido){
+  if(validarEmail().valido && validarContrasena().valido && validarConfirmacion().valido){
     alertaEmail.textContent = '';
     alertaConvenio.textContent = '';
   }else {

@@ -58,10 +58,15 @@
                <a  class="btn btn-default btn-outline"  href="{{ ''.$solicitude->id.'?opcion=imprimir' }}"><i
                      class='fa fa-print'></i> IMPRIMIR</a>
             </button>
+
+            <button class="text-right">
+                <a  class="btn btn-default btn-outline"  href="{{ '/clientes/create' }}"><i
+                      class='fa fa-print'></i> Regresar</a>
+             </button>
      
             <button  class="float-right">
-               <a  class="btn btn-default btn-outline"  href="{{ '/home' }}"><i
-                     class='fa fa-print'></i> Terminar</a>
+               <a  class="btn btn-default btn-outline"  href="{{ route('contacto') }}"><i
+                     class='fa fa-print'></i> Aceptar y continuar</a>
             </button>
    </section>
    

@@ -241,6 +241,7 @@ class SolicitudeController extends Controller
 
         $solicitude->update($request->all());
 
+        return redirect()->route('solicitudes.show',$solicitude->id);
         return redirect()->route('home');
         return redirect()->route('solicitudes.index')
             ->with('success', 'Solicitude updated successfully');

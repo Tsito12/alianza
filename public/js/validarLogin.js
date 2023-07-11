@@ -21,7 +21,7 @@ const validarConvenio = () => {
 
 loginBoton.addEventListener('click', ev =>{
 
-  if(validarEmail().valido && validarConvenio.valido){
+  if(validarEmail().valido && validarConvenio().valido){
     alertaCorreo.textContent = '';
     alertaConvenio.textContent = '';
   }else {

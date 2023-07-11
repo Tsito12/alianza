@@ -191,7 +191,7 @@
 
 <script>
     checkbox.addEventListener("change", function () {
-        ojoImagen.src = this.checked ? "{{ asset('img/hide.png')}}" : "{{ asset('img/view.png')}}";
+        document.getElementById('ojo').src = this.checked ? "{{ asset('img/hide.png')}}" : "{{ asset('img/view.png')}}";
         contrasenaInput.type = this.checked ? "text" : "password";
         confirmacionInput.type = this.checked ? "text" : "password";
     });

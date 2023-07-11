@@ -150,7 +150,8 @@
                                 <input type="number" name="días-mes" id="días-mes" min="1" max="30" class="meses-input" value="1" tabindex="-1" required readonly>
                                 <div id="boton-mas-dias" class="meses-boton">+</div>
                                 <span>de cada mes.</span>                                
-                            </div>                  
+                            </div>    
+                            {{Form::hidden('estado','En proceso')}}              
                         </div>      
                     </div>
                 </form>        

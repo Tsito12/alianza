@@ -21,7 +21,7 @@ class TelefonoController extends Controller
         $cliente = Cliente::where('user_id',Auth::id())->first();
         $codigo = $cliente->confirmaciontelefono;
         $error = "El codigo de verificación es incorrecto";
-        if($request->input('verificacion')==$codigo) return redirect()->route('home');
+        if($request->input('verificacion')==$codigo) return 'En breve, un asesor se comunicara con usted';
         else return view('cliente.confirmarNumero')->with('error', $error);
         
     }

@@ -52,7 +52,7 @@ const desplazarSiguiente = () => {
                 cambiarDePaso(1);
                 cambiarTitulo();
                 if(pasoGuardado<1){
-                    document.getElementsByTagName("form")[1].submit();
+                    //document.getElementsByTagName("form")[1].submit();
                 }
             }else{
                 alertaTelefono.textContent = validarTelefono().error;
@@ -120,7 +120,7 @@ const desplazarSiguiente = () => {
         case 4 :
             if(validarPrestamoSolicitado().valido ){
                 console.log('si');
-                if(pasoGuardado>=1)
+                if(true)
                 {
                     document.getElementsByTagName("form")[1].submit();
                 }

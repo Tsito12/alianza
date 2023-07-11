@@ -7,6 +7,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelefonoController;
+use App\Http\Controllers\ContactoController;
 use App\Http\Middleware\Asesor;
 
 /*
@@ -42,5 +43,8 @@ Route::get('imprimirDatosSolicitud', [PdfController::class, 'imprimirDatosSolici
 
 Route::get('confirmarTelefono',[TelefonoController::class, 'index'])->name('confirmarTelefono');
 Route::post('confirmarTelefono',[TelefonoController::class, 'verificar'])->name('confirmarTelefono');
+
+Route::get('contacto',[ContactoController::class, 'index'])->name('contacto');
+Route::post('contacto',[ContactoController::class, 'metodo'])->name('contacto');
 
 
