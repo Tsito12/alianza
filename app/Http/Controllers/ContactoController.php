@@ -23,7 +23,7 @@ class ContactoController extends Controller
 
                 $cliente = Cliente::where('user_id',Auth::id())->first();
                 $telefono = '52'.$cliente->telefono;
-                $this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
+                //$this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
                 return redirect()->route('confirmarTelefono');
             break;
             case 2: 

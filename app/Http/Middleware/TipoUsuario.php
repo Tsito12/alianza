@@ -17,7 +17,7 @@ class TipoUsuario
     public function handle(Request $request, Closure $next)
     {
         if(auth()->user()->tipo=="Admin"){
-            return redirect()->route('clientes.index');
+            return redirect()->route('solicitudes.index');
         } else
         {
             return $next($request);

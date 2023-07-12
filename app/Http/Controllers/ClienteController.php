@@ -168,7 +168,7 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::find($id);
 
-        return view('cliente.edit', compact('cliente'));
+        return view('cliente.edit', compact('cliente'))->with('userid',$cliente->user_id);
     }
 
     /**

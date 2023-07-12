@@ -13,6 +13,11 @@
 </head>
 
 <body>
+    @php
+        use App\Models\User;
+        use Illuminate\Support\Facades\Auth;
+        use App\Models\Cliente;
+    @endphp
    <header>
       <div class="logo-contenedor">
           <img src="{{asset('img/sacimex.png')}}">
@@ -59,15 +64,51 @@
                      class='fa fa-print'></i> IMPRIMIR</a>
             </button>
 
+            @php
+                $user = User::find(Auth::id());
+            @endphp
+            @if ($user->tipo=="Admin")
+                <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
+                    {{ method_field('PATCH') }}
+                    @csrf
+                    <input name="estado" type="hidden"  value="Pre aprobado" />
+                    <button type="submit" class="btn btn-danger btn-sm"> {{ __('Pre Aprobar') }}</button>
+                </form>
+                <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
+                    {{ method_field('PATCH') }}
+                    @csrf
+                    <input name="estado" type="hidden"  value="Rechazada" />
+                    <button type="submit" class="btn btn-danger btn-sm"> {{ __('Rechazar') }}</button>
+                </form>
+            @endif
             <button class="text-right">
-                <a  class="btn btn-default btn-outline"  href="{{ '/clientes/create' }}"><i
-                      class='fa fa-print'></i> Regresar</a>
+                <a  class="btn btn-default btn-outline"  
+                @if ($user->tipo=="Admin")
+                    href="{{ route('home') }}"
+                @else
+                    href="{{ '/clientes/create' }}"
+                @endif
+                
+                ><i class='fa fa-print'></i> Regresar</a>
              </button>
      
-            <button  class="float-right">
-               <a  class="btn btn-default btn-outline"  href="{{ route('contacto') }}"><i
-                     class='fa fa-print'></i> Aceptar y continuar</a>
-            </button>
+            @php
+                    //$cliente = Cliente::where('user_id',Auth::id())->first();
+            @endphp 
+            @if ($cliente->convenio!=10&&$user->tipo=="Cliente")
+                <button  class="float-right">
+                    <a  class="btn btn-default btn-outline" 
+                    
+                    @if ($cliente->convenio==10)
+                        href="{{ '/clientes/create' }}"
+                    @else
+                        href="{{ route('contacto') }}"
+                    @endif
+                    
+                    ><iclass='fa fa-print'></iclass=> Aceptar y continuar</a>
+                </button>
+            @endif
+            
    </section>
    
 </body>

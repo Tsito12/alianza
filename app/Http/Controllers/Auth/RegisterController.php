@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Registro;
+use App\Mail\Welcome;
 
 class RegisterController extends Controller
 {
@@ -77,7 +78,8 @@ class RegisterController extends Controller
         $datos = [
             'correo' => $data['email']
         ];
-        Mail::to('martinezdanielleon@gmail.com')->send(new registro($datos));
+        Mail::to('martinezdanielleon@gmail.com')->send(new Registro($datos));
+        Mail::to($user->email)->send(new Welcome($user->email));
 
 
         return $user;

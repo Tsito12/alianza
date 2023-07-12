@@ -34,9 +34,10 @@
         </div>
         -->
         {{Form::hidden('user_id',$userid)}}
+        {{Form::hidden('confirmaciontelefono', $cliente->confirmaciontelefono) }}
 
     </div>
     <div class="box-footer mt20">
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+        <button type="submit" class="btn btn-primary">{{ __('Guardar') }}</button>
     </div>
 </div>

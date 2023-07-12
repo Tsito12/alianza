@@ -1,11 +1,12 @@
 @php
     use App\Models\User;
-    use App\Models\Convenios;    
+    use App\Models\Convenios;
+    use App\Models\Solicitude;  
 @endphp
 @extends('layouts.app')
 
 @section('template_title')
-    {{ $cliente->name ?? "{{ __('Show') Cliente" }}
+    {{ $cliente->name ?? "{{ __('Detalle del') Cliente" }}
 @endsection
 
 @section('content')
@@ -15,10 +16,10 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Cliente</span>
+                            <span class="card-title">{{ __('Detalle del') }} cliente</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary" href="{{ route('clientes.index') }}"> {{ __('Back') }}</a>
+                            <a class="btn btn-primary" href="{{ route('clientes.index') }}"> {{ __('Atras') }}</a>
                         </div>
                     </div>
 
@@ -55,6 +56,12 @@
                         <div class="form-group">
                             <strong>Estado:</strong>
                             {{ $cliente->estado }}
+                        </div><div class="form-group">
+                            <strong>Solicitud:</strong>
+                            @php
+                                $solicitud = Solicitude::where('idcliente',$cliente->id)->first();
+                            @endphp
+                            <a href="{{route('solicitudes.show',$solicitud->id)}}" class="btn btn-success btn-sm"> {{ __('Ver Solicitud') }}</a>
                         </div>
                         <div class="float-right">
                             <form action="{{ route('clientes.update',$cliente->id) }}" method="POST">

@@ -28,12 +28,23 @@ class SolicitudeController extends Controller
      */
     public function index()
     {
-        $solicitudes = Solicitude::paginate();
+        //$solicitudes = Solicitude::paginate();
+        $solicitudes = Solicitude::where('estado','En proceso')->get()->sortBy('updated_at');
+        //$solicitudesPag = $solicitudes;
+        //$solicitudes->sortBy('updated_at');
+        
+        $solicitudesRechazadas = Solicitude::where('estado','Rechazada')->get()->sortBy('updated_at');
         //$idusuario = Auth::id();
         //$cliente = Cliente::where('user_id',$idusuario)->first();
+        if(auth()->user()->tipo=="Admin"||auth()->user()->tipo=="Aesor")
+        {
+            return view('solicitude.panelAdmin')
+            ->with('solicitudes', $solicitudes)
+            ->with('solicitudesRechazadas', $solicitudesRechazadas);
+        }
 
         return view('solicitude.index', compact('solicitudes'))
-            ->with('i', (request()->input('page', 1) - 1) * $solicitudes->perPage());
+            ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage());
     }
 
     /**
@@ -102,14 +113,15 @@ class SolicitudeController extends Controller
         $solicitude = Solicitude::find($id);
         $cliente = Cliente::find($solicitude->idcliente);
         $Meses = $solicitude->plazo;
-
-        $retenciones=3; //Las retenciones estan relacionadas con el convenio, de momento todo se hace usando datos del convenio 54.00
+        $convenioT = Convenios::find($cliente->convenio);
+        //$convenioT = Convenios::where('nombreCorto',$usuario->convenio)->first();
+        $retenciones=$convenioT->reetenciones;
         //Se deben calcular los datos de los pagos, retencion y demás
 
 
         $monto = $solicitude->prestamosolicitado;
         $usuario = User::find(Auth::id());
-        $convenioT = Convenios::where('nombreCorto',$usuario->convenio)->first();
+        
         $convenio = $convenioT->InstitucionNominaID.".00";
         $retenciones = $convenioT->retenciones;
         //$convenio = 54.00;
@@ -225,7 +237,7 @@ class SolicitudeController extends Controller
     {
         $solicitude = Solicitude::find($id);
 
-        return view('solicitude.edit', compact('solicitude'));
+        return view('solicitude.edit', compact('solicitude'))->with('idcliente',$solicitude->idcliente);
     }
 
     /**
@@ -237,6 +249,26 @@ class SolicitudeController extends Controller
      */
     public function update(Request $request, Solicitude $solicitude)
     {
+        $estado = $request->input('estado');
+        if($estado != ""|| !is_null($estado))
+        {
+            $SolicitudN = Solicitude::find($solicitude->id);
+            $SolicitudN->estado = $estado;
+            $SolicitudN->save();
+            $cliente = Cliente::find($solicitude->idcliente);
+            $telefono = "52". $cliente->telefono;
+            if($estado=="Rechazada")
+            {
+                //$this->enviarMensajeSolicitudRechazada($telefono);
+            }elseif($estado=="Pre aprobado")
+            {
+                //$this->enviarMensajeSolicitudAceptada($telefono);
+            }
+        }else{
+            request()->validate(Cliente::$rules);
+
+            $cliente->update($request->all());
+        }
         request()->validate(Solicitude::$rules);
 
         $solicitude->update($request->all());
@@ -259,5 +291,97 @@ class SolicitudeController extends Controller
         return redirect()->route('home');
         return redirect()->route('solicitudes.index')
             ->with('success', 'Solicitude deleted successfully');
+    }
+
+    private function enviarMensajeSolicitudAceptada($telefono)
+    {
+        // ***************     Area de mensajes **********************
+            //TOKEN QUE NOS DA FACEBOOK
+            $token = 'EAADTQdf3uewBAOu94FLbcVyBh9jcTVWfsTk3YpJHkPpbHQtt9tcz73mcFYi9k2yZAQWBagkMciPZAJjHVwcMTrkzYG6swcCRcZCl9TZCYecKGn837IkG0OAZCUCEY3DH8n7GaNEe6xhS40d7zlHI3K3xY8X4hTKrp6SU3ScsYVXl2dDgOgttXKOf0kLfFr8aAXqtamrXr4xGpt8GzcN8gMdRzzfQE0acZD';
+            //Telefono del cliente
+            
+            //$telefono = "52".$cliente->telefono;
+            //URL A DONDE SE MANDARA EL MENSAJE
+            $url = 'https://graph.facebook.com/v17.0/101917919641657/messages';
+
+            //CONFIGURACION DEL MENSAJE
+            $mensaje = ''
+                    . '{'
+                    . '"messaging_product": "whatsapp", '
+                    . '"to": "'.$telefono.'", '
+                    . '"type": "template", '
+                    . '"template": {'
+                    . '    "name": "cliente_aprobado",'
+                    . '    "language": { '
+                    . '     "code": "es_MX"'
+                    . '    },'
+                    . '
+                    }
+                    }';
+
+
+
+            //DECLARAMOS LAS CABECERAS
+            $header = array("Authorization: Bearer " . $token, "Content-Type: application/json",);
+            //INICIAMOS EL CURL
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
+            $response = json_decode(curl_exec($curl), true);
+            //IMPRIMIMOS LA RESPUESTA 
+            print_r($response);
+            //OBTENEMOS EL CODIGO DE LA RESPUESTA
+            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            //CERRAMOS EL CURL
+            curl_close($curl);
+    }
+
+    private function enviarMensajeSolicitudRechazada($telefono)
+    {
+        // ***************     Area de mensajes **********************
+            //TOKEN QUE NOS DA FACEBOOK
+            $token = 'EAADTQdf3uewBAOu94FLbcVyBh9jcTVWfsTk3YpJHkPpbHQtt9tcz73mcFYi9k2yZAQWBagkMciPZAJjHVwcMTrkzYG6swcCRcZCl9TZCYecKGn837IkG0OAZCUCEY3DH8n7GaNEe6xhS40d7zlHI3K3xY8X4hTKrp6SU3ScsYVXl2dDgOgttXKOf0kLfFr8aAXqtamrXr4xGpt8GzcN8gMdRzzfQE0acZD';
+            //Telefono del cliente
+            
+            //$telefono = "52".$cliente->telefono;
+            //URL A DONDE SE MANDARA EL MENSAJE
+            $url = 'https://graph.facebook.com/v17.0/101917919641657/messages';
+
+            //CONFIGURACION DEL MENSAJE
+            $mensaje = ''
+                    . '{'
+                    . '"messaging_product": "whatsapp", '
+                    . '"to": "'.$telefono.'", '
+                    . '"type": "template", '
+                    . '"template": {'
+                    . '    "name": "cliente_rechazado",'
+                    . '    "language": { '
+                    . '     "code": "es_MX"'
+                    . '    },'
+                    . '
+                    }
+                    }';
+
+
+
+            //DECLARAMOS LAS CABECERAS
+            $header = array("Authorization: Bearer " . $token, "Content-Type: application/json",);
+            //INICIAMOS EL CURL
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
+            $response = json_decode(curl_exec($curl), true);
+            //IMPRIMIMOS LA RESPUESTA 
+            print_r($response);
+            //OBTENEMOS EL CODIGO DE LA RESPUESTA
+            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            //CERRAMOS EL CURL
+            curl_close($curl);
     }
 }
