@@ -37,7 +37,7 @@ class ContactoController extends Controller
     {
         // ***************     Area de mensajes **********************
             //TOKEN QUE NOS DA FACEBOOK
-            $token = 'EAADTQdf3uewBAOu94FLbcVyBh9jcTVWfsTk3YpJHkPpbHQtt9tcz73mcFYi9k2yZAQWBagkMciPZAJjHVwcMTrkzYG6swcCRcZCl9TZCYecKGn837IkG0OAZCUCEY3DH8n7GaNEe6xhS40d7zlHI3K3xY8X4hTKrp6SU3ScsYVXl2dDgOgttXKOf0kLfFr8aAXqtamrXr4xGpt8GzcN8gMdRzzfQE0acZD';
+            $token = 'EAADTQdf3uewBAFPzoi5in5hwB0lrGPDvmdK7i2j4kYbU4EonEZCq74KnMMVYnCIt1iDvONklkU6hFOHvtDW1782IPIZAdiLSeFZAJ6r8aYAzQtP6mNU9fdfvQZBZC2CgcZBMEGOSnDVHairOOmPeezA8FhJKXNV7L0tbZBlBoAtbbXuRdlhBxTFVYD2XcyifgOqeNdg0jfYCQZDZD';
             //Telefono del cliente
             
             //$telefono = "52".$cliente->telefono;

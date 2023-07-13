@@ -27,12 +27,12 @@ class Solicitude extends Model
 {
     
     static $rules = [
-		'pagominimo' => 'required|integer',
-		'pagomaximo' => 'required|integer|gt:pagominimo',
-		'pagodeseado' => 'required|integer|gte:pagominimo|lte:pagomaximo',
-		'plazo' => 'required|integer|digits_between:1,2',
-		'creditomaximo' => 'required|integer',
-		'prestamosolicitado' => 'required|integer|lte:creditomaximo',
+		'pagominimo' => 'required|float',
+		'pagomaximo' => 'required|float|gt:pagominimo',
+		'pagodeseado' => 'required|float|gte:pagominimo|lte:pagomaximo',
+		'plazo' => 'required|integfloater|digits_between:1,2',
+		'creditomaximo' => 'required|float',
+		'prestamosolicitado' => 'required|float|lte:creditomaximo',
 		//'idcliente' => 'required',
     ];
 

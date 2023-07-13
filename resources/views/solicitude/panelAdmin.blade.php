@@ -48,6 +48,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $i=0;
+                                    @endphp
                                     @foreach ($solicitudes as $solicitude)
                                         @php
                                             $cliente = Cliente::find($solicitude->idcliente);
