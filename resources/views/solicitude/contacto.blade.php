@@ -12,19 +12,19 @@
   <section>
     <div class="contenedor-principal">
       <div class="titulo-contenedor">
-        <h3>¿Cómo prefieres que nuestro asesor se comunique contigo?</h3>
+        <h3>¿Cómo te gustaría que te contactáramos?</h3>
       </div>
       <form action="{{route('contacto')}}" method="POST">
         @csrf
         <div class="inps">
           <label class="radio-button">
-            <input type='radio' name='radio' value='1' checked/> WhatsApp<span></span>
+            <input type='checkbox' name='whatsapp'/> WhatsApp<span></span>
           </label>
           <label class="radio-button">
-            <input type='radio' name='radio' value='2'/> Llamada telefónica<span></span>
+            <input type='checkbox' name='llamada'/> Llamada telefónica<span></span>
           </label>
           <label class="radio-button">
-            <input type='radio' name='radio' value='3'/> SMS<span></span>
+            <input type='checkbox' name='sms'/> SMS<span></span>
           </label>
         </div>
         <div class="btn-contenedor">

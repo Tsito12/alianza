@@ -40,7 +40,7 @@
                                 <p id="alerta-nombre" class="alerta"></p>   
                             </div> 
                             <div class="inp-contenedor">
-                                <input type="number" id="telefono" value="{{ $cliente->telefono }}" name="telefono" class="inp sa" maxlength="10" tabindex="-1" required>
+                                <input type="number" id="telefono" value="{{ $cliente->telefono }}" name="telefono" class="inp sa" maxlength="12" tabindex="-1" oninput="separarNumeros()" required>
                                 <label for="telefono" class="etq">WhatsApp</label>
                                 @error('telefono')
                                     <span class="invalid-feedback" role="alert">
@@ -118,10 +118,10 @@
                             <div>
                                 <label for="plazo" class="pagos-etiqueta">¿A cuántos meses?</label>
                                 <div class="meses-contenedor">
-                                    <div id="boton-menos" class="meses-boton gris">-</div>
+                                    <div id="boton-menos" class="meses-boton">-</div>
                                     <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
                                     <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
-                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="3" tabindex="-1" required readonly>
+                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="12" tabindex="-1" required readonly>
                                     <div id="boton-mas" class="meses-boton">+</div>
                                     <span> meses</span>                                
                                 </div>
@@ -165,4 +165,21 @@
     <script src="{{asset('js/desplazarForm.js')}}"></script>
     <script src="{{asset('js/calcularMontos.js')}}"></script>
     <script src="{{asset('js/calcularTotal.js')}}"></script>
+    <script>
+        const separarNumeros = () => {
+            let input = document.getElementById('telefono');
+            let numero = input.value.replace(/\D/g, '');
+            let formateado = '';
+      
+            for (let i = 0; i < numero.length; i++) {
+                if (i === 3 || i === 6) {
+                    formateado += ' ';
+                }
+        
+                formateado += numero.charAt(i);
+            }
+      
+            input.value = formateado;
+        }
+    </script>
     @endsection

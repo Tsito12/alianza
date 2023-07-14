@@ -21,6 +21,7 @@
    <header>
       <div class="logo-contenedor">
           <img src="{{asset('img/sacimex.png')}}">
+          <h2 class="titulo-saci">Tu crédito de confianza.</h2>
       </div>
    </header>
    
@@ -79,25 +80,27 @@
                     @csrf
                     <input name="estado" type="hidden"  value="Rechazada" />
                     <button type="submit" class="btn btn-danger btn-sm"> {{ __('Rechazar') }}</button>
-                </form>
+                </form>            
             @endif
-            <button class="text-right">
-                <a  class="btn btn-default btn-outline"  
+            <div class="boton-contenedor">
+                <div class="tooltip-left">
+                    <span class="question-mark"><img src="./img/QuestionMark.png"/></span>
+                    <span class="tooltip-text-left">Si lo prefieres, puedes guardar tu solicitud sin enviarla para poder editarla en el futuro.</span>
+                </div>
+                <a class="boton guardar"  
                 @if ($user->tipo=="Admin")
                     href="{{ route('home') }}"
                 @else
                     href="{{ '/clientes/create' }}"
                 @endif
                 
-                ><i class='fa fa-print'></i> Regresar</a>
-             </button>
+                >Terminar y guardar</a>
      
             @php
                     //$cliente = Cliente::where('user_id',Auth::id())->first();
             @endphp 
             @if ($cliente->convenio!=10&&$user->tipo=="Cliente")
-                <button  class="float-right">
-                    <a  class="btn btn-default btn-outline" 
+                    <a class="boton" 
                     
                     @if ($cliente->convenio==10)
                         href="{{ '/clientes/create' }}"
@@ -105,10 +108,9 @@
                         href="{{ route('contacto') }}"
                     @endif
                     
-                    ><iclass='fa fa-print'></iclass=> Aceptar y continuar</a>
-                </button>
+                    >Enviar</a>
             @endif
-            
+            </div>
    </section>
    
 </body>
