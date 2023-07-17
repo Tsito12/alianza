@@ -43,7 +43,7 @@
             <p id="alerta-correo" class="alerta"></p>
         </div>
         <div class="inp-contenedor">
-            <input type="text" id="convenio" name="convenio" class="inp" oninput="this.value = this.value.toUpperCase()" required>
+            <input type="text" id="convenio" name="convenio" class="inp" oninput="formatInput(this)" required>
             <label for="convenio" class="etq">Convenio</label>
             @error('convenio')
                 <span class="invalid-feedback" role="alert">
@@ -80,4 +80,21 @@
         document.getElementById('password').type = this.checked ? "text" : "password";
     });
 </script>
+<script>
+     const formatInput = input => {
+      
+      if(input.value.length <= 3) input.value = input.value.replace(/\D/g, '');
+      
+      
+      if (input.value.length === 3) {
+        input.value = input.value.slice(0, 3) + '-' + input.value.slice(3);
+      };
+
+      if (input.value === '00') {
+        input.value = input.value.slice(0, 2) + '-' + input.value.slice(3);
+      };
+
+      input.value = input.value.toUpperCase();
+    };
+  </script>
 </html>

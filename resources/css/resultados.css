@@ -68,6 +68,16 @@ p {
     white-space: nowrap;
 }
 
+button {
+    border: none;
+}
+
+button a {
+    padding: 18px 9px;
+    color: #FFF;
+    background-color: #00632F;
+}
+
 .logo-contenedor {
     width: 150px;
 }
