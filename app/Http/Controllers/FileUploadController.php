@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Documentos;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Storage;
 
 
 //prueba para subir archivos
@@ -27,6 +28,7 @@ class FileUploadController extends Controller
             $documentos->rfc=null;
             $documentos->comprobanteDomicilio=null;
             $documentos->fotografia=null;
+            $documentos->ingresos=null;
             $documentos->idcliente=null;
         }
         return view('file-upload')->with('documentos',$documentos);
@@ -37,14 +39,12 @@ class FileUploadController extends Controller
          
         $validatedData = $request->validate([
          'ine' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
-         'curp' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
-         'actanacimiento' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
-         'rfc' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
          'comprobantedomicilio' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
          'fotografia' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
+         'ingresos' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
  
         ]);
-
+        
         //Se obtiene el id del cliente para la ruta de sus archivos personales
         $usuario = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
         $cliente = Cliente::where('user_id',$usuario)->first();
@@ -59,37 +59,9 @@ class FileUploadController extends Controller
         } else
         {
             $nameIne = $request->file('ine')->getClientOriginalName();
-            $pathIne = $request->file('ine')->store('public/files/'.$idcliente);
+            $pathIne = $request->file('ine')->store('/files/'.$idcliente, 'public');
+            Storage::disk('ftp')->put('files/'.$idcliente.'/', $request->file('ine'));
             $ine = $pathIne;
-        }
-        if(is_null($request->file('curp')))
-        {
-            $curp=$request->input('hiddencurp');
-        } else
-        {
-            $nameCurp = $request->file('curp')->getClientOriginalName();
-            $pathCurp = $request->file('curp')->store('public/files/'.$idcliente);
-            $curp = $pathCurp;
-        }
-
-        if(is_null($request->file('actanacimiento')))
-        {
-            $actaNacimiento=$request->input('hiddenacta');
-        } else
-        {
-            $nameActa = $request->file('actanacimiento')->getClientOriginalName();
-            $pathActa = $request->file('actanacimiento')->store('public/files/'.$idcliente);
-            $actaNacimiento = $pathActa;
-        }
-
-        if(is_null($request->file('rfc')))
-        {
-            $rfc=$request->input('hiddenrfc');
-        } else
-        {
-            $nameRfc = $request->file('rfc')->getClientOriginalName();
-            $pathRfc = $request->file('rfc')->store('public/files/'.$idcliente);
-            $rfc = $pathRfc;
         }
         if(is_null($request->file('comprobantedomicilio')))
         {
@@ -97,7 +69,7 @@ class FileUploadController extends Controller
         } else
         {
             $nameComprobante = $request->file('comprobantedomicilio')->getClientOriginalName();
-            $pathComprobante = $request->file('comprobantedomicilio')->store('public/files/'.$idcliente);
+            $pathComprobante = $request->file('comprobantedomicilio')->store('/files/'.$idcliente);
             $comprobanteDom = $pathComprobante;
         }
 
@@ -107,8 +79,17 @@ class FileUploadController extends Controller
         } else
         {
             $nameFoto = $request->file('fotografia')->getClientOriginalName();
-            $pathFoto = $request->file('fotografia')->store('public/files/'.$idcliente);
+            $pathFoto = $request->file('fotografia')->store('/files/'.$idcliente);
             $foto = $pathFoto;
+        }
+        if(is_null($request->file('ingresos')))
+        {
+            $ingresos=$request->input('hiddeningresos');
+        } else
+        {
+            $nameIngresos = $request->file('ingresos')->getClientOriginalName();
+            $pathIngresos = $request->file('ingresos')->store('/files/'.$idcliente);
+            $ingresos = $pathIngresos;
         }
 
         
@@ -120,22 +101,18 @@ class FileUploadController extends Controller
         {
             $documentos = new Documentos();
             $documentos->ine=$ine;
-            $documentos->curp=$curp;
-            $documentos->actaNacimiento=$actaNacimiento;
-            $documentos->rfc=$rfc;
             $documentos->comprobanteDomicilio=$comprobanteDom;
             $documentos->fotografia=$foto;
+            $documentos->ingresos=$ingresos;
             $documentos->idcliente=$idcliente;
             $documentos->save();
         }else
         {
             $documentos = Documentos::find($Buscardocumentos->id);
             $documentos->ine=$ine;
-            $documentos->curp=$curp;
-            $documentos->actaNacimiento=$actaNacimiento;
-            $documentos->rfc=$rfc;
             $documentos->comprobanteDomicilio=$comprobanteDom;
             $documentos->fotografia=$foto;
+            $documentos->ingresos=$ingresos;
             $documentos->idcliente=$idcliente;
             $documentos->save();
         }

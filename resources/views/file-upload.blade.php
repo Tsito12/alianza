@@ -1,169 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Laravel 8 File Upload Example</title>
- 
-  <meta name="csrf-token" content="{{ csrf_token() }}">
- 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
- 
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{asset('css/subirArchivos.css')}}" rel="stylesheet">
+    <title>Subir archivos</title>
 </head>
 <body>
- 
-<div class="container mt-4">
- 
-  <h2 class="text-center">Ejemplo de subir archivos</h2>
- 
-      <form method="POST" enctype="multipart/form-data" id="upload-file" action="{{ url('store') }}" >
-    @csrf
-          <div class="row">
- 
-            
-
-            
-             
-              <div class="col-md-12">
-
+    <header>
+        <div class="logo-contenedor">
+            <img src="{{asset('img/logo.png')}}">
+        </div>
+        <h2>Tu crédito de confianza.</h2>
+    </header>
+    <section>        
+        <form method="post" enctype="multipart/form-data" action="{{ url('store') }}" >
+          @csrf
+            <div class="tabla">
+                <div class="nombre">INE</div>
+                <div class="input-contenedor">
+                    <input type="file" name="ine" id="ine" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
+                    <input type="text" name="hiddenine" value="{{$documentos->ine}}" style="display: none;">
+                    <label for="ine" class="label-file">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
+                        </svg>
+                        <span>Subir archivo.</span>
+                    </label>
+                    @error('file')
+                      <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                      <div class="alerta">Error</div>
+                    @enderror
+                    <div class="contenedor-nombre"><span id="nombre-ine"></span></div>    
+                </div>
+                @if(!is_null($documentos->ine))
+                  @php
+                      $ruta = "storage/".str_replace("public/","",$documentos->ine);
+                  @endphp
+                  <div class="estado"><div class="centrar-estado">
+                    <h6>Ya se subió un documento</h6>
+                    <a href="{{asset($ruta)}}" class="ver">Ver</a>
+                  </div></div>
+                @endif
                 
-                  <div class="row form-group">
-                    <div class="col">
-                      <label for="ine">INE</label>
-                      <input type="file" name="ine" placeholder="Choose file" id="ine" 
-                       accept="image/png, image/jpeg, application/pdf,application/msword" >
-                       <input type="text" class="d-none" name="hiddenine" value="{{$documentos->ine}}">
-                        @error('file')
-                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-                      
-                        @if(!is_null($documentos->ine))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->ine)}}">Ver</a>
+                <div class="nombre">Comprobante de ingresos</div>
+                <div class="input-contenedor">
+                    <input type="file" name="ingresos" id="ingresos" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
+                    <input type="text" name="hiddeningresos" value="{{$documentos->ingresos}}" style="display: none;">
+                    <label for="ingresos" class="label-file">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
+                        </svg>
+                        <span>Subir archivo.</span>
+                    </label>
+                    <div class="contenedor-nombre"><span id="nombre-ingresos"></span></div>   
+                    
+                </div>
+                <div class="estado">
+                  @if(!is_null($documentos->ingresos))
+                      @php
+                          $ruta = "storage/".str_replace("public/","",$documentos->ingresos);
+                      @endphp
+                      <div class="estado"><div class="centrar-estado">
+                        <h6>Ya se subió un documento</h6>
+                        <a href="{{asset($ruta)}}" class="ver">Ver</a>
+                      </div></div>
+                    @endif 
+                </div>
+                <div class="nombre">Comprobante de domicilio</div>
+                <div class="input-contenedor">
+                    <input type="file" name="comprobantedomicilio" id="comprobantedomicilio" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
+                    <input type="text" name="hiddencomprobante" value="{{$documentos->comprobanteDomicilio}}" style="display: none;">
+                    <label for="comprobantedomicilio" class="label-file">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
+                        </svg>
+                        <span>Subir archivo.</span>
+                    </label>
+                    <div class="contenedor-nombre"><span id="nombre-domicilio"></span></div>   
                             
-                          </div>
-                        @endif
-                  </div>
-
-                  <div class="row form-group">
-                    <div class="col">
-                      <label for="actanacimiento">Acta de nacimiento</label>
-                      <input type="file" name="actanacimiento" placeholder="Choose file" id="actanacimiento" 
-                      accept="image/png, image/jpeg, application/pdf,application/msword" >
-                      <input type="text" class="d-none" name="hiddenacta" value="{{$documentos->actaNacimiento}}">
-                        @error('file')
-                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                        @if(!is_null($documentos->actaNacimiento))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->actaNacimiento)}}">Ver</a>
-                            
-                          </div>
-                        @endif
-                      
-                  </div>
-
-                  <div class="row form-group">
-                      <div class="col">
-                        <label for="curp">CURP</label>
-                        <input type="file" name="curp" placeholder="Choose file" id="curp" 
-                          accept="image/png, image/jpeg, application/pdf,application/msword">
-                          <input type="text" class="d-none" name="hiddencurp" value="{{$documentos->curp}}">
-                          @error('file')
-                          <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                          @enderror
-                      </div>
-
-                        @if(!is_null($documentos->curp))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->curp)}}">Ver</a>
-                            
-                          </div>
-                        @endif
-                      
-                  </div>
-
-                  <div class="row form-group">
-                    <div class="col">
-                      <label for="rfc">RFC</label>
-                      <input type="file" name="rfc" placeholder="Choose file" id="rfc" 
-                          accept="image/png, image/jpeg, application/pdf,application/msword" >
-                          <input type="text" class="d-none" name="hiddenrfc" value="{{$documentos->rfc}}">
-                        @error('file')
-                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                        @if(!is_null($documentos->rfc))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->rfc)}}">Ver</a>
-                            
-                          </div>
-                        @endif
-                      
-                  </div>
-
-                  <div class="row form-group">
-                    <div class="col">
-                      <label for="comprobantedomicilio">Comprobante de domicilio</label>
-                      <input type="file" name="comprobantedomicilio" placeholder="Choose file" id="comprobantedomicilio" 
-                        accept="image/png, image/jpeg, application/pdf,application/msword"  >
-                        <input type="text" class="d-none" name="hiddencomprobante" value="{{$documentos->comprobanteDomicilio}}">
-                        @error('file')
-                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                        @if(!is_null($documentos->comprobanteDomicilio))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->comprobanteDomicilio)}}">Ver</a>
-                            
-                          </div>
-                        @endif
-
-                      
-                  </div>
-
-                  <div class="row form-group">
-                    <div class="col">
-                      <label for="fotografia">Fotografía</label>
-                      <input type="file" name="fotografia" placeholder="Choose file" id="fotografia" 
-                        accept="image/png, image/jpeg, application/pdf,application/msword" >
-                        <input type="text" class="d-none" name="hiddenfoto" value="{{$documentos->fotografia}}">
-                        @error('file')
-                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                        @if(!is_null($documentos->fotografia))
-                          <div class="col">
-                            <h6>Ya se subió un documento</h6>
-                            <a href="{{'/storage/'.str_replace("public/","",$documentos->fotografia)}}">Ver</a>
-                            
-                          </div>
-                        @endif
-
-                      
-                  </div>
-
-
-
-              </div>
-                 
-              <div class="col-md-12">
-                  <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-              </div>
-          </div>     
-      </form>
-</div>
- 
-</div>  
+                </div>
+                <div class="estado">
+                  @if(!is_null($documentos->comprobanteDomicilio))
+                      @php
+                          $ruta = "storage/".str_replace("public/","",$documentos->comprobanteDomicilio);
+                      @endphp
+                      <div class="estado"><div class="centrar-estado">
+                        <h6>Ya se subió un documento</h6>
+                        <a href="{{asset($ruta)}}" class="ver">Ver</a>
+                      </div></div>
+                    @endif  
+                </div>
+                <div class="nombre">Fotografía</div>
+                <div class="input-contenedor">
+                    <input type="file" name="fotografia" id="fotografia" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
+                    <input type="text" name="hiddenfotografia" value="{{$documentos->fotografia}}" style="display: none;">
+                    <label for="fotografia" class="label-file">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
+                        </svg>
+                        <span>Subir archivo.</span>
+                    </label>
+                    <div class="contenedor-nombre"><span id="nombre-foto"></span></div>    
+                          
+                </div>
+                <div class="estado">
+                  @if(!is_null($documentos->fotografia))
+                      @php
+                          $ruta = "storage/".str_replace("public/","",$documentos->fotografia);
+                      @endphp
+                      <div class="estado"><div class="centrar-estado">
+                        <h6>Ya se subió un documento</h6>
+                        <a href="{{asset($ruta)}}" class="ver">Ver</a>
+                      </div></div>
+                    @endif  
+                </div>
+            </div>
+            <button type="submit" class="btn">Enviar</button>
+        </form>
+    </section>
 </body>
+<script>
+document.getElementById('ine').addEventListener('change', ev => {
+    const archivo = ev.target.files[0];
+    const nombreArchivo = archivo ? archivo.name : '';
+    document.getElementById('nombre-ine').textContent = nombreArchivo;
+});
+
+document.getElementById('ingresos').addEventListener('change', ev => {
+    const archivo = ev.target.files[0];
+    const nombreArchivo = archivo ? archivo.name : '';
+    document.getElementById('nombre-ingresos').textContent = nombreArchivo;
+});
+
+document.getElementById('comprobantedomicilio').addEventListener('change', ev => {
+    const archivo = ev.target.files[0];
+    const nombreArchivo = archivo ? archivo.name : '';
+    document.getElementById('nombre-domicilio').textContent = nombreArchivo;
+});
+
+document.getElementById('fotografia').addEventListener('change', ev => {
+    const archivo = ev.target.files[0];
+    const nombreArchivo = archivo ? archivo.name : '';
+    document.getElementById('nombre-fo  to').textContent = nombreArchivo;
+});
+</script>
 </html>

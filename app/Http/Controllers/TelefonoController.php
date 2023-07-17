@@ -22,13 +22,14 @@ class TelefonoController extends Controller
         //$solicitud = Solicitude::where('idcliente',$cliente->id)->first();
         $codigo = $cliente->confirmaciontelefono;
         $telefono = "52".$cliente->telefono;
-        $telefonoAsesor = "52"."9513566175";
+        $telefonoAsesor = "52"."9513566175";        // de mientras mi numero
+        //$telefonoAsesor = "52"."9511173957";      -> telefono de la contadora Elizabeth
         $error = "El codigo de verificación es incorrecto";
         if($request->input('verificacion')==$codigo) 
         {
             if($cliente->convenio!=10)
             {
-                //$this->enviarMensajeSolicitudEnviada($telefonoAsesor, $$cliente->id);
+                //$this->enviarMensajeSolicitudEnviada($telefonoAsesor, $cliente->id);
                 return 'En breve, un asesor se comunicara con usted';
             } else
             {

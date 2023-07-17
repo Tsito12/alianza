@@ -1,10 +1,13 @@
 const inputDiasMes = document.getElementById('días-mes');
 const botonMasDias = document.getElementById('boton-mas-dias');
 const botonMenosDias = document.getElementById('boton-menos-dias');
-
-const tasa = 0.022;
+const montoMinimo = document.getElementById("montoMinimo").innerText;
+let tasaReal = parseFloat(document.getElementById("tasa").innerText);
+tasaReal = (tasaReal/12)/100;
+//console.log(tasaReal);
+const tasa = tasaReal;
 const iva = 1.16;
-const maximoPermitido = 150000;
+const maximoPermitido = parseFloat(document.getElementById("montoMaximo").innerText);
 const tasaIva = tasa * iva;
 
 const calcularCreditoMaximo = () => {
@@ -13,7 +16,7 @@ const calcularCreditoMaximo = () => {
     const pagoMensual = pagoQuincenal * 2;
     const potencia = Math.pow(1 + tasaIva, meses);
     const va = parseInt(pagoMensual * ((potencia - 1) / (tasaIva * potencia)));
-    if(va<3000)
+    if(va<parseFloat(montoMinimo))
     {
         meses +=1;
         inputMeses.value=meses;

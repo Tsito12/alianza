@@ -33,14 +33,16 @@ class SolicitudeController extends Controller
         //$solicitudesPag = $solicitudes;
         //$solicitudes->sortBy('updated_at');
         
-        $solicitudesRechazadas = Solicitude::where('estado','Rechazada')->get()->sortBy('updated_at');
+        $solicitudesRechazadas = Solicitude::where('estado','Modificada')->get()->sortBy('updated_at');
+        $solicitudesIntegracion = Solicitude::where('estado','En integracion')->get()->sortBy('updated_at');
         //$idusuario = Auth::id();
         //$cliente = Cliente::where('user_id',$idusuario)->first();
         if(auth()->user()->tipo=="Admin"||auth()->user()->tipo=="Aesor")
         {
             return view('solicitude.panelAdmin')
             ->with('solicitudes', $solicitudes)
-            ->with('solicitudesRechazadas', $solicitudesRechazadas);
+            ->with('solicitudesRechazadas', $solicitudesRechazadas)
+            ->with('solicitudesIntegracion', $solicitudesIntegracion);
         }
 
         return view('solicitude.index', compact('solicitudes'))
@@ -124,6 +126,8 @@ class SolicitudeController extends Controller
         
         $convenio = $convenioT->InstitucionNominaID.".00";
         $retenciones = $convenioT->retenciones;
+        if(($Meses<=6) && ($Meses>3)) $retenciones=2;
+        elseif($Meses==3) $retenciones=1;
         //$convenio = 54.00;
         $diaMes = 1;
         $fechaInicio = date("Y-m-d");
@@ -207,7 +211,6 @@ class SolicitudeController extends Controller
                 'pagoMaximo' => $solicitude->pagomaximo,
                 'pagoQuincenal' => $solicitude->pagodeseado,
                 'meses' => $solicitude->plazo,
-                'retenciones' => 3,             //Retenciones por defecto para el convenio 54.0
                 'creditoMaximo' => $solicitude->creditomaximo,
                 'plazoCredito' => $solicitude->meses,
                 'montoSolicitado' => $solicitude->prestamosolicitado,
@@ -250,7 +253,8 @@ class SolicitudeController extends Controller
     public function update(Request $request, Solicitude $solicitude)
     {
         $estado = $request->input('estado');
-        if($estado != ""|| !is_null($estado))
+        $prestamosolicitado = $request->input('prestamosolicitado');
+        if((($estado != "")|| (!is_null($estado)))&&((is_null($prestamosolicitado))||($prestamosolicitado=="")))
         {
             $SolicitudN = Solicitude::find($solicitude->id);
             $SolicitudN->estado = $estado;
@@ -265,13 +269,17 @@ class SolicitudeController extends Controller
                 //$this->enviarMensajeSolicitudAceptada($telefono);
             }
         }else{
+            /*
             request()->validate(Cliente::$rules);
 
             $cliente->update($request->all());
-        }
-        request()->validate(Solicitude::$rules);
+            */
+            request()->validate(Solicitude::$rules);
+            $solicitude->update($request->all());
+            $solicitude->estado="Modificada";
+            $solicitude->save();
 
-        $solicitude->update($request->all());
+        }
 
         return redirect()->route('solicitudes.show',$solicitude->id);
         return redirect()->route('home');

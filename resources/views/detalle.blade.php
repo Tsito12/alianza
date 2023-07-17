@@ -37,7 +37,11 @@
                </div>
                <div class="border"></div>
                    <div class="info-contenedor-doble">
-                       <p>{{ $datos['retenciones'] }} pagos retenidos:</p>
+                    @php
+                        $terminacion = "";
+                        if($datos['retenciones']>1) $terminacion="s";
+                    @endphp
+                       <p>{{ $datos['retenciones'] }} pago{{$terminacion}} retenido{{$terminacion}}:</p>
                        <h3>$ {{ number_format($datos['montoRetenciones'], 2, '.', ',') }}</h3>
                    </div>
                    <div class="info-contenedor-doble">
@@ -71,8 +75,8 @@
                 <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
                     {{ method_field('PATCH') }}
                     @csrf
-                    <input name="estado" type="hidden"  value="Pre aprobado" />
-                    <button type="submit" class="btn btn-danger btn-sm"> {{ __('Pre Aprobar') }}</button>
+                    <input name="estado" type="hidden"  value="En integracion" />
+                    <button type="submit" class="btn btn-danger btn-sm"> {{ __('A integración') }}</button>
                 </form>
                 <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
                     {{ method_field('PATCH') }}

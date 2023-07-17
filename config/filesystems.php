@@ -38,7 +38,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL').'/almacenamiento',
             'visibility' => 'public',
         ],
 
@@ -51,6 +51,14 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+        ],
+
+        'ftp' => [
+            'driver' => env('FTP_DRIVER', 'ftp'),
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'port' => env('FTP_PORT', 21),
         ],
 
     ],
@@ -68,6 +76,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('almacenamiento') => storage_path('app/public'),
     ],
 
 ];

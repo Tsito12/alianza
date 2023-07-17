@@ -69,13 +69,14 @@ const actualizarValores = () => {
 };
 
 const sumar = () => {
-    if(parseInt(inputMeses.value) < plazoMaximo.innerText) inputMeses.value++;
+    if((parseInt(inputMeses.value) < plazoMaximo.innerText)&&verificarFechaTermino(parseInt(inputMeses.value))) inputMeses.value++;
 
-    if(parseInt(inputMeses.value) === plazoMaximo.innerText) botonMas.classList.add('gris');
+    if((parseInt((inputMeses.value) === plazoMaximo.innerText)) || !verificarFechaTermino(parseInt(inputMeses.value)+1)) botonMas.classList.add('gris');
     if(parseInt(inputMeses.value) !== plazoMinimo.innerText) botonMenos.classList.remove('gris');
 };
 
 const restar = () => {
+    calcularCreditoMaximo();
     if(parseInt(inputMeses.value) > plazoMinimo.innerText) inputMeses.value--;
 
     if(parseInt(inputMeses.value) === plazoMinimo.innerText) botonMenos.classList.add('gris');
@@ -102,3 +103,14 @@ botonMenos.addEventListener('mouseleave', manejarMouseUp);
 inputTotalQuincena.addEventListener('keyup', actualizarMontos);
 inputMontoDisponible.addEventListener('keyup', actualizarMontos);
 inputRange.addEventListener('input', actualizarValores);
+
+
+function verificarFechaTermino(meses)
+{
+    let fechaTermino = new Date(document.getElementById('fechaTermino').innerText+" ");
+    //let meses = parseInt(inputMeses.value);
+    let fechaActual = new Date();
+    let fechaTentativa = new Date(fechaActual.setMonth(fechaActual.getMonth()+meses));
+    if(fechaTentativa>fechaTermino) return false;
+    return true;
+}

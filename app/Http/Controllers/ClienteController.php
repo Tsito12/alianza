@@ -34,11 +34,22 @@ class ClienteController extends Controller
      */
     public function create(Request $request)
     {
+        $idsolicitud = $request->query('idsolicitud');
+        $solicitud = Solicitude::find($idsolicitud);
+        if(!is_null($solicitud))
+        {
+            $cliente = Cliente::find($solicitud->idcliente);
+            $usuario = User::find($cliente->user_id);
+            $convenio = Convenios::find($cliente->convenio);
+            $iduser = $usuario->id;
+        } else
+        {
+            $iduser = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
+            $usuario = User::find($iduser);
+            $cliente = Cliente::where('user_id',$iduser)->first();
+            $convenio = Convenios::where('nombreCorto',$usuario->convenio)->first();
+        }
         
-        $iduser = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
-        $usuario = User::find($iduser);
-        $cliente = Cliente::where('user_id',$iduser)->first();
-        $convenio = Convenios::where('nombreCorto',$usuario->convenio)->first();
         if(is_null($cliente)){
             $cliente = new Cliente();
             $cliente->nombre="";
@@ -55,7 +66,7 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request;
+        //area donde se procesa la solicitud
         $creditoMaximo=$request->input('creditomaximo');
         if($creditoMaximo!=0||!is_null($creditoMaximo)||$creditoMaximo!="")
         {
@@ -71,7 +82,7 @@ class ClienteController extends Controller
                 $resultado = (new SolicitudeController)->update($request,$solicitud);
             }
             return $resultado;
-
+            /*
             $solicitud = new Solicitude();
             $solicitud->pagominimo=$request->input('pagominimo');
             $solicitud->pagomaximo=$request->input('pagomaximo');
@@ -85,6 +96,7 @@ class ClienteController extends Controller
             $idsolicitud = $solicitud->id;
             return redirect()->route('solicitudes.show',$solicitud->id);
             return redirect()->route('home');
+            */
         }
         $ingresoquincenal = $request->input('ingresoquincenal');
         $iduser = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');

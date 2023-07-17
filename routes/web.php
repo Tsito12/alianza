@@ -27,7 +27,7 @@ Route::get('/', function () {
 
 Route::resource('clientes', ClienteController::class)->middleware('auth');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('tipo-usuario');
 

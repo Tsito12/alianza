@@ -121,7 +121,11 @@
                                     <div id="boton-menos" class="meses-boton gris">-</div>
                                     <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
                                     <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
-                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="3" tabindex="-1" required readonly>
+                                    <p id="fechaTermino" class="d-none">{{$convenio->fechaTermino}}</p>
+                                    <p id="montoMinimo" class="d-none">{{$convenio->montoMinimo}}</p>
+                                    <p id="montoMaximo" class="d-none">{{$convenio->montoMaximo}}</p>
+                                    <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
+                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="12" tabindex="-1" required readonly>
                                     <div id="boton-mas" class="meses-boton">+</div>
                                     <span> meses</span>                                
                                 </div>
