@@ -178,7 +178,8 @@ class SolicitudeController extends Controller
             DB::disconnect('produccion');
 
             $MontoSeguro = $seguro[0]->MontoSeguro;
-            $montoRecibir = ($monto)-($montoRetenciones+$MontoSeguro);
+            $consultaBuro = 30;             //Pago de la consulta a buró de crédito, de momento son 30 peso, pero puede cambiar
+            $montoRecibir = ($monto)-($montoRetenciones+$MontoSeguro)-$consultaBuro;
 
             //     Se guardan los detalles de la solicitud - Comentar si es que algo truena
             $solicitude->montoretenido=$montoRetenciones;
@@ -199,6 +200,7 @@ class SolicitudeController extends Controller
                 'retenciones' => $retenciones,
                 'montoRetenciones' => $montoRetenciones,
                 'montoRecibir' => $montoRecibir,
+                'pagoConsultaBuro' => 30,
 
 
                 'NombreCompleto' => strtoupper($cliente->nombre),
@@ -254,20 +256,21 @@ class SolicitudeController extends Controller
     {
         $estado = $request->input('estado');
         $prestamosolicitado = $request->input('prestamosolicitado');
-        if((($estado != "")|| (!is_null($estado)))&&((is_null($prestamosolicitado))||($prestamosolicitado=="")))
+        if((($estado != "")&&(!is_null($estado)))&&((is_null($prestamosolicitado))||($prestamosolicitado=="")))
         {
             $SolicitudN = Solicitude::find($solicitude->id);
             $SolicitudN->estado = $estado;
             $SolicitudN->save();
             $cliente = Cliente::find($solicitude->idcliente);
             $telefono = "52". $cliente->telefono;
-            if($estado=="Rechazada")
+            if($estado=="Modificada")
             {
-                //$this->enviarMensajeSolicitudRechazada($telefono);
-            }elseif($estado=="Pre aprobado")
+                return $this->enviarMensajeSolicitudRechazada($telefono, $SolicitudN->id);
+            }elseif($estado=="En integracion")
             {
-                //$this->enviarMensajeSolicitudAceptada($telefono);
+                $this->enviarMensajeSolicitudAceptada($telefono);
             }
+            return redirect()->route('home');
         }else{
             /*
             request()->validate(Cliente::$rules);
@@ -276,8 +279,19 @@ class SolicitudeController extends Controller
             */
             request()->validate(Solicitude::$rules);
             $solicitude->update($request->all());
-            $solicitude->estado="Modificada";
-            $solicitude->save();
+            if(Auth::user()->tipo=="Admin")
+            {
+                $cliente = Cliente::find($solicitude->idcliente);
+                $telefono = "52". $cliente->telefono;
+                $solicitude->estado="Modificada";
+                $solicitude->save();
+                $this->enviarMensajeSolicitudRechazada($telefono, $solicitude->id);
+            }
+            elseif (($solicitude->estado=="Modificada")&&(Auth::user()->tipo=="Cliente"))
+            {
+                $solicitude->estado="En proceso";
+                $solicitude->save();
+            }
 
         }
 
@@ -340,14 +354,14 @@ class SolicitudeController extends Controller
             //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
             $response = json_decode(curl_exec($curl), true);
             //IMPRIMIMOS LA RESPUESTA 
-            print_r($response);
+            //print_r($response);
             //OBTENEMOS EL CODIGO DE LA RESPUESTA
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             //CERRAMOS EL CURL
             curl_close($curl);
     }
 
-    private function enviarMensajeSolicitudRechazada($telefono)
+    private function enviarMensajeSolicitudRechazada($telefono, $idsoclicitud)
     {
         // ***************     Area de mensajes **********************
             //TOKEN QUE NOS DA FACEBOOK
@@ -369,8 +383,20 @@ class SolicitudeController extends Controller
                     . '    "language": { '
                     . '     "code": "es_MX"'
                     . '    },'
-                    . '
-                    }
+                    . '"components": [
+                        {
+                            "type": "button",
+                            "sub_type": "url",
+                            "index": "0",
+                            "parameters": [
+                            {
+                                "type": "text",
+                                "text": "'. $idsoclicitud .'"
+                            }
+                            ]
+                        }
+                        ]
+                        }
                     }';
 
 
@@ -386,10 +412,11 @@ class SolicitudeController extends Controller
             //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
             $response = json_decode(curl_exec($curl), true);
             //IMPRIMIMOS LA RESPUESTA 
-            print_r($response);
+            //print_r($response);
             //OBTENEMOS EL CODIGO DE LA RESPUESTA
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             //CERRAMOS EL CURL
             curl_close($curl);
+            //return $response;
     }
 }

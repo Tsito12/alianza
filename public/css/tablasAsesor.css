@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  font-size: 16px;
+}
+
+header {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  padding: 0 35px;
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #CCC;
+  z-index: 100;
+}
+
+img {
+  object-fit: cover;
+  width:100%;
+}
+
+section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 70px;
+  width: 100%;
+  min-height: 100vh;
+  padding: 90px 0;
+}
+
+h2 {
+  color: #005520;
+  font-size: 20px;
+  text-align: right;
+}
+
+h3 {
+  color: #257140;
+  font-size: 16px;
+}
+
+button {
+  padding: 9px 18px;
+  color: #005520;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: #F8FAFC;
+  border: 2px solid #005520;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform .3s;
+}
+
+button:hover {
+  transform: scale(105%);
+}
+
+.logo-contenedor {
+  width: 150px;
+}
+
+.botones-contendor {
+  display: flex;
+  gap: 30px;
+}
+
+.tabla-titulo {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mostrar {
+  display: flex;
+}
+
+.tabla {
+  display: flex;
+  flex-direction: column;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 100px repeat(8, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: 1200px;
+}
+
+.columna-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.titulo {
+  background-color: #00632F;
+}
+
+.columna-titulo span {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.columna {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #CCC;
+}
+
+.columna span {
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #FFF;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform .3s;
+}
+
+.boton:hover {
+  transform: scale(105%);
+}
+
+.azul {
+  background-color: blue;
+}
+
+.verde {
+  background-color: green;
+}
+
+.rojo {
+  background-color: red;
+}

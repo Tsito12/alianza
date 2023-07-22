@@ -3,12 +3,6 @@
 <title>Preferencias de contacto</title>
 
 @section('content')
-<header>
-    <div class="logo-contenedor">
-      <img src="{{('img/logo.png')}}">
-    </div>
-    <h2>Tu crédito de confianza.</h2>
-  </header>
   <section>
     <div class="contenedor-principal">
       <div class="titulo-contenedor">

@@ -27,9 +27,12 @@ class TelefonoController extends Controller
         $error = "El codigo de verificación es incorrecto";
         if($request->input('verificacion')==$codigo) 
         {
+            $cliente->verificado = true;
+            $cliente->save();
             if($cliente->convenio!=10)
             {
                 //$this->enviarMensajeSolicitudEnviada($telefonoAsesor, $cliente->id);
+                return view('cliente.postVerificacion');
                 return 'En breve, un asesor se comunicara con usted';
             } else
             {

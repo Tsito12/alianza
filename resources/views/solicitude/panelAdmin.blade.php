@@ -9,250 +9,337 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-
-                            <span id="card_title">
-                                {{ __('Solicitudes NO atendidas') }}
-                            </span>
-
-                             
-                        </div>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        
-										<th>Cliente</th>
-										<th>Convenio</th>
-										<th>Prestamo solicitado</th>
-										<th>Monto recibido</th>
-                                        <th>Plazo</th>
-										<th>Estado</th>
-										<th>Ultimo movimiento</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i=0;
-                                    @endphp
-                                    @foreach ($solicitudes as $solicitude)
-                                        @php
-                                            $cliente = Cliente::find($solicitude->idcliente);
-                                            $convenio = Convenios::find($cliente->convenio);
-                                        @endphp
-                                        @if ($convenio->id!=10)
-                                            <tr>
-                                                
-                                                <td>{{ ++$i }}</td>
-                                                <td>{{ $cliente->nombre }}</td>
-                                                <td>{{ $convenio->nombreCorto }}</td>
-                                                <td>{{ $solicitude->prestamosolicitado }}</td>
-                                                <td>{{ $solicitude->montorecibido }}</td>
-                                                <td>{{ $solicitude->plazo }}</td>
-                                                <td>{{ $solicitude->estado }}</td>
-                                                <td>{{ $solicitude->updated_at }}</td>
-                                                
-                                                
-
-                                                <td>
-                                                    <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST">
-                                                        <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
-                                                        <a class="btn btn-sm btn-success" href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                        
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-               
-            </div>
-
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-
-                            <span id="card_title">
-                                {{ __('Solicitudes RECHAZADAS') }}
-                            </span>
-
-                             
-                        </div>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        
-										<th>Cliente</th>
-										<th>Convenio</th>
-										<th>Prestamo solicitado</th>
-										<th>Monto recibido</th>
-                                        <th>Plazo</th>
-										<th>Estado</th>
-										<th>Ultimo movimiento</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i=0;
-                                    @endphp
-                                    @foreach ($solicitudesRechazadas as $solicitude)
-                                        @php
-                                            $cliente = Cliente::find($solicitude->idcliente);
-                                            $convenio = Convenios::find($cliente->convenio);
-                                        @endphp
-                                        @if ($convenio->id!=10)
-                                            
-                                            <tr>
-                                                
-                                                <td>{{ ++$i }}</td>
-                                                <td>{{ $cliente->nombre }}</td>
-                                                <td>{{ $convenio->nombreCorto }}</td>
-                                                <td>{{ $solicitude->prestamosolicitado }}</td>
-                                                <td>{{ $solicitude->montorecibido }}</td>
-                                                <td>{{ $solicitude->plazo }}</td>
-                                                <td>{{ $solicitude->estado }}</td>
-                                                <td>{{ $solicitude->updated_at }}</td>
-                                                
-                                                
-
-                                                <td>
-                                                    <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST">
-                                                        <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
-                                                        <a class="btn btn-sm btn-success" href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            
-                                        @endif
-                                        
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-
-                            <span id="card_title">
-                                {{ __('Solicitudes En integración') }}
-                            </span>
-
-                             
-                        </div>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        
-										<th>Cliente</th>
-										<th>Convenio</th>
-										<th>Prestamo solicitado</th>
-										<th>Monto recibido</th>
-                                        <th>Plazo</th>
-										<th>Estado</th>
-										<th>Ultimo movimiento</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i=0;
-                                    @endphp
-                                    @foreach ($solicitudesIntegracion as $solicitude)
-                                        @php
-                                            $cliente = Cliente::find($solicitude->idcliente);
-                                            $convenio = Convenios::find($cliente->convenio);
-                                        @endphp
-                                        @if ($convenio->id!=10)
-                                            
-                                            <tr>
-                                                
-                                                <td>{{ ++$i }}</td>
-                                                <td>{{ $cliente->nombre }}</td>
-                                                <td>{{ $convenio->nombreCorto }}</td>
-                                                <td>{{ $solicitude->prestamosolicitado }}</td>
-                                                <td>{{ $solicitude->montorecibido }}</td>
-                                                <td>{{ $solicitude->plazo }}</td>
-                                                <td>{{ $solicitude->estado }}</td>
-                                                <td>{{ $solicitude->updated_at }}</td>
-                                                
-                                                
-
-                                                <td>
-                                                    <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST">
-                                                        <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
-                                                        <a class="btn btn-sm btn-success" href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            
-                                        @endif
-                                        
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    <link href="{{asset('css/tablasAsesor.css')}}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
+    
+      <section>
+        <div class="botones-contendor">
+          <button onclick="cambiarTabla(1)">No atendidas</button>
+          <button onclick="cambiarTabla(2)">En integración</button>
+          <button onclick="cambiarTabla(3)">Modificadas</button>
         </div>
-    </div>
+        <div class="tabla-titulo mostrar"  id="1">
+          <h3>Solicitudes no atendidas</h3>
+          <div class="tabla">
+            <div class="fila titulo">
+              <div class="columna-titulo">
+                <span>No.</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Cliente</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Convenio</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Préstamo solicitado</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Monto recibido</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Plazo</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Estado</span>
+              </div>
+              <!--
+              <div class="columna-titulo">
+                <span>Último movimiento</span>
+              </div> -->
+              <div class="columna-titulo">
+                <span>Timer</span>
+              </div>
+              <div class="columna-titulo"></div>
+            </div>
+            @php
+                $i=0;
+            @endphp
+            @foreach ($solicitudes as $solicitude)
+                @php
+                    $cliente = Cliente::find($solicitude->idcliente);
+                    $convenio = Convenios::find($cliente->convenio);
+                @endphp
+                <div class="fila">
+                    <div class="columna">
+                        <span>{{++$i}}</span>
+                    </div>
+                    <div class="columna">
+                        <span>{{$cliente->nombre}}</span>
+                    </div>
+                    <div class="columna">
+                        <span>{{$convenio->nombreCorto}}</span>
+                    </div>
+                    <div class="columna">
+                        <span>${{$solicitude->prestamosolicitado}}</span>
+                    </div>
+                    <div class="columna">
+                        <span>${{$solicitude->montorecibido}}</span>
+                    </div>
+                    <div class="columna">
+                        <span>{{$solicitude->plazo}} Meses</span>
+                    </div>
+                    <div class="columna">
+                        <span>{{$solicitude->estado}}</span>
+                    </div>
+                    <div class="columna d-none">
+                        <span>{{$solicitude->updated_at}}</span>
+                    </div>
+                    <div class="columna">
+                        <span></span>
+                    </div>
+                    <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
+                        <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
+                        <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                        <button type="submit" class="boton rojo"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                </div>
+            @endforeach
+            
+            </div>
+          </div>
+        
+        <div class="tabla-titulo" id="2">
+          <h3>Solicitudes en integración</h3>
+          <div class="tabla">
+            <div class="fila titulo">
+              <div class="columna-titulo">
+                <span>No.</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Cliente</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Convenio</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Préstamo solicitado</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Monto recibido</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Plazo</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Estado</span>
+              </div>
+              <div class="columna-titulo d-none">
+                <span>Último movimiento</span>
+              </div>
+              <div class="columna-titulo">
+                <span>Timer</span>
+              </div>
+              <div class="columna-titulo"></div>
+            </div>
+            @php
+                $i=0;
+            @endphp
+            @foreach ($solicitudesIntegracion as $solicitude)
+                @php
+                    $cliente = Cliente::find($solicitude->idcliente);
+                    $convenio = Convenios::find($cliente->convenio);
+                @endphp
+            <div class="fila">
+                <div class="columna">
+                    <span>{{++$i}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$cliente->nombre}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$convenio->nombreCorto}}</span>
+                </div>
+                <div class="columna">
+                    <span>${{$solicitude->prestamosolicitado}}</span>
+                </div>
+                <div class="columna">
+                    <span>${{$solicitude->montorecibido}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$solicitude->plazo}} Meses</span>
+                </div>
+                <div class="columna">
+                    <span>{{$solicitude->estado}}</span>
+                </div>
+                <div class="columna d-none">
+                    <span>{{$solicitude->updated_at}}</span>
+                </div>
+                <div class="columna">
+                    <span></span>
+                </div>
+                <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
+                    <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
+                    <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                    <button type="submit" class="boton rojo"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </div> 
+            @endforeach
+          </div>    
+        </div>
+        <div class="tabla-titulo"  id="3">
+          <h3>Solicitudes modificadas</h3>
+        <div class="tabla">
+          <div class="fila titulo">
+            <div class="columna-titulo">
+              <span>No.</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Cliente</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Convenio</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Préstamo solicitado</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Monto recibido</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Plazo</span>
+            </div>
+            <div class="columna-titulo">
+              <span>Estado</span>
+            </div>
+            <div class="columna-titulo d-none">
+              <span>Último movimiento</span>
+            </div>
+            <div class="columna-titulo d-none">
+                <span>Timer</span>
+              </div>
+            <div class="columna-titulo"></div>
+          </div>
+
+          @php
+            $i=0;
+        @endphp
+        @foreach ($solicitudesRechazadas  as $solicitude)
+            @php
+                $cliente = Cliente::find($solicitude->idcliente);
+                $convenio = Convenios::find($cliente->convenio);
+            @endphp
+            <div class="fila">
+                <div class="columna">
+                    <span>{{++$i}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$cliente->nombre}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$convenio->nombreCorto}}</span>
+                </div>
+                <div class="columna">
+                    <span>${{$solicitude->prestamosolicitado}}</span>
+                </div>
+                <div class="columna">
+                    <span>${{$solicitude->montorecibido}}</span>
+                </div>
+                <div class="columna">
+                    <span>{{$solicitude->plazo}} Meses</span>
+                </div>
+                <div class="columna">
+                    <span>{{$solicitude->estado}}</span>
+                </div>
+                <div class="columna d-none">
+                    <span>{{$solicitude->updated_at}}</span>
+                </div>
+                <div class="columna">
+                    <span></span>
+                </div>
+                <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
+                    <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
+                    <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                    <button type="submit" class="boton rojo"><i class="fa-solid fa-trash"></i></button>
+                </form>
+            </div>
+        @endforeach
+          
+          
+        </div>
+        </div>
+      </section>
+    </body>
+    <script>
+      const cambiarTabla = id => {
+        switch(id){
+          case 1 :
+            document.getElementById('1').classList.add('mostrar');
+            document.getElementById('2').classList.remove('mostrar');
+            document.getElementById('3').classList.remove('mostrar');
+          break;
+          case 2 :
+            document.getElementById('1').classList.remove('mostrar');
+            document.getElementById('2').classList.add('mostrar');
+            document.getElementById('3').classList.remove('mostrar');
+          break;
+          case 3 : 
+            document.getElementById('1').classList.remove('mostrar');
+            document.getElementById('2').classList.remove('mostrar');
+            document.getElementById('3').classList.add('mostrar');
+          break;
+        };
+      };
+
+      function calcularTiempo()
+      {
+        let filas = document.getElementsByClassName("fila");
+        for(i = 1; i < filas.length; i++)
+        {
+            let fechaMovimiento = new Date(filas[i].children[7].innerText);
+            let fechaActual = new Date();
+            let tiempoTranscurrido = fechaActual.getTime()-fechaMovimiento.getTime();
+            let horas = Math.trunc(tiempoTranscurrido/3600000);
+            let minutos = Math.trunc(tiempoTranscurrido/60000);
+            minutos = minutos%60;
+            let segundos = Math.trunc(tiempoTranscurrido/1000);
+            segundos = segundos%60;
+            if(minutos<10)
+            {
+                minutos= "0"+minutos;
+            }
+            if(segundos<10)
+            {
+                segundos = "0"+segundos;
+            }
+            if(horas<10)
+            {
+                horas = "0" + horas;
+            }
+            filas[i].children[8].innerText=horas+":"+minutos+":"+segundos;
+        }
+      }
+      setInterval(calcularTiempo, 1000);
+
+      function actualizarTiempo(horas, minutos, segundos)
+      {
+        horas = parseInt(horas);
+        minutos = parseInt(minutos);
+        segundos = parseInt(segundos);
+        if(segundos==59)
+        {
+            segundos = 0;
+            if(minutos==59)
+            {
+                minutos = 0;
+                horas++;
+            }else
+            {
+                minutos++
+            }
+        }
+        if(minutos<10)
+        {
+            minutos= "0"+minutos;
+        }
+        if(segundos<10)
+        {
+            segundos = "0"+segundos;
+        }
+        if(horas<10)
+        {
+            horas = "0" + horas;
+        }
+      }
+    </script>
 @endsection

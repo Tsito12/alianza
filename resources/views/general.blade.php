@@ -1,3 +1,7 @@
+@php
+    use App\Models\Cliente;
+    use App\Models\Convenios;
+@endphp
 @extends('layouts.app')
 
 @section('template_title')
@@ -45,7 +49,7 @@
                                 <thead class="thead">
                                     <tr>
                                         <th>No</th>
-                                        
+                                        <th>Convenio</th>
 										<th>Monto Total</th>
 										<th>Plazo</th>
 										<th>Retenciones</th>
@@ -59,9 +63,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($solicitudes as $solicitude)
+                                    @php
+                                        $cliente = Cliente::find($solicitude->idcliente);
+                                        $convenio = Convenios::find($cliente->convenio);
+                                    @endphp
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            
+                                            <td>{{ $convenio->nombreCorto }}</td>
 											<td>{{ $solicitude->prestamosolicitado }}</td>
 											<td>{{ $solicitude->plazo }}</td>
 											<td>{{ $solicitude->montoretenido }}</td>
@@ -75,11 +83,15 @@
                                                     <!--
                                                     <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
                                                     -->
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
+                                                    @php
+                                                        $clase = "";
+                                                        if($solicitude->estado=="En integracion") $clase="disabled";
+                                                    @endphp
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
+                                                    <a class="btn btn-sm btn-success {{$clase}}" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm {{$clase}}"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
                                                 </form>
                                             </td>
                                         </tr>

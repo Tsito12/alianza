@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\Solicitude;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,24 +13,36 @@ class ContactoController extends Controller
     public function index()
     {
         $error = "";
+        $cliente = Cliente::where('user_id',Auth::id())->first();
+        $solicitud = Solicitude::where('idcliente',$cliente->id)->first();
+        $solicitud->estado="En proceso";
+        $solicitud->save();
         return view('solicitude.contacto')->with('error',$error);
     }
 
     public function metodo(Request $request)
     {
-        switch($request->input('radio'))
+        $wa = $request->input('whatsapp');
+        $llamada = $request->input('llamada');
+        $sms = $request->input('sms');
+        $metodoContacto = "";
+        if(!is_null($wa)) $metodoContacto.="Whatsapp ";
+        if(!is_null($llamada)) $metodoContacto.= "Llamada ";
+        if(!is_null($sms)) $metodoContacto.= "SMS ";
+        $cliente = Cliente::where('user_id',Auth::id())->first();
+        $solicitud = Solicitude::where('idcliente',$cliente->id)->first();
+        $solicitud->estado="En proceso";
+        $solicitud->save();
+        $cliente->metodocomunicacion = $metodoContacto;
+        $cliente->save();
+        if(str_contains($metodoContacto, "Whatsapp"))
         {
-            case 1:
-
-                $cliente = Cliente::where('user_id',Auth::id())->first();
-                $telefono = '52'.$cliente->telefono;
-                //$this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
-                return redirect()->route('confirmarTelefono');
-            break;
-            case 2: 
-            break;
-            case 3: 
-            break;
+            $telefono = '52'.$cliente->telefono;
+            //$this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
+            return redirect()->route('confirmarTelefono');
+        } else
+        {
+            return redirect()->route('home');
         }
     }
 

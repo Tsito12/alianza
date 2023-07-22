@@ -9,11 +9,7 @@
 <body>
     <!-- LOGO -->
     @section('content')
-    <header>
-        <div class="logo-contenedor">
-            <img src="{{ asset('img/sacimex.png') }}">
-        </div>
-    </header>
+    
     <section>
         <div class="titulo-contenedor">
             <p id="titulo-paso" class="titulo">Paso 1. Ingrese sus datos personales.</p>
@@ -40,8 +36,9 @@
                                 <p id="alerta-nombre" class="alerta"></p>   
                             </div> 
                             <div class="inp-contenedor">
-                                <input type="number" id="telefono" value="{{ $cliente->telefono }}" name="telefono" class="inp sa" maxlength="12" tabindex="-1" oninput="separarNumeros()" required>
-                                <label for="telefono" class="etq">WhatsApp</label>
+                                <input type="text" id="telefonofeik" value="{{ $cliente->telefono }}" name="telefonofeik" class="inp sa" maxlength="12" tabindex="-1" oninput="separarNumeros()" required>
+                                <input type="number" class="d-none" id="telefono" name="telefono" value="{{ $cliente->telefono }}" >
+                                <label for="telefonofeik" class="etq">WhatsApp</label>
                                 @error('telefono')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -59,7 +56,8 @@
                         <!-- PASO 2 -->
                         <div class="paso">
                             <div class="inp-contenedor">
-                                <input type="number" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}" name="ingresoquincenal" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="ingresoquincenalfeik" value="{{ $cliente->ingresoquincenal }}" onload="formatoMexico(this)" name="ingresoquincenalfeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="number" class="d-none" name="ingresoquincenal" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}">
                                 <label for="ingresoquincenal" class="etq">Ingresos quincenales</label>
                                 @error('ingresoquincenal')
                                     <span class="invalid-feedback" role="alert">
@@ -71,7 +69,8 @@
                                 <p id="alerta-quincena" class="alerta"></p> 
                             </div>
                             <div class="inp-contenedor">
-                                <input type="number" id="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}" name="disponiblequincenal" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="disponiblequincenalfeik" value="{{ $cliente->disponiblequincenal }}" onload="formatoMexico(this)" name="disponiblequincenal" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="number" id="disponiblequincenal" class="d-none" name="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}">
                                 <label for="disponiblequincenal" class="etq">¿Cuánto te queda disponible?</label>
                                 @error('disponiblequincenal')
                                     <span class="invalid-feedback" role="alert">
@@ -121,6 +120,9 @@
                                     <div id="boton-menos" class="meses-boton">-</div>
                                     <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
                                     <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
+                                    <p id="montoMinimo" class="d-none">{{$convenio->montoMinimo}}</p>
+                                    <p id="montoMaximo" class="d-none">{{$convenio->montoMaximo}}</p>
+                                    <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
                                     <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="12" tabindex="-1" required readonly>
                                     <div id="boton-mas" class="meses-boton">+</div>
                                     <span> meses</span>                                
@@ -151,7 +153,7 @@
                                 <div id="boton-mas-dias" class="meses-boton">+</div>
                                 <span>de cada mes.</span>                                
                             </div>    
-                            {{Form::hidden('estado','En proceso')}}              
+                            {{Form::hidden('estado','Editando')}}              
                         </div>      
                     </div>
                 </form>        
@@ -167,7 +169,7 @@
     <script src="{{asset('js/calcularTotal.js')}}"></script>
     <script>
         const separarNumeros = () => {
-            let input = document.getElementById('telefono');
+            let input = document.getElementById('telefonofeik');
             let numero = input.value.replace(/\D/g, '');
             let formateado = '';
       
@@ -180,6 +182,23 @@
             }
       
             input.value = formateado;
+            juntarNumeros();
+        }
+        function juntarNumeros()
+        {
+            let inputtelefono = document.getElementById("telefono");
+            let inputFeik = document.getElementById("telefonofeik");
+            inputtelefono.value=inputFeik.value.replaceAll(' ','');
+        }
+        const formatoMexico = (number) => {
+            let numero = number.value;
+            numero = numero.replaceAll(',','');
+            const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+            const rep = '$1,';
+            number.value = numero.toString().replace(exp,rep);
+            let idInputBueno = number.id.replaceAll('feik','');
+            document.getElementById(idInputBueno).value=numero;
+            return numero.toString().replace(exp,rep);
         }
     </script>
     @endsection

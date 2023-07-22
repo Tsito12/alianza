@@ -33,10 +33,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
  
-Route::get('file-upload', [FileUploadController::class, 'index'])->name('file-upload');
+Route::get('file-upload', [FileUploadController::class, 'index'])->name('file-upload')->middleware('auth');
 Route::post('store', [FileUploadController::class, 'store']);
+Route::post('cambiarEstado', [FileUploadController::class, 'cambiarEstado']);
 
-Route::resource('solicitudes', SolicitudeController::class);
+Route::resource('solicitudes', SolicitudeController::class)->middleware('auth');
 Route::resource('users', UserController::class);
 
 Route::get('imprimirDatosSolicitud', [PdfController::class, 'imprimirDatosSolicitud'])->name('imprimirDatosSolicitud');

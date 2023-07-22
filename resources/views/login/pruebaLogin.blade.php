@@ -60,11 +60,33 @@
             <p class="par">¿No tienes una cuenta?</p>
             <a href="  {{ route('register') }}  " class="lnk">Regístrate</a>
         </div>
+        <div class="lnk-contenedor">
+            <p class="par">¿Olvidaste tu contraseña?</p>
+            <a href="  {{ route('password.request') }}  " class="lnk">Restablacer contraseña</a>
+        </div>
+
     </form>
     <div id="bot-ayuda" class="bot-ayuda">
         <img id="img-bot" src="{{asset('img/BotAyuda1.png')}}" alt="Bot de ayuda"/>
     </div>
     </section>
+
+
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/64b5cda294cf5d49dc64323c/1h5j2mgkf';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+
 </body>
 <script src="{{asset('js/validarLogin.js')}}"></script>
 
