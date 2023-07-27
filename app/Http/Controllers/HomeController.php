@@ -56,4 +56,9 @@ class HomeController extends Controller
         return view('home');
         //return redirect()->action([ClienteController::class, 'index']);
     }
+
+    public function fechaHoraActual()
+    {
+        return date('D M j Y G:i:s');
+    }
 }

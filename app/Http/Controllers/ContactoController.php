@@ -42,7 +42,7 @@ class ContactoController extends Controller
             return redirect()->route('confirmarTelefono');
         } else
         {
-            return redirect()->route('home');
+            return redirect()->route('file-upload');
         }
     }
 

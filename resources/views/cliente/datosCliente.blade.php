@@ -140,7 +140,8 @@
                                 <p id="meses-etq" class="pagos-etiqueta"></p>
                             </div>
                             <div class="inp-contenedor">
-                                <input type="number" id="prestamosolicitado" name="prestamosolicitado" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="prestamosolicitadofeik" name="prestamosolicitadofeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="hidden" id="prestamosolicitado" name="prestamosolicitado" class="inp sa" tabindex="-1" required>
                                 <label for="prestamosolicitado" class="etq">Prestamo solicitado:</label>
                                 <span class="bar sa"></span>
                                 <span class="quincena-span">$</span>
@@ -200,5 +201,14 @@
             document.getElementById(idInputBueno).value=numero;
             return numero.toString().replace(exp,rep);
         }
+
+        function moverAlInicio()
+        {
+            formatoMexico(document.getElementById("ingresoquincenalfeik"));
+            formatoMexico(document.getElementById("disponiblequincenalfeik"));
+            formatoMexico(document.getElementById("prestamosolicitadofeik"));
+            separarNumeros();
+        }
+        document.getElementsByTagName("body")[0].onload=moverAlInicio();
     </script>
     @endsection

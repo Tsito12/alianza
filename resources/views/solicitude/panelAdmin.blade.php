@@ -12,6 +12,7 @@
     <link href="{{asset('css/tablasAsesor.css')}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
     
+    <p class="d-none" id="fechaServidor"></p>
       <section>
         <div class="botones-contendor">
           <button onclick="cambiarTabla(1)">No atendidas</button>
@@ -48,7 +49,7 @@
                 <span>Último movimiento</span>
               </div> -->
               <div class="columna-titulo">
-                <span>Timer</span>
+                <span>Tiempo transcurrido</span>
               </div>
               <div class="columna-titulo"></div>
             </div>
@@ -87,6 +88,9 @@
                     </div>
                     <div class="columna">
                         <span></span>
+                    </div>
+                    <div class="columna d-none">
+                      {{date('D M j Y G:i:s')}}
                     </div>
                     <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
                         <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
@@ -128,7 +132,7 @@
                 <span>Último movimiento</span>
               </div>
               <div class="columna-titulo">
-                <span>Timer</span>
+                <span>Tiempo transcurrido</span>
               </div>
               <div class="columna-titulo"></div>
             </div>
@@ -168,6 +172,9 @@
                 <div class="columna">
                     <span></span>
                 </div>
+                <div class="columna d-none">
+                  {{date('D M j Y G:i:s')}}
+                </div>
                 <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
                     <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
                     <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
@@ -205,8 +212,8 @@
             <div class="columna-titulo d-none">
               <span>Último movimiento</span>
             </div>
-            <div class="columna-titulo d-none">
-                <span>Timer</span>
+            <div class="columna-titulo">
+                <span>Tiempo transcurrido</span>
               </div>
             <div class="columna-titulo"></div>
           </div>
@@ -247,6 +254,9 @@
                 <div class="columna">
                     <span></span>
                 </div>
+                <div class="columna d-none">
+                  {{date('D M j Y G:i:s')}}
+                </div>
                 <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
                     <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
                     <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
@@ -281,14 +291,28 @@
         };
       };
 
+      let milisegundosActuales=0;
       function calcularTiempo()
       {
+        var fechaDelServidor;
+        /*
+        $.get( "/fechaYHora", function( data ) {
+          $("#fechaServidor").html(data);
+          fechaDelServidor = data;
+          console.log(fechaDelServidor);
+        });
+        */
         let filas = document.getElementsByClassName("fila");
         for(i = 1; i < filas.length; i++)
         {
+            //$(filas[i].children[9]).load("/fechaYHora");
             let fechaMovimiento = new Date(filas[i].children[7].innerText);
-            let fechaActual = new Date();
-            let tiempoTranscurrido = fechaActual.getTime()-fechaMovimiento.getTime();
+            let fechaActual = new Date(filas[i].children[9].innerText);
+            if(milisegundosActuales==0)
+            {
+              milisegundosActuales=fechaActual.getTime();
+            }
+            let tiempoTranscurrido = milisegundosActuales-fechaMovimiento.getTime();
             let horas = Math.trunc(tiempoTranscurrido/3600000);
             let minutos = Math.trunc(tiempoTranscurrido/60000);
             minutos = minutos%60;
@@ -306,8 +330,12 @@
             {
                 horas = "0" + horas;
             }
-            filas[i].children[8].innerText=horas+":"+minutos+":"+segundos;
+            if(!isNaN(horas))
+            {
+              filas[i].children[8].innerText=horas+":"+minutos+":"+segundos;
+            }
         }
+        milisegundosActuales= milisegundosActuales+1000;
       }
       setInterval(calcularTiempo, 1000);
 

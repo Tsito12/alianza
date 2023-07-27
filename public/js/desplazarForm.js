@@ -179,8 +179,8 @@ if(inputTotalQuincena.value!==""&&inputMontoDisponible.value!=="")
 }
 else */if(inputNombre.value!==""&&inputTelefono!==""){
     pasoGuardado = 2;
-    inputNombre.setAttribute("readonly","");
-    inputTelefono.setAttribute("readonly","");
+    //inputNombre.setAttribute("readonly","");
+    //inputTelefono.setAttribute("readonly","");
 }
 
 if(pasoGuardado>1){

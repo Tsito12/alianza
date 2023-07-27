@@ -48,4 +48,6 @@ Route::post('confirmarTelefono',[TelefonoController::class, 'verificar'])->name(
 Route::get('contacto',[ContactoController::class, 'index'])->name('contacto');
 Route::post('contacto',[ContactoController::class, 'metodo'])->name('contacto');
 
+Route::get('fechaYHora',[App\Http\Controllers\HomeController::class, 'fechaHoraActual'])->name('fechaYHora');
+
 

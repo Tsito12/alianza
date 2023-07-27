@@ -89,19 +89,30 @@
                         <button type="submit" class="boton btn btn-succes btn-sm"> {{ __('Aceptar cambios') }}</button>
                     </form>
                 @else
-                    <a class="boton" 
-                    
-                    @if ($cliente->convenio==10)
-                        href="{{ '/clientes/create' }}"
+
+
+                    @if ($cliente->verificado)
+                        <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
+                            {{ method_field('PATCH') }}
+                            @csrf
+                            <input name="estado" type="hidden"  value="En proceso" />
+                            <button type="submit" class="boton btn btn-succes btn-sm"> {{ __('Enviar') }}</button>
+                        </form>
                     @else
-                        @if ($cliente->verificado)
-                            href="{{ '/home' }}"
+                        <a class="boton" 
+                        
+                        @if ($cliente->convenio==10)
+                            href="{{ '/clientes/create' }}"
                         @else
-                            href="{{ route('contacto') }}"
+                            @if (!$cliente->verificado)
+                                href="{{ route('contacto') }}"
+                            @endif
                         @endif
+                        
+                        >Enviar</a>
                     @endif
-                    
-                    >Enviar</a>
+
+
                 @endif
         @endif
         </div>

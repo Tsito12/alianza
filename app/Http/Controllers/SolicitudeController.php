@@ -222,6 +222,12 @@ class SolicitudeController extends Controller
             );
 
             session(['datosSolicitud' => $datos]);
+            $pdf = PDF::loadView('imprimir', ['datos' => $datos]);
+            $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date("H:i:s").'].pdf';
+            $descarga = $pdf->download($nombrepdf);
+            $contenido = $descarga->getOriginalContent();
+            $ruta = "files/".$cliente->id."/solicitudes/".$solicitude->id.'.pdf';
+            Storage::put($ruta, $contenido);
             //En la vista, el botón imprimir, redirige a este mismo controlador, mismo metodo
             //pero se incluye un campo opcion, donde se da la opción para generar el pdf y mandarlo por correo
 
@@ -269,6 +275,14 @@ class SolicitudeController extends Controller
             }elseif($estado=="En integracion")
             {
                 $this->enviarMensajeSolicitudAceptada($telefono);
+            }
+            if($estado=="En proceso")
+            {
+                $url = str_replace("/solicitudes/".$solicitude->id,"",$request->url());
+                
+                $rutapdf = $url."/storage/public/files/".$cliente->id."/solicitudes/".$solicitude->id.".pdf";
+                
+                //return $rutapdf;
             }
             return redirect()->route('home');
         }else{
