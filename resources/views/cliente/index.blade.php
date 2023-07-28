@@ -48,6 +48,7 @@
 										<th>Disponiblequincenal</th>
 										<th>Ajuste</th>
 										<th>Correo</th>
+                                        <th>Método de contacto</th>
                                         <th>Estado</th>
 
                                         <th></th>
@@ -57,14 +58,14 @@
                                     @foreach ($clientes as $cliente)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            
 											<td>{{ $cliente->nombre }}</td>
-											<td>{{ $cliente->telefono }}</td>
+											<td><a href="https://web.whatsapp.com/send/?phone=+52{{ $cliente->telefono }}">{{ $cliente->telefono }}</a></td>
                                             <td>{{ Convenios::find($cliente->convenio)->nombreCorto }}</td>
 											<td>{{ $cliente->ingresoquincenal }}</td>
 											<td>{{ $cliente->disponiblequincenal }}</td>
 											<td>{{ $cliente->ajuste }}</td>
 											<td>{{ User::find($cliente->user_id)->email }}</td>
+                                            <td>{{ $cliente->metodocomunicacion }}</td>
                                             <td>{{ $cliente->estado }}</td>
 
                                             <td>

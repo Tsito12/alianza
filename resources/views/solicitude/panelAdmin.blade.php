@@ -54,16 +54,16 @@
               <div class="columna-titulo"></div>
             </div>
             @php
-                $i=0;
+                
             @endphp
-            @foreach ($solicitudes as $solicitude)
+            @foreach ($solicitudesPag as $solicitude)
                 @php
                     $cliente = Cliente::find($solicitude->idcliente);
                     $convenio = Convenios::find($cliente->convenio);
                 @endphp
                 <div class="fila">
                     <div class="columna">
-                        <span>{{++$i}}</span>
+                        <td>{{ ++$i }}</td>
                     </div>
                     <div class="columna">
                         <span>{{$cliente->nombre}}</span>
@@ -95,11 +95,13 @@
                     <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
                         <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
                         <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                        @csrf
+                        @method('DELETE')
                         <button type="submit" class="boton rojo"><i class="fa-solid fa-trash"></i></button>
                     </form>
                 </div>
             @endforeach
-            
+            {!! $solicitudesPag->links() !!}
             </div>
           </div>
         
@@ -137,7 +139,7 @@
               <div class="columna-titulo"></div>
             </div>
             @php
-                $i=0;
+                //$i=0;
             @endphp
             @foreach ($solicitudesIntegracion as $solicitude)
                 @php
@@ -146,7 +148,7 @@
                 @endphp
             <div class="fila">
                 <div class="columna">
-                    <span>{{++$i}}</span>
+                    <span>{{++$j}}</span>
                 </div>
                 <div class="columna">
                     <span>{{$cliente->nombre}}</span>
@@ -176,12 +178,15 @@
                   {{date('D M j Y G:i:s')}}
                 </div>
                 <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST" class="columna" style="gap: 10px;">
-                    <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
-                    <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                  <a href="{{ route('solicitudes.show',$solicitude->id) }}" class="boton azul"><i class="fa-solid fa-info"></i></a>
+                  <a href="{{ route('clientes.create',['idsolicitud' => $solicitude->id]) }}" class="boton verde"><i class="fa-solid fa-pen"></i></a>
+                  @csrf
+                  @method('DELETE')
                     <button type="submit" class="boton rojo"><i class="fa-solid fa-trash"></i></button>
                 </form>
             </div> 
             @endforeach
+            {!! $solicitudesIntegracionPag->links() !!}
           </div>    
         </div>
         <div class="tabla-titulo"  id="3">
@@ -219,7 +224,7 @@
           </div>
 
           @php
-            $i=0;
+            //$i=0;
         @endphp
         @foreach ($solicitudesRechazadas  as $solicitude)
             @php
@@ -228,7 +233,7 @@
             @endphp
             <div class="fila">
                 <div class="columna">
-                    <span>{{++$i}}</span>
+                    <span>{{++$k}}</span>
                 </div>
                 <div class="columna">
                     <span>{{$cliente->nombre}}</span>
@@ -264,7 +269,7 @@
                 </form>
             </div>
         @endforeach
-          
+        {!! $solicitudesRechazadasPag->links() !!}
           
         </div>
         </div>

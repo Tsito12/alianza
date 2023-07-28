@@ -29,18 +29,26 @@ class SolicitudeController extends Controller
     public function index()
     {
         //$solicitudes = Solicitude::paginate();
-        $solicitudes = Solicitude::where('estado','En proceso')->get()->sortBy('updated_at');
-        //$solicitudesPag = $solicitudes;
-        //$solicitudes->sortBy('updated_at');
+        $solicitudes = Solicitude::where('estado','En proceso')->get()->sortBy('updated_at')->toQuery();
+        $solicitudesPag = $solicitudes->paginate($perPage = 20, $columns = ['*'], $pageName = 'enProceso');
+        $solicitudes = $solicitudes->get()->sortBy('updated_at');
         
-        $solicitudesRechazadas = Solicitude::where('estado','Modificada')->get()->sortBy('updated_at');
-        $solicitudesIntegracion = Solicitude::where('estado','En integracion')->get()->sortBy('updated_at');
+        $solicitudesRechazadas = Solicitude::where('estado','Modificada');
+        $solicitudesRechazadasPag = $solicitudesRechazadas->paginate($perPage = 10, $columns = ['*'], $pageName = 'rechazadas');
+        $solicitudesRechazadas = $solicitudesRechazadas->get()->sortBy('updated_at');
+
+        $solicitudesIntegracion = Solicitude::where('estado','En integracion')->get()->sortBy('updated_at')->toQuery();
+        $solicitudesIntegracionPag = $solicitudesIntegracion->paginate($perPage = 10, $columns = ['*'], $pageName = 'enIntegracion');
+        $solicitudesIntegracion = $solicitudesIntegracion->get()->sortBy('updated_at');
         //$idusuario = Auth::id();
         //$cliente = Cliente::where('user_id',$idusuario)->first();
         if(auth()->user()->tipo=="Admin"||auth()->user()->tipo=="Aesor")
         {
-            return view('solicitude.panelAdmin')
-            ->with('solicitudes', $solicitudes)
+            return view('solicitude.panelAdmin', compact('solicitudesPag', 'solicitudesRechazadasPag', 'solicitudesIntegracionPag'))
+            ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage())
+            ->with('j', (request()->input('page', 1) - 1) * $solicitudesRechazadasPag->perPage())
+            ->with('k', (request()->input('page', 1) - 1) * $solicitudesIntegracionPag->perPage())
+            //->with('solicitudes', $solicitudes)
             ->with('solicitudesRechazadas', $solicitudesRechazadas)
             ->with('solicitudesIntegracion', $solicitudesIntegracion);
         }
@@ -281,7 +289,7 @@ class SolicitudeController extends Controller
                 $url = str_replace("/solicitudes/".$solicitude->id,"",$request->url());
                 
                 $rutapdf = $url."/storage/public/files/".$cliente->id."/solicitudes/".$solicitude->id.".pdf";
-                
+
                 //return $rutapdf;
             }
             return redirect()->route('home');

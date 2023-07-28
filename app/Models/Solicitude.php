@@ -36,7 +36,7 @@ class Solicitude extends Model
 		//'idcliente' => 'required',
     ];
 
-    protected $perPage = 20;
+    protected $perPage = 10;
 
     /**
      * Attributes that should be mass-assignable.
