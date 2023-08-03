@@ -33,11 +33,12 @@ class FileUploadController extends Controller
             "domicilio" => $domicilio,
             "foto" => $foto
         );
-        foreach($documentosN as $documento)
+        
+        foreach($documentosN as &$documento)
         {
             if(is_null($documento))
             {
-                $documento = new Documentocliente();
+                $documento = new Documentoscliente();
                 $documento->documento = "";
                 $documento->idcliente = $idcliente;
             }
@@ -91,7 +92,7 @@ class FileUploadController extends Controller
             $nameIne = $request->file('ine')->getClientOriginalName();
             $pathIne = $request->file('ine')->store('/files/'.$idcliente, 'public');
             $ine = $pathIne;
-            $estado = "Documento modificado";
+            $estado = "Modificado";
             $observaciones = "Documento modificado";
             $documentoIne = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',1)->first();
             if(is_null($documentoIne))
@@ -116,7 +117,7 @@ class FileUploadController extends Controller
             $pathComprobante = $request->file('comprobantedomicilio')->store('/files/'.$idcliente);
             $comprobanteDom = $pathComprobante;
             $documentoDom = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',3)->first();
-            $estado = "Documento modificado";
+            $estado = "Modificado";
             $observaciones = "Documento modificado";
             if(is_null($documentoDom))
             {
@@ -141,7 +142,7 @@ class FileUploadController extends Controller
             $pathFoto = $request->file('fotografia')->store('/files/'.$idcliente);
             $foto = $pathFoto;
             $documentoFoto = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',4)->first();
-            $estado = "Documento modificado";
+            $estado = "Modificado";
             $observaciones = "Documento modificado";
             if(is_null($documentoFoto))
             {
@@ -166,7 +167,7 @@ class FileUploadController extends Controller
             $pathIngresos = $request->file('ingresos')->store('/files/'.$idcliente);
             $ingresos = $pathIngresos;
             $documentoIngresos = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',2)->first();
-            $estado = "Documento modificado";
+            $estado = "Modificado";
             $observaciones = "Documento modificado";
             if(is_null($documentoIngresos))
             {

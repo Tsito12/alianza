@@ -3,6 +3,8 @@
     use App\Models\Convenios;
 @endphp
 @extends('layouts.app')
+<link href="{{asset('css/tablasAsesor.css')}}" rel="stylesheet">
+<script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 
 @section('template_title')
     Solicitudes
@@ -21,7 +23,7 @@
         <div class="row mt-2">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header tabla-titulo">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
@@ -45,20 +47,20 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover tabla">
                                 <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Convenio</th>
-										<th>Monto Total</th>
-										<th>Plazo</th>
-										<th>Retenciones</th>
-										<th>Cobertura de riesgo</th>
-                                        <th>Pago quincenal</th>
-										<th>Monto a recibir</th>
-										<th>Estado</th>
+                                    <tr class="fila-cliente titulo">
+                                        <th class="columna-titulo">No</th>
+                                        <th class="columna-titulo">Convenio</th>
+										<th class="columna-titulo">Monto Total</th>
+										<th class="columna-titulo">Plazo</th>
+										<th class="columna-titulo">Retenciones</th>
+										<th class="columna-titulo">Cobertura de riesgo</th>
+                                        <th class="columna-titulo">Pago quincenal</th>
+										<th class="columna-titulo">Monto a recibir</th>
+										<th class="columna-titulo">Estado</th>
 
-                                        <th></th>
+                                        <th class="columna-titulo"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,18 +69,18 @@
                                         $cliente = Cliente::find($solicitude->idcliente);
                                         $convenio = Convenios::find($cliente->convenio);
                                     @endphp
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            <td>{{ $convenio->nombreCorto }}</td>
-											<td>{{ $solicitude->prestamosolicitado }}</td>
-											<td>{{ $solicitude->plazo }}</td>
-											<td>{{ $solicitude->montoretenido }}</td>
-											<td>{{ $solicitude->coberturariesgo }}</td>
-											<td>{{ $solicitude->pagoplazo }}</td>
-											<td>{{ $solicitude->montorecibido }}</td>
-											<td>{{ $solicitude->estado }}</td>
+                                        <tr class="fila-cliente">
+                                            <td class="columna">{{ ++$i }}</td>
+                                            <td class="columna">{{ $convenio->nombreCorto }}</td>
+											<td class="columna">{{ $solicitude->prestamosolicitado }}</td>
+											<td class="columna">{{ $solicitude->plazo }}</td>
+											<td class="columna">{{ $solicitude->montoretenido }}</td>
+											<td class="columna">{{ $solicitude->coberturariesgo }}</td>
+											<td class="columna">{{ $solicitude->pagoplazo }}</td>
+											<td class="columna">{{ $solicitude->montorecibido }}</td>
+											<td class="columna">{{ $solicitude->estado }}</td>
 
-                                            <td>
+                                            <td class="columna">
                                                 <form action="{{ route('solicitudes.destroy',$solicitude->id) }}" method="POST">
                                                     <!--
                                                     <a class="btn btn-sm btn-primary " href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
@@ -87,11 +89,11 @@
                                                         $clase = "";
                                                         if($solicitude->estado=="En integracion") $clase="disabled";
                                                     @endphp
-                                                    <a class="btn btn-sm btn-primary" href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Detalle') }}</a>
-                                                    <a class="btn btn-sm btn-success {{$clase}}" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> {{ __('Editar') }}</a>
+                                                    <a class="boton azul" href="{{ route('solicitudes.show',$solicitude->id) }}"><i class="fa-solid fa-info"></i> </a>
+                                                    <a class="boton verde {{$clase}}" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm {{$clase}}"><i class="fa fa-fw fa-trash"></i> {{ __('Borrar') }}</button>
+                                                    <button type="submit" class="boton rojo{{$clase}}"><i class="fa fa-fw fa-trash"></i> </button>
                                                 </form>
                                             </td>
                                         </tr>

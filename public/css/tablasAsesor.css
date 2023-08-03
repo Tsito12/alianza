@@ -103,6 +103,14 @@ button:hover {
   grid-row-gap: 0px;
   width: 1200px;
 }
+.fila-cliente {
+  display: grid;
+  grid-template-columns: 100px repeat(9, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  width: 1200px;
+}
 
 .columna-titulo {
   display: flex;

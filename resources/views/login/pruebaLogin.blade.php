@@ -23,7 +23,7 @@
             <label for="email" class="etq">Correo electrónico</label>
             @error('email')
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
+                    <strong id="mensaje-error">{{ $message }}</strong>
                 </span>
             @enderror
             <span class="bar"></span>

@@ -31,7 +31,7 @@
                         </div>
                         <div class="form-group">
                             <strong>Telefono:</strong>
-                            {{ $cliente->telefono }}
+                            <a href='https://web.whatsapp.com/send/?phone=+52{{ $cliente->telefono }}'>{{ $cliente->telefono }}</a>
                         </div>
                         <div class="form-group">
                             <strong>Convenio:</strong>
@@ -78,6 +78,9 @@
                                 <input name="estado" type="hidden"  value="Rechazado" />
                                 <button type="submit" class="btn btn-danger btn-sm"> {{ __('Rechazar') }}</button>
                             </form>
+                        </div>
+                        <div class="float-right">
+                            <a class="btn btn-info btn-sm" href="{{route('file-upload',['idcliente'=>$cliente->id])}}">Ver documentos</a>
                         </div>
 
                     </div>

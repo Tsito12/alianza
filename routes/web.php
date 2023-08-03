@@ -50,4 +50,6 @@ Route::post('contacto',[ContactoController::class, 'metodo'])->name('contacto');
 
 Route::get('fechaYHora',[App\Http\Controllers\HomeController::class, 'fechaHoraActual'])->name('fechaYHora');
 
+Route::get('documentosIntegracion', [SolicitudeController::class, 'abr'])->name('documentosIntegracion');
+
 

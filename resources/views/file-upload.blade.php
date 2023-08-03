@@ -16,9 +16,13 @@
             url('{{asset('fonts/PresidenciaFirme-Italicas.otf')}}') format('opentype');
     }
 </style>
+<script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 <section>
     <form method="post" enctype="multipart/form-data" action="{{ url('store') }}" >
       @csrf
+      @if (is_null($documentosN['ine']))
+          
+      @endif
       {{Form::hidden('idcliente',$documentosN['ine']->idcliente)}}
         <div class="tabla">
             <div class="filas">
@@ -39,7 +43,7 @@
                 </div>
                 <div class="estado">
                     <div class="estado">
-                        @if(!is_null($documentosN['ine']->documento))
+                        @if(($documentosN['ine']->documento)!="")
                             @php
                                 $ruta = "storage/".str_replace("public/","",$documentosN['ine']->documento);
                             @endphp              
@@ -49,41 +53,45 @@
                 </div>
             </div>
             <div class="filas">
-                <div class="visualizacion-contenedor">
-                    <embed id="inepro" src="{{asset($ruta)}}"  frameborder="0">
-                </div>
+                @if(($documentosN['ine']->documento)!="")
+                    <div class="visualizacion-contenedor">
+                        <embed id="inepro" src="{{asset($ruta)}}"  frameborder="0">
+                    </div>
+                    @endif
             </div>
-            @if (Auth::user()->tipo=="Admin")
+            @if (Auth::user()->tipo=="Admin"&&$documentosN['ine']->estado!="")
                 <div class="filas">
+                    @if (($documentosN['ine']->documento)!="")
                     <div class="botones-contenedor">
-                        <!--como hacer que se pase que opcion fue la que se pulsó -->
-                        <a id="aprobarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re verde @if($documentosN['ine']->estado=="Aprobado") disabled @endif ">
+                        <a id="aprobarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['ine']->estado=="Aprobado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-up"></i>
                         </a>
-                        <a id="rechazarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo @if($documentosN['ine']->estado=="Rechazado") disabled @endif ">
+                        <a id="rechazarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['ine']->estado=="Rechazado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-down"></i>
                         </a>
                     </div>
                     <input id="motivoIne" name="motivoIne" type="text" placeholder="Observaciones" value="{{$documentosN['ine']->observaciones}}" class="observaciones">
-                    <a class="boton-integracion">Enviar a integración</a>
+                    @endif
+                    
                 </div>        
-            @else
-                @if ($documentosN['ine']->estado!="En revisión")
-                    <div class="filas">
-                        <p class="text-center">{{$documentosN['ine']->estado}}</p>
-                        <label for="motivoIne" class="form-control">Observaciones</label>
-                        <input class="observaciones disabled" type="text" name="motivoIne" id="motivoIne" value="{{$documentosN['ine']->observaciones}}" readonly>
-                    </div>
-                @endif
+                @else
+                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!="")
+                        <div class="filas">
+                            <p class="text-center">Estado</p>
+                            <p class="text-center">{{$documentosN['ine']->estado}}</p>
+                            <label for="motivoIne" class="form-control">Observaciones</label>
+                            <input class="observaciones disabled" type="text" name="motivoIne" id="motivoIne" value="{{$documentosN['ine']->observaciones}}" readonly>
+                        </div>
+                    @endif
             @endif    
-                    @if ($documentosN['ine']->estado!="En revisión")
+                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!=""&&Auth::user()->tipo=="Admin")
                             <div>
-                                <p class="text-center">{{$documentosN['ine']->estado}}</p>
+                                <p id="estadoIne" class="text-center">{{$documentosN['ine']->estado}}</p>
                                 <label for="motivoIne" class="form-control">Observaciones</label>
-                                <input class="form-control disabled" type="text" name="motivoIne" id="motivoIne" value="{{$documentosN['ine']->observaciones}}" readonly>
+                                <input class="form-control disabled" type="text" name="motivoIne" id="motivo2Ine" value="{{$documentosN['ine']->observaciones}}" readonly>
                             </div>
                     @endif
-            @endif
+            
         </div>
         <div class="tabla">
             <div class="filas">
@@ -104,7 +112,7 @@
                 </div>
                 <div class="estado">
                     <div class="estado">
-                        @if(!is_null($documentosN['ingresos']->documento))
+                        @if(($documentosN['ingresos']->documento)!="")
                             @php
                                 $ruta = "storage/".str_replace("public/","",$documentosN['ingresos']->documento);
                             @endphp              
@@ -114,32 +122,42 @@
                 </div>
             </div>
             <div class="filas">
-                <div class="visualizacion-contenedor">
-                    <embed id="ingresospro" src="{{asset($ruta)}}"  frameborder="0">
-                </div>
+                @if(($documentosN['ingresos']->documento)!="")
+                    <div class="visualizacion-contenedor">
+                        <embed id="ingresospro" src="{{asset($ruta)}}"  frameborder="0">
+                    </div>
+                @endif
             </div>
-            @if (Auth::user()->tipo=="Admin")
+            @if ((Auth::user()->tipo=="Admin")&&($documentosN['ingresos']->documento)!="")
                 <div class="filas">
                     <div class="botones-contenedor">
                         <!--como hacer que se pase que opcion fue la que se pulsó -->
-                        <a id="aprobarIngresos" onclick="movimiento(this)" href="#" class=" boton-ap-re verde @if($documentosN['ingresos']->estado=="Aprobado") disabled @endif ">
+                        <a id="aprobarIngresos" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['ingresos']->estado=="Aprobado") pointer-events : none @endif ">
                             <i class="fa-regular fa-thumbs-up"></i>
                         </a>
-                        <a id="rechazarIngresos" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo @if($documentosN['ingresos']->estado=="Rechazado") disabled @endif ">
+                        <a id="rechazarIngresos" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['ingresos']->estado=="Rechazado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-down"></i>
                         </a>
                     </div>
                     <input type="text" name="motivoIngresos" id="motivoIngresos" value="{{$documentosN['ingresos']->observaciones}}" class="observaciones">
-                    <a class="boton-integracion">Enviar a integración</a>
+                    
                 </div>        
             @else
-                @if ($documentosN['ingresos']->estado!="En revisión")
+                @if ($documentosN['ingresos']->estado!="En revisión"&&$documentosN['ingresos']->estado!="")
                     <div class="filas">
+                        <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['ingresos']->estado}}</p>
                         <label for="motivoIngresos" class="form-control">Observaciones</label>
                         <input class="observaciones disabled" type="text" name="motivoIngresos" id="motivoIngresos" value="{{$documentosN['ingresos']->observaciones}}" readonly>
                     </div>
                 @endif
+            @endif
+            @if ($documentosN['ingresos']->estado!="En revisión"&&$documentosN['ingresos']->estado!=""&&Auth::user()->tipo=="Admin")
+                <div class="filas">
+                    <p id="estadoIngresos" class="text-center">{{$documentosN['ingresos']->estado}}</p>
+                    <label for="motivo2Ingresos" class="form-control">Observaciones</label>
+                    <input class="form-control disabled" type="text" name="motivoIngresos" id="motivo2Ingresos" value="{{$documentosN['ingresos']->observaciones}}" readonly>
+                </div>
             @endif
         </div>
         <div class="tabla">
@@ -161,7 +179,7 @@
                 </div>
                 <div class="estado">
                     <div class="estado">
-                        @if(!is_null($documentosN['domicilio']->documento))
+                        @if(($documentosN['domicilio']->documento)!="")
                             @php
                                 $ruta = "storage/".str_replace("public/","",$documentosN['domicilio']->documento);
                             @endphp              
@@ -171,33 +189,43 @@
                 </div>
             </div>
             <div class="filas">
-                <div class="visualizacion-contenedor">
-                    <embed id="domiciliopro" src="{{asset($ruta)}}"  frameborder="0">
-                </div>
+                @if(($documentosN['domicilio']->documento)!="")
+                    <div class="visualizacion-contenedor">
+                        <embed id="domiciliopro" src="{{asset($ruta)}}"  frameborder="0">
+                    </div>
+                @endif
             </div>
-            @if (Auth::user()->tipo=="Admin")
+            @if (Auth::user()->tipo=="Admin"&&$documentosN['domicilio']->estado!="")
                 <div class="filas">
                     <div class="botones-contenedor">
                         <!--como hacer que se pase que opcion fue la que se pulsó -->
-                        <a id="aprobarDomicilio" onclick="movimiento(this)" href="#" class=" boton-ap-re verde @if($documentosN['domicilio']->estado=="Aprobado") disabled @endif ">
+                        <a id="aprobarDomicilio" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['domicilio']->estado=="Aprobado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-up"></i>
                         </a>
-                        <a id="rechazarDomicilio" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo @if($documentosN['domicilio']->estado=="Rechazado") disabled @endif ">
+                        <a id="rechazarDomicilio" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['domicilio']->estado=="Rechazado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-down"></i>
                         </a>
                     </div>
                     <input type="text" name="motivoDomicilio" id="motivoDomicilio" value="{{$documentosN['domicilio']->observaciones}}" class="observaciones">
-                    <a class="boton-integracion">Enviar a integración</a>
+                    
                 </div>        
             @else
-                @if ($documentosN['domicilio']->estado!="En revisión")
+                @if ($documentosN['domicilio']->estado!="En revisión"&&$documentosN['domicilio']->estado!="")
                     <div class="filas">
+                        <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['domicilio']->estado}}</p>
                         <label for="motivoDomicilio" class="form-control">Observaciones</label>
                         <input class="observaciones disabled" type="text" name="motivoDomicilio" id="motivoDomicilio" value="{{$documentosN['domicilio']->observaciones}}" readonly>
                     </div>
                 @endif
             @endif
+            @if ($documentosN['domicilio']->estado!="En revisión"&&$documentosN['domicilio']->estado!=""&&Auth::user()->tipo=="Admin")
+                    <div class="filas">
+                        <p id="estadoDomicilio" class="text-center">{{$documentosN['domicilio']->estado}}</p>
+                        <label for="motivoDomicilio" class="form-control">Observaciones</label>
+                        <input class="form-control   disabled" type="text" name="motivoDomicilio" id="motivo2Domicilio" value="{{$documentosN['domicilio']->observaciones}}" readonly>
+                    </div>
+                @endif
         </div>
         <div class="tabla">
             <div class="filas">
@@ -218,7 +246,7 @@
                 </div>
                 <div class="estado">
                     <div class="estado">
-                        @if(!is_null($documentosN['foto']->documento))
+                        @if(($documentosN['foto']->documento)!="")
                             @php
                                 $ruta = "storage/".str_replace("public/","",$documentosN['foto']->documento);
                             @endphp              
@@ -228,59 +256,61 @@
                 </div>
             </div>
             <div class="filas">
-                <div class="visualizacion-contenedor">
-                    <embed id="fotopro" src="{{asset($ruta)}}"  frameborder="0">
-                </div>
+                @if(($documentosN['foto']->documento)!="")
+                    <div class="visualizacion-contenedor">
+                        <embed id="fotopro" src="{{asset($ruta)}}"  frameborder="0">
+                    </div>
+                @endif
             </div>
-            @if (Auth::user()->tipo=="Admin")
+            @if (Auth::user()->tipo=="Admin"&&$documentosN['foto']->documento!="")
                 <div class="filas">
                     <div class="botones-contenedor">
                         <!--como hacer que se pase que opcion fue la que se pulsó -->
-                        <a id="aprobarFoto" onclick="movimiento(this)" href="#" class=" boton-ap-re verde @if($documentosN['foto']->estado=="Aprobado") disabled @endif ">
+                        <a id="aprobarFoto" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['foto']->estado=="Aprobado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-up"></i>
                         </a>
-                        <a id="rechazarFoto" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo @if($documentosN['foto']->estado=="Rechazado") disabled @endif ">
+                        <a id="rechazarFoto" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['foto']->estado=="Rechazado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-down"></i>
                         </a>
                     </div>
                     <input type="text" name="motivoFoto" id="motivoFoto" value="{{$documentosN['foto']->observaciones}}" class="observaciones">
-                    <a class="boton-integracion">Enviar a integración</a>
+                    
                 </div>        
             @else
-                @if ($documentosN['foto']->estado!="En revisión")
+                @if ($documentosN['foto']->estado!="En revisión"&&$documentosN['foto']->documento!="")
                     <div class="filas">
+                        <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['foto']->estado}}</p>
                         <label for="motivoFoto" class="form-control">Observaciones</label>
                         <input class="observaciones disabled" type="text" name="motivoFoto" id="motivoFoto" value="{{$documentosN['foto']->observaciones}}" readonly>
                     </div>
                 @endif
             @endif
+            @if ($documentosN['foto']->estado!="En revisión"&&$documentosN['foto']->documento!=""&&Auth::user()->tipo=="Admin")
+                    <div class="filas">
+                        <p id="estadoFoto" class="text-center">{{$documentosN['foto']->estado}}</p>
+                        <label for="motivoFoto" class="form-control">Observaciones</label>
+                        <input class="form-control disabled" type="text" name="motivoFoto" id="motivo2Foto" value="{{$documentosN['foto']->observaciones}}" readonly>
+                    </div>
+                @endif
         </div>
         <button type="submit" class="boton">Enviar</button>
-    </form>
-    @php
-        $aprobados = true;
-        foreach ($documentosN as $documento) {
-            if ($documento->estado!="Aprobado") {
-                $aprobados = false;
-                break;
-            }
-        }
-    @endphp
-    
         @php
+            $aprobados = true;
+            foreach ($documentosN as $documento) {
+                if ($documento->estado!="Aprobado") {
+                    $aprobados = false;
+                    break;
+                }
+            }
+            $solicitud = Solicitude::where('idcliente', $documentosN['ine']->idcliente)->first();
             $solicitud = Solicitude::where('idcliente', $documentosN['ine']->idcliente)->first();
         @endphp
-        <form action="{{route('solicitudes.update',$solicitud)}}" method="post">
-            @csrf
-            {{ method_field('PATCH') }}
-            <input type="hidden" name="estado" value="En integracion">
-            <input type="hidden" name="idcliente" value="{{$documentosN['ine']->idcliente}}">
-            <!--<input type="hidden" name="prestamosolicitado", value="{{$solicitud->prestamosolicitado}}">-->
-            <input type="submit" id="botonIntegracion" class="btn boton @if (!$aprobados||(Auth::user()->tipo!="Admin")) d-none
-            @endif
-            " value="Mandar a integración">
-        </form>
+
+
+            <a id="botonIntegracion" style="text-decoration: none" class="boton @if (!$aprobados||(Auth::user()->tipo!="Admin")) d-none
+                @endif" href="{{route('documentosIntegracion', ['idsolicitud' => $solicitud])}}">A integracion</a>
+
     
 </section>
 
@@ -316,8 +346,8 @@ function movimiento(boton)
     documento = documento.replaceAll("rechazar","");
     let documentoid = null;
     let resultado = "";
-    if(accion == "Aprobar") resultado = "Aprobado";
-    else resultado = "Rechazado";
+    if(boton.id.indexOf('aprobar') != -1) resultado = "Aprobado";
+    else if(boton.id.indexOf('rechazar') != -1)resultado = "Rechazado";
     let motivo;
     switch(documento)
     {
@@ -360,18 +390,25 @@ function movimiento(boton)
                             })
                             .then((data) => {
                                 console.log(data['estado']);
-                                boton.classList.add("disabled");
+                                //boton.classList.add("disabled");
+                                boton.style.pointerEvents="none";
                                 if(data['estado']=="Aprobado")
                                 {
-                                    boton.nextElementSibling.classList.remove('disabled');
+                                    boton.nextElementSibling.style.pointerEvents="";
+                                    document.getElementById("estado"+documento).innerText="Aprobado";
                                 }else if(data['estado']=="Rechazado")
                                 {
-                                    boton.previousElementSibling.classList.remove('disabled');
+                                    boton.previousElementSibling.style.pointerEvents="";
+                                    document.getElementById("estado"+documento).innerText="Rechazado";
                                 }
                                 if(documentosListos(boton))
                                 {
                                     document.getElementById("botonIntegracion").classList.remove("d-none");
+                                }else
+                                {
+                                    document.getElementById("botonIntegracion").classList.add("d-none");
                                 }
+                                document.getElementById("motivo2"+documento).value=document.getElementById("motivo"+documento).value;
                             }
 
                             );
@@ -390,15 +427,15 @@ function documentosListos(boton)
 
     }else
     {
-        const ine = document.getElementById("aprobarIne").className;
-        const ingresos = document.getElementById("aprobarIngresos").className;
-        const domicilio = document.getElementById("aprobarDomicilio").className;
-        const foto = document.getElementById("aprobarFoto").className;
+        const ine = document.getElementById("estadoIne").innerText;
+        const ingresos = document.getElementById("estadoIngresos").innerText;
+        const domicilio = document.getElementById("estadoDomicilio").innerText;
+        const foto = document.getElementById("estadoFoto").innerText;
         let documentos = [ine,ingresos,domicilio,foto];
         for(let i = 0; i < documentos.length; i++)
         {
             console.log(documentos[i]);
-            if(documentos[i].indexOf("disabled")==-1) todoListo = false;
+            if(documentos[i].indexOf("Aprobado")==-1) todoListo = false;
         }
     }
     console.log(todoListo);

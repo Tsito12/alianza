@@ -56,7 +56,7 @@
             @php
                 
             @endphp
-            @foreach ($solicitudesPag as $solicitude)
+            @foreach ($solicitudes as $solicitude)
                 @php
                     $cliente = Cliente::find($solicitude->idcliente);
                     $convenio = Convenios::find($cliente->convenio);
@@ -66,7 +66,7 @@
                         <td>{{ ++$i }}</td>
                     </div>
                     <div class="columna">
-                        <span>{{$cliente->nombre}}</span>
+                      <span><a href="{{route('clientes.show', $cliente->id)}}">{{$cliente->nombre}}</a></span>
                     </div>
                     <div class="columna">
                         <span>{{$convenio->nombreCorto}}</span>
@@ -101,7 +101,7 @@
                     </form>
                 </div>
             @endforeach
-            {!! $solicitudesPag->links() !!}
+            {!! $solicitudes->appends('rechazadas', request()->input('rechazadas',1))->appends('enIntegracion', request()->input('enIntegracion',1))->links() !!}
             </div>
           </div>
         
@@ -138,9 +138,6 @@
               </div>
               <div class="columna-titulo"></div>
             </div>
-            @php
-                //$i=0;
-            @endphp
             @foreach ($solicitudesIntegracion as $solicitude)
                 @php
                     $cliente = Cliente::find($solicitude->idcliente);
@@ -148,10 +145,10 @@
                 @endphp
             <div class="fila">
                 <div class="columna">
-                    <span>{{++$j}}</span>
+                    <span>{{++$k}}</span>
                 </div>
                 <div class="columna">
-                    <span>{{$cliente->nombre}}</span>
+                    <span><a href="{{route('clientes.show', $cliente->id)}}">{{$cliente->nombre}}</a></span>
                 </div>
                 <div class="columna">
                     <span>{{$convenio->nombreCorto}}</span>
@@ -186,7 +183,7 @@
                 </form>
             </div> 
             @endforeach
-            {!! $solicitudesIntegracionPag->links() !!}
+            {!! $solicitudesIntegracion->appends('enProceso', request()->input('enProceso',1))->appends('rechazadas', request()->input('rechazadas',1))->links() !!}
           </div>    
         </div>
         <div class="tabla-titulo"  id="3">
@@ -223,9 +220,6 @@
             <div class="columna-titulo"></div>
           </div>
 
-          @php
-            //$i=0;
-        @endphp
         @foreach ($solicitudesRechazadas  as $solicitude)
             @php
                 $cliente = Cliente::find($solicitude->idcliente);
@@ -233,10 +227,10 @@
             @endphp
             <div class="fila">
                 <div class="columna">
-                    <span>{{++$k}}</span>
+                    <span>{{++$j}}</span>
                 </div>
                 <div class="columna">
-                    <span>{{$cliente->nombre}}</span>
+                  <span><a href="{{route('clientes.show', $cliente->id)}}">{{$cliente->nombre}}</a></span>
                 </div>
                 <div class="columna">
                     <span>{{$convenio->nombreCorto}}</span>
@@ -269,7 +263,7 @@
                 </form>
             </div>
         @endforeach
-        {!! $solicitudesRechazadasPag->links() !!}
+        {!! $solicitudesRechazadas->appends('enProceso',request()->input('enProceso',1))->appends('enIntegracion',request()->input('enIntegracion',1))->links() !!}
           
         </div>
         </div>
@@ -300,13 +294,6 @@
       function calcularTiempo()
       {
         var fechaDelServidor;
-        /*
-        $.get( "/fechaYHora", function( data ) {
-          $("#fechaServidor").html(data);
-          fechaDelServidor = data;
-          console.log(fechaDelServidor);
-        });
-        */
         let filas = document.getElementsByClassName("fila");
         for(i = 1; i < filas.length; i++)
         {
@@ -374,5 +361,25 @@
             horas = "0" + horas;
         }
       }
+
+      function paginaAlCargar()
+      {
+        let tablas = ["enProceso","enIntegracion","rechazadas"];
+        let ruta = window.location.search;
+        ruta = ruta.replaceAll('?','');
+        ruta = ruta.replaceAll('=','');
+        ruta = ruta.replaceAll(/\d/g,'');
+        let tablasActuales = ruta.split('&');
+        for(let i = 0; i < tablas.length; i++)
+        {
+          if(tablas[i]==tablasActuales[tablasActuales.length-1])
+          {
+            cambiarTabla(i+1);
+            break;
+          } 
+        }
+        console.log(tablasActuales);
+      }
+      document.getElementsByTagName("body")[0].addEventListener("load",paginaAlCargar());
     </script>
 @endsection

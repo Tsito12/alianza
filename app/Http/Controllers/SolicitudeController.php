@@ -22,35 +22,22 @@ use PDF;
 class SolicitudeController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * Obtiene las solicitudes que estan en proceso, modificadas y en integracion
+     * ordenandolas por fecha de modificacion, de tal forma que se siga un primeras entradas primeras salidas
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //$solicitudes = Solicitude::paginate();
-        $solicitudes = Solicitude::where('estado','En proceso')->get()->sortBy('updated_at')->toQuery();
-        $solicitudesPag = $solicitudes->paginate($perPage = 20, $columns = ['*'], $pageName = 'enProceso');
-        $solicitudes = $solicitudes->get()->sortBy('updated_at');
-        
-        $solicitudesRechazadas = Solicitude::where('estado','Modificada');
-        $solicitudesRechazadasPag = $solicitudesRechazadas->paginate($perPage = 10, $columns = ['*'], $pageName = 'rechazadas');
-        $solicitudesRechazadas = $solicitudesRechazadas->get()->sortBy('updated_at');
-
-        $solicitudesIntegracion = Solicitude::where('estado','En integracion')->get()->sortBy('updated_at')->toQuery();
-        $solicitudesIntegracionPag = $solicitudesIntegracion->paginate($perPage = 10, $columns = ['*'], $pageName = 'enIntegracion');
-        $solicitudesIntegracion = $solicitudesIntegracion->get()->sortBy('updated_at');
-        //$idusuario = Auth::id();
-        //$cliente = Cliente::where('user_id',$idusuario)->first();
+        //se llama al metodo paginate con parametros para poder mantener paginias saparadas para cada tipo de solicitud
+        $solicitudes = Solicitude::where('estado','En proceso')->orderBy('updated_at')->paginate($perPage = 10, $columns = ['*'], $pageName = 'enProceso');  
+        $solicitudesRechazadas = Solicitude::where('estado','Modificada')->orderBy('updated_at')->paginate($perPage = 2, $columns = ['*'], $pageName = 'rechazadas');
+        $solicitudesIntegracion = Solicitude::where('estado','En integracion')->orderBy('updated_at')->paginate($perPage = 2, $columns = ['*'], $pageName = 'enIntegracion');
         if(auth()->user()->tipo=="Admin"||auth()->user()->tipo=="Aesor")
         {
-            return view('solicitude.panelAdmin', compact('solicitudesPag', 'solicitudesRechazadasPag', 'solicitudesIntegracionPag'))
-            ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage())
-            ->with('j', (request()->input('page', 1) - 1) * $solicitudesRechazadasPag->perPage())
-            ->with('k', (request()->input('page', 1) - 1) * $solicitudesIntegracionPag->perPage())
-            //->with('solicitudes', $solicitudes)
-            ->with('solicitudesRechazadas', $solicitudesRechazadas)
-            ->with('solicitudesIntegracion', $solicitudesIntegracion);
+            return view('solicitude.panelAdmin', compact('solicitudes', 'solicitudesRechazadas', 'solicitudesIntegracion'))
+            ->with('i', (request()->input('enProceso', 1) - 1) * $solicitudes->perPage())
+            ->with('j', (request()->input('rechazadas', 1) - 1) * $solicitudesRechazadas->perPage())
+            ->with('k', (request()->input('enIntegracion', 1) - 1) * $solicitudesIntegracion->perPage());
         }
 
         return view('solicitude.index', compact('solicitudes'))
@@ -440,5 +427,14 @@ class SolicitudeController extends Controller
             //CERRAMOS EL CURL
             curl_close($curl);
             //return $response;
+    }
+
+    public function abr(Request $request)
+    {
+        $idsolicitud = $request->query('idsolicitud');
+        $solicitud = Solicitude::find($idsolicitud);
+        $solicitud->estado="En integracion";
+        $solicitud->save();
+        return redirect()->route('home');
     }
 }
