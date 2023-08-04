@@ -6,7 +6,19 @@
     <link href="{{ asset('css/input-styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/login.css') }}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
+    <link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
     <title>Registro</title>
+    <style>
+        @font-face {
+            font-family: 'Presidencia Fina';
+            src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Presidencia Firme';
+            src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+        }
+    </style>
 </head>
 <body class="reg">
     <header>

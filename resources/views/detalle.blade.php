@@ -1,7 +1,19 @@
 @extends('layouts.app')
 @section('content')
 <link href="{{asset('css/resultados.css')}}" rel="stylesheet">
+<link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
 <title>Resultados de crédito</title>
+<style>
+    @font-face {
+        font-family: 'Presidencia Fina';
+        src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+    }
+
+    @font-face {
+        font-family: 'Presidencia Firme';
+        src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+    }
+</style>
 @php
     use App\Models\User;
     use Illuminate\Support\Facades\Auth;

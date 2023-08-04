@@ -6,6 +6,17 @@
     <link href="{{ asset('css/input-styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/login.css') }}" rel="stylesheet">
     <title>Iniciar sesión</title>
+    <style>
+        @font-face {
+            font-family: 'Presidencia Fina';
+            src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Presidencia Firme';
+            src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+        }
+    </style>
 </head>
 <body>
     <header>

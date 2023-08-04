@@ -1,29 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap');
-
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
 }
 
 body {
-    position: relative;
+    background-color: #F2F3F4;
+    font-size: 20px;
     min-height: 100vh;
-    background-color: #F8FAFC;
-    font-size: 16px;
+    position: relative;
 }
 
 header {
-    position: fixed;
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    background-color: #F2F3F4;
+    box-shadow:  5px 5px 10px #B3B4B5, -5px -5px 10px #FFFFFF;
+    display: flex;
     height: 60px;
+    justify-content: space-between;
     padding: 0 35px;
-    background-color: #F8FAFC;
-    border-bottom: 1px solid #CCC;
+    position: fixed;
+    width: 100%;
     z-index: 100;
 }
 
@@ -33,45 +30,48 @@ img {
 }
 
 section {
-    display: flex;
     align-items: center;
-    justify-content: center;
+    display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 50px;
+    justify-content: center;
+    padding: 90px 0 30px;
     width: 100%;
-    min-height: 100vh;
-    padding-top: 60px;
 }
 
 h1 {
     color: #00632F;
-    text-align: center;
+    font-family: 'Presidencia Firme', sans-serif;
     font-size: 1.375em;
-    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 h2 {
-    font-size: 1.75em;
-    font-weight: 700;
     color: #00632F;
+    font-family: 'Presidencia Firme', sans-serif;
+    font-size: 1.75em;
+    letter-spacing: 1px;
 }
 
 h3 {
-    font-size: 1.25em;
-    font-weight: 500;
     color: #257140;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1.25em;
     white-space: nowrap;
 }
 
 p {
+    color: #7A7A7A;
+    font-family: 'Presidencia Fina', sans-serif;
     font-size: 1em;
-    color: #ADADAD;
     white-space: nowrap;
 }
 
 .titulo-saci {
     color: #005520;
-    font-size: 20px;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1.25em;
     text-align: right;
 }
 
@@ -80,50 +80,51 @@ p {
 }
 
 .cuadro-contenedor {
-    display: flex;
     align-items: center;
-    justify-content: center;
+    background-color: #F2F3F4;
+    box-shadow:  5px 5px 10px #B3B4B5, -5px -5px 10px #FFFFFF;
+    border-radius: 5px;
+    display: flex;
     flex-direction: column;
     gap: 20px;
+    justify-content: center;
     padding: 50px;
-    border: 1px solid #CCC;
-    border-radius: 15px;
 }
 
 .info-contenedor {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 5px;
+    display: flex;
     flex-direction: column;
+    gap: 5px;
+    justify-content: center;
 }
 
 .info-contenedor-doble {
-    position: relative;
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: space-between;
+    position: relative;
     width: 300px;
 }
 
 .border {
-    width: 100%;
     border: 1px solid #CCC;
+    width: 100%;
 }
 
 .tooltip {
+    display: inline-block;
     position: absolute;
     right: -30px;
     top: 5px;
-    display: inline-block;
     width: 20px;
 }
 
 .tooltip-left {
-    position: absolute;
-    left: -30px;
-    top: 5px;
     display: inline-block;
+    left: -30px;
+    position: absolute;
+    top: 5px;
     width: 20px;
 }
   
@@ -133,37 +134,41 @@ p {
 }
   
 .tooltip-text {
-    display: none;
-    width: 220px;
     background-color: #000;
-    color: #FFF;
-    text-align: center;
-    padding: 5px;
     border: 1px solid #FFF;
     border-radius: 4px;
-    position: absolute;
-    top: -30px;
+    color: #FFF;
+    display: none;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1em;
     left: -110px;
+    padding: 5px;
+    position: absolute;
+    text-align: center;
+    top: -30px;
     transform: translateX(-50%);
-    z-index: 1;
     user-select: none;
+    width: 220px;
+    z-index: 1;
 }
 
 .tooltip-text-left {
-    display: none;
-    width: 220px;
     background-color: #000;
-    color: #FFF;
-    text-align: center;
-    padding: 5px;
     border: 1px solid #FFF;
     border-radius: 4px;
+    color: #FFF;
+    display: none;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1em;
+    padding: 5px;
     position: absolute;
-    top: -100px;
     right: -320px;
+    text-align: center;
+    top: -100px;
     transform: translateX(-50%);
-    z-index: 1;
     user-select: none;
+    width: 220px;
+    z-index: 1;
 }
   
 .tooltip:hover .tooltip-text {
@@ -175,19 +180,19 @@ p {
 }
 
 .boton-contenedor {
-    position: relative;
     display: flex;
     gap: 20px;
+    position: relative;
 }
 
 .boton {
-    padding: 9px 18px;
-    color: #FFF;
-    font-size: 1em;
-    font-weight: 700;
-    text-decoration: none;
     background-color: #00632F;
     border-radius: 5px;
+    color: #FFF;
+    font-family: 'Presidencia Firme', sans-serif;
+    font-size: 1em;
+    padding: 9px 18px;
+    text-decoration: none;
     transition: transform .3s;
 }
 
@@ -196,14 +201,16 @@ p {
 }
 
 .guardar {
-    color: #00632F;
-    background-color: #F8FAFC;
+    background-color: #F2F3F4;
     border: 1px solid #00632F;
+    color: #00632F;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1em;
 }
 
 @media (max-width: 500px){
     body {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .cuadro-contenedor {
@@ -218,7 +225,7 @@ p {
 @media (max-width: 370px){
 
     body {
-        font-size: 10px;
+        font-size: 14px;
     }
 
     .info-contenedor-doble {

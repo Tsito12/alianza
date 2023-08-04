@@ -1,6 +1,18 @@
 @extends('layouts.app')
 <link href="{{asset('css/preferencias.css')}}" rel="stylesheet">
+<link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
 <title>Preferencias de contacto</title>
+<style>
+    @font-face {
+        font-family: 'Presidencia Fina';
+        src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+    }
+
+    @font-face {
+        font-family: 'Presidencia Firme';
+        src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+    }
+</style>
 
 @section('content')
   <section>

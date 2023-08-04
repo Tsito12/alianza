@@ -4,9 +4,8 @@ const inputPagoMaximo = document.getElementById('pago-maximo');
 const inputPagoMinimo = document.getElementById('pago-minimo');
 const inputRange = document.getElementById('range');
 const inputNumberRange = document.getElementById('number-range');
-const botonMas = document.getElementById('boton-mas');
-const botonMenos = document.getElementById('boton-menos');
-const inputMeses = document.getElementById('meses');
+const inputRangeMeses = document.getElementById('range-meses');
+const inputNumberMeses = document.getElementById('number-meses');
 
 var intervaloID;
 
@@ -57,36 +56,11 @@ const actualizarValores = () => {
     inputNumberRange.value = inputRange.value;
 };
 
-const sumar = () => {
-    if(parseInt(inputMeses.value) < 24) inputMeses.value++;
-
-    if(parseInt(inputMeses.value) === 24) botonMas.classList.add('gris');
-    if(parseInt(inputMeses.value) !== 3) botonMenos.classList.remove('gris');
+const actualizarValoresMeses = () => {
+    inputNumberMeses.value = inputRangeMeses.value;
 };
 
-const restar = () => {
-    if(parseInt(inputMeses.value) > 3) inputMeses.value--;
-
-    if(parseInt(inputMeses.value) === 3) botonMenos.classList.add('gris');
-    if(parseInt(inputMeses.value) !== 24) botonMas.classList.remove('gris');
-};
-
-const manejarMouseDown = callback => {
-    callback();
-
-    intervaloID = setInterval(callback, 200);
-};
-
-const manejarMouseUp = () => {
-    clearInterval(intervaloID);
-};
-
-botonMas.addEventListener('mousedown', () => manejarMouseDown(sumar));
-botonMas.addEventListener('mouseup', manejarMouseUp);
-botonMas.addEventListener('mouseleave', manejarMouseUp);
-botonMenos.addEventListener('mousedown', () => manejarMouseDown(restar));
-botonMenos.addEventListener('mouseup', manejarMouseUp);
-botonMenos.addEventListener('mouseleave', manejarMouseUp);
 inputTotalQuincena.addEventListener('keyup', actualizarMontos);
 inputMontoDisponible.addEventListener('keyup', actualizarMontos);
 inputRange.addEventListener('input', actualizarValores);
+inputRangeMeses.addEventListener('input', actualizarValoresMeses);

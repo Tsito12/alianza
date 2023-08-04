@@ -8,7 +8,7 @@ const maximoPermitido = 150000;
 const tasaIva = tasa * iva;
 
 const calcularCreditoMaximo = () => {
-    const meses = parseFloat(inputMeses.value);
+    const meses = parseFloat(inputNumberMeses.value);
     const pagoQuincenal = parseFloat(inputNumberRange.value);
     const pagoMensual = pagoQuincenal * 2;
     const potencia = Math.pow(1 + tasaIva, meses);

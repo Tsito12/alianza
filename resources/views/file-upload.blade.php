@@ -4,16 +4,17 @@
 @include('layouts.app')
 
 <link href="{{asset('css/subirArchivos.css')}}" rel="stylesheet">
+<link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
 <title>Subir archivos</title>
 <style>
     @font-face {
-        font-family: 'Presidencia';
-        src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype'),
-            url('{{asset('fonts/PresidenciaFuerte.otf')}}') format('opentype'),
-            url('{{asset('fonts/PresidenciaFuerte-Italicas.otf')}}') format('opentype'),
-            url('{{asset('fonts/PresidenciaFuerte-Versalitas.otf')}}') format('opentype'),
-            url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype'),
-            url('{{asset('fonts/PresidenciaFirme-Italicas.otf')}}') format('opentype');
+        font-family: 'Presidencia Fina';
+        src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+    }
+
+    @font-face {
+        font-family: 'Presidencia Firme';
+        src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
     }
 </style>
 <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
