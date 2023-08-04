@@ -1,28 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap');
-
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
 }
 
 body {
+  background-color: #F2F3F4;
+  font-size: 20px;
   min-height: 100vh;
-  background-color: #F8FAFC;
-  font-size: 16px;
 }
 
 header {
-  position: fixed;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  background-color: #F2F3F4;
+  box-shadow:  5px 5px 10px #B3B4B5, -5px -5px 10px #FFFFFF;
+  display: flex;
   height: 60px;
+  justify-content: space-between;
   padding: 0 35px;
-  background-color: #F8FAFC;
-  border-bottom: 1px solid #CCC;
+  position: fixed;
+  width: 100%;
   z-index: 100;
 }
 
@@ -32,36 +29,39 @@ img {
 }
 
 section {
-  display: flex;
   align-items: center;
-  justify-content: flex-start;
+  display: flex;
   flex-direction: column;
   gap: 70px;
-  width: 100%;
+  justify-content: flex-start;
   min-height: 100vh;
   padding: 90px 0;
+  width: 100%;
 }
 
 h2 {
   color: #005520;
-  font-size: 20px;
+  font-family: 'Presidencia Fina', sans-serif;
+  font-size: 1.25em;
   text-align: right;
 }
 
 h3 {
   color: #257140;
-  font-size: 16px;
+  font-family: 'Presidencia Fina', sans-serif;
+  font-size: 1em;
 }
 
 button {
-  padding: 9px 18px;
-  color: #005520;
-  font-size: 14px;
-  font-weight: 700;
-  background-color: #F8FAFC;
+  background-color: #F2F3F4;
   border: 2px solid #005520;
   border-radius: 5px;
+  color: #005520;
   cursor: pointer;
+  font-family: 'Presidencia Firme', sans-serif;
+  font-size: 0.875em;
+  letter-spacing: 1px;
+  padding: 9px 18px;
   transition: transform .3s;
 }
 
@@ -80,14 +80,14 @@ button:hover {
 
 .tabla-titulo {
   display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .mostrar {
+  align-items: center;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
 }
 
 .tabla {
@@ -97,24 +97,24 @@ button:hover {
 
 .fila {
   display: grid;
-  grid-template-columns: 100px repeat(8, 1fr);
-  grid-template-rows: auto;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  grid-template-columns: 100px repeat(8, 1fr);
+  grid-template-rows: auto;
   width: 1200px;
 }
 .fila-cliente {
   display: grid;
-  grid-template-columns: 100px repeat(9, 1fr);
-  grid-template-rows: auto;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  grid-template-columns: 100px repeat(9, 1fr);
+  grid-template-rows: auto;
   width: 1200px;
 }
 
 .columna-titulo {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
   padding: 10px 0;
 }
@@ -125,39 +125,40 @@ button:hover {
 
 .columna-titulo span {
   color: #FFF;
-  font-size: 14px;
-  font-weight: 700;
+  font-family: 'Presidencia Firme', sans-serif;
+  font-size: 0.875em;
+  letter-spacing: 1px;
   text-align: center;
 }
 
 .columna {
-  display: flex;
   align-items: center;
+  border-bottom: 1px solid #CCC;
+  display: flex;
   justify-content: center;
   padding: 10px 0;
-  border-bottom: 1px solid #CCC;
 }
 
 .columna span {
   color: #000;
-  font-size: 14px;
-  font-weight: 500;
+  font-family: 'Presidencia Fina', sans-serif;
+  font-size: 0.875em;
   text-align: center;
 }
 
 .boton {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  color: #FFF;
-  font-size: 14px;
-  text-decoration: none;
   border: none;
   border-radius: 50%;
+  color: #FFF;
   cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  height: 30px;
+  justify-content: center;
+  text-decoration: none;
   transition: transform .3s;
+  width: 30px;
 }
 
 .boton:hover {

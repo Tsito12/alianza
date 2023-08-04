@@ -4,7 +4,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ asset('css/input-styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/sacialianza.css') }}" rel="stylesheet">
+    <link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
     <title>SaciAlianza</title>
+    <style>
+        @font-face {
+            font-family: 'Presidencia Fina';
+            src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Presidencia Firme';
+            src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+        }
+    </style>
 </head>
 <body>
     <!-- LOGO -->
@@ -114,18 +126,17 @@
                                     <input type="number" name="pagodeseado" id="pagodeseado" class="pagos-input" tabindex="-1" readonly required>
                                 </div>
                             </div>
-                            <div>
-                                <label for="plazo" class="pagos-etiqueta">¿A cuántos meses?</label>
-                                <div class="meses-contenedor">
-                                    <div id="boton-menos" class="meses-boton">-</div>
-                                    <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
-                                    <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
-                                    <p id="montoMinimo" class="d-none">{{$convenio->montoMinimo}}</p>
-                                    <p id="montoMaximo" class="d-none">{{$convenio->montoMaximo}}</p>
-                                    <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
-                                    <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="12" tabindex="-1" required readonly>
-                                    <div id="boton-mas" class="meses-boton">+</div>
-                                    <span> meses</span>                                
+                            <div class="range-contenedor">
+                                <p id="plazoMinimo" class="d-none">{{$convenio->plazoMinimo}}</p>
+                                <p id="plazoMaximo" class="d-none">{{$convenio->plazoMaximo}}</p>
+                                <p id="montoMinimo" class="d-none">{{$convenio->montoMinimo}}</p>
+                                <p id="montoMaximo" class="d-none">{{$convenio->montoMaximo}}</p>
+                                <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
+                                <label for="range-meses" class="pagos-etiqueta">¿A cuántos meses?</label>
+                                <input type="range" name="range-meses" id="range-meses" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" value="12" step="1" tabindex="-1">
+                                <div class="pagos-ssc">
+                                    <input value="12" type="number" name="number-meses" id="number-meses" class="meses-input" tabindex="-1" readonly required>
+                                    <span class="meses-span">Meses</span>
                                 </div>
                             </div>           
                         </div>

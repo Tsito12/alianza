@@ -10,6 +10,18 @@
 
 @section('content')
     <link href="{{asset('css/tablasAsesor.css')}}" rel="stylesheet">
+    <link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
+    <style>
+        @font-face {
+            font-family: 'Presidencia Fina';
+            src: url('{{asset('fonts/PresidenciaFina.otf')}}') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Presidencia Firme';
+            src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
+        }
+    </style>
     <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
     
     <p class="d-none" id="fechaServidor"></p>
