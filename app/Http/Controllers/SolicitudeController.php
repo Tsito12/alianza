@@ -128,11 +128,11 @@ class SolicitudeController extends Controller
         $fechaInicio = date("Y-m-d");
         $Transaccion = rand(10,10000000);
 
-        //opcion para cuando se va a imprimir el pdf, para que no se vuelvan a realizar los calclulos
+        //opcion para cuando se va a imprimir el pdf, para que no se vuelvan a realizar los calculos
         if( !is_null(session('datosSolicitud'))  )
         {
             $opcion=$request->get('opcion');
-            if($opcion=='imprimir'){
+            if(Auth::user()->tipo=="Cliente"){
                 //return redirect()->route('imprimirDatosSolicitud',$datos);
                 $datos=session('datosSolicitud');
                 $pdf = PDF::loadView('imprimir', ['datos' => $datos]);
@@ -150,10 +150,11 @@ class SolicitudeController extends Controller
                 return $descarga;
                 //imprimir($datos);
             }
+            return view('detalle', compact('solicitude'))->with('datos',$datos)->with('cliente',$cliente)->with('convenios', $convenioT);
         }
         
         
-        //Consultas a la base de datos 100% real
+        //Consultas a la base de datos del online, o de el antiguo sacialianza, pero parece ser que llama a un metodo de safi
         $simulacion     = DB::connection('produccion')->select("
                 CALL CREPAGCRECAMORPRO($monto,$convenio,30,'M','D',$diaMes,'$fechaInicio',$Meses,3001,20235,'S','N','N',0.0,'S',@a,@b,@c,@d,@e,@f,@g,1,184,'$fechaInicio','192.168.100.184','/microfin/catalogoCliente.htm',13,-$Transaccion)
             ");

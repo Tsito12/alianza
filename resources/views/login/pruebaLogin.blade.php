@@ -10,7 +10,8 @@
 <body>
     <header>
         <div class="logo-contenedor">
-            <img src="{{ asset('img/sacimex.png') }}">
+            <a href="{{route('home')}}"><img src="{{ asset('img/sacimex.png') }}"></a>
+            
         </div>
         <h2>Tu crédito de confianza.</h2>
     </header>
@@ -60,7 +61,7 @@
             <p class="par">¿No tienes una cuenta?</p>
             <a href="  {{ route('register') }}  " class="lnk">Regístrate</a>
         </div>
-        <div class="lnk-contenedor">
+        <div class="lnk-contenedor" id="restablecer">
             <p class="par">¿Olvidaste tu contraseña?</p>
             <a href="  {{ route('password.request') }}  " class="lnk">Restablacer contraseña</a>
         </div>
@@ -118,5 +119,19 @@
 
       input.value = input.value.toUpperCase();
     };
+
+    function llevarAlRegistro()
+    {
+        let mensaje = document.getElementById("mensaje-error").innerText;
+        if(mensaje=="No se encontró un usuario con ese correo")
+        {
+            window.location.replace("/register");
+        } else if(mensaje=="Las credenciales no coinciden.")
+        {
+            document.getElementById("restablecer").style="font-size: x-large";
+        }
+    }
+
+    document.getElementsByTagName("body")[0].addEventListener("load",llevarAlRegistro());
   </script>
 </html>

@@ -66,6 +66,8 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
+        // Debido a que se cuenta con un solo formulario para registrar tanto clientes como solicitudes, 
+        //Por este metodo pasan también las solicitudes
         //area donde se procesa la solicitud
         $creditoMaximo=$request->input('creditomaximo');
         if($creditoMaximo!=0||!is_null($creditoMaximo)||$creditoMaximo!="")
@@ -100,7 +102,7 @@ class ClienteController extends Controller
         }
         $ingresoquincenal = $request->input('ingresoquincenal');
         $iduser = $request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
-        
+        //Area donde se procesan los datos del cliente
         if($request->input('idcliente')!==""&&!is_null($request->input('idcliente')))
         {
             $cliente = Cliente::find($request->input('idcliente'));

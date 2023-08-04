@@ -32,7 +32,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="logo-contenedor">
-                <img src="{{asset('img/logo.png')}}">
+                <a href="{{route('home')}}"><img src="{{asset('img/logo.png')}}"></a>
             </div>
             
 

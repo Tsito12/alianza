@@ -40,6 +40,7 @@ const calcularMontos = (disponible) => {
 
 const actualizarMontos = () => {
 
+    console.log("Se estan actualizando los valores de monto minimo y monto maximo");
     const quincena = parseInt(inputTotalQuincena.value);
     const disponible = parseInt(inputMontoDisponible.value);
 
@@ -77,7 +78,8 @@ const sumar = () => {
 
 const restar = () => {
     calcularCreditoMaximo();
-    if(parseInt(inputMeses.value) > plazoMinimo.innerText) inputMeses.value--;
+    //if(parseInt(inputMeses.value) > plazoMinimo.innerText) inputMeses.value--;
+    if (restarMes()) inputMeses.value--;
 
     if(parseInt(inputMeses.value) === plazoMinimo.innerText) botonMenos.classList.add('gris');
     if(parseInt(inputMeses.value) !== plazoMaximo.innerText) botonMas.classList.remove('gris');
@@ -100,8 +102,8 @@ botonMas.addEventListener('mouseleave', manejarMouseUp);
 botonMenos.addEventListener('mousedown', () => manejarMouseDown(restar));
 botonMenos.addEventListener('mouseup', manejarMouseUp);
 botonMenos.addEventListener('mouseleave', manejarMouseUp);
-inputTotalQuincena.addEventListener('keyup', actualizarMontos);
-inputMontoDisponible.addEventListener('keyup', actualizarMontos);
+inputTotalQuincena.addEventListener('change', actualizarMontos);
+inputMontoDisponible.addEventListener('change', actualizarMontos);
 inputRange.addEventListener('input', actualizarValores);
 
 
@@ -113,4 +115,10 @@ function verificarFechaTermino(meses)
     let fechaTentativa = new Date(fechaActual.setMonth(fechaActual.getMonth()+meses));
     if(fechaTentativa>fechaTermino) return false;
     return true;
+}
+
+function calcularPlazoMinimo()
+{
+    let plazoMinimoActual = plazoMinimo;
+
 }

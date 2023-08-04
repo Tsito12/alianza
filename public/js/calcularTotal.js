@@ -20,11 +20,11 @@ const calcularCreditoMaximo = () => {
     {
         meses +=1;
         inputMeses.value=meses;
-        plazoMinimo.innerText=meses;
+        //plazoMinimo.innerText=meses;
 
         calcularCreditoMaximo();
     }else{
-        plazoMinimo.innerText=plazoMinimoVal;
+        //plazoMinimo.innerText=plazoMinimoVal;
     }
 
     //plazoMinimo.innerText=plazoMinimoVal;
@@ -49,6 +49,20 @@ const restarDias = () => {
     if(parseInt(inputDiasMes.value) === 1) botonMenosDias.classList.add('gris');
     if(parseInt(inputDiasMes.value) !== 30) botonMasDias.classList.remove('gris');
 };
+
+function restarMes()
+{
+    var meses = parseFloat(inputMeses.value)-1;
+    const pagoQuincenal = parseFloat(inputNumberRange.value);
+    const pagoMensual = pagoQuincenal * 2;
+    const potencia = Math.pow(1 + tasaIva, meses);
+    const va = parseInt(pagoMensual * ((potencia - 1) / (tasaIva * potencia)));
+    if(va<parseFloat(montoMinimo)||meses<plazoMinimo.innerText)
+    {
+        return false;
+    }
+    return true;
+}
 
 botonMasDias.addEventListener('mousedown', () => manejarMouseDown(sumarDias));
 botonMasDias.addEventListener('mouseup', manejarMouseUp);

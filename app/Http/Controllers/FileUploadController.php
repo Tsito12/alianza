@@ -69,6 +69,9 @@ class FileUploadController extends Controller
          'ingresos' => 'mimetypes:application/pdf,application/msword,image/jpeg,image/bmp,image/png|max:2048',
  
         ]);
+        //Para saber cuando mandar un mensaje al asesor de que se modificó uno o varios documentos
+        //Si no se puede mandar un mensaje por cada documento modificado
+        $modifico = false;
         
         //Se obtiene el id del cliente para la ruta de sus archivos personales
         $idcliente = $request->input('idcliente');
@@ -94,6 +97,7 @@ class FileUploadController extends Controller
             $ine = $pathIne;
             $estado = "Modificado";
             $observaciones = "Documento modificado";
+            $modifico = true;
             $documentoIne = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',1)->first();
             if(is_null($documentoIne))
             {
@@ -118,6 +122,7 @@ class FileUploadController extends Controller
             $comprobanteDom = $pathComprobante;
             $documentoDom = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',3)->first();
             $estado = "Modificado";
+            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoDom))
             {
@@ -143,6 +148,7 @@ class FileUploadController extends Controller
             $foto = $pathFoto;
             $documentoFoto = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',4)->first();
             $estado = "Modificado";
+            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoFoto))
             {
@@ -153,7 +159,7 @@ class FileUploadController extends Controller
             $documentoFoto->documento = $foto;
             $documentoFoto->tipodocumento = 4;
             $documentoFoto->idcliente = $idcliente;
-            $documentoFoto->estado = "En revisión";
+            $documentoFoto->estado = $estado;
             $documentoFoto->observaciones = $observaciones;
             //$this->mensajeDocumentoModificado($telefonoAsesor,$idcliente);
             $documentoFoto->save();
@@ -168,6 +174,7 @@ class FileUploadController extends Controller
             $ingresos = $pathIngresos;
             $documentoIngresos = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',2)->first();
             $estado = "Modificado";
+            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoIngresos))
             {
@@ -187,7 +194,8 @@ class FileUploadController extends Controller
         
         
         //$datosCliente = ClienteP::where('iduser',$userid)->first();
-
+        //Se supone que esta parte ya no sirve, así se manejó antiguamente, pero se cambio el esquema de la db
+        //Se quedo provisional pero tengo la idea de que no hace nada
         $Buscardocumentos = Documentos::where('idcliente',$idcliente)->first();
         if(is_null($Buscardocumentos))
         {
@@ -211,6 +219,10 @@ class FileUploadController extends Controller
 
         
  
+        if($modifico)
+        {
+            $this->mensajeDocumentoModificado($telefonoAsesor,$idcliente);
+        }
         /*
         $save = new File;
  
@@ -233,7 +245,7 @@ class FileUploadController extends Controller
             if($documento->estado=="Rechazado")
             {
                 $cliente = Cliente::find($documento->idcliente);
-                //$this->mensajeDocumentoRechazado("52".$cliente->telefono);
+                $this->mensajeDocumentoRechazado("52".$cliente->telefono);
             }
             return response()->json([
                 'estado' => $request->input('movimiento')
@@ -242,6 +254,65 @@ class FileUploadController extends Controller
         {
             return "Ocurrio un error";
         }
+    }
+
+    private function mensajeDocumentoEnviado($telefono, $idcliente)
+    {
+        // ***************     Area de mensajes **********************
+            //TOKEN QUE NOS DA FACEBOOK
+            $token = 'EAADTQdf3uewBAFPzoi5in5hwB0lrGPDvmdK7i2j4kYbU4EonEZCq74KnMMVYnCIt1iDvONklkU6hFOHvtDW1782IPIZAdiLSeFZAJ6r8aYAzQtP6mNU9fdfvQZBZC2CgcZBMEGOSnDVHairOOmPeezA8FhJKXNV7L0tbZBlBoAtbbXuRdlhBxTFVYD2XcyifgOqeNdg0jfYCQZDZD';
+            //Telefono del cliente
+            
+            //$telefono = "52".$cliente->telefono;
+            //URL A DONDE SE MANDARA EL MENSAJE
+            $url = 'https://graph.facebook.com/v17.0/101917919641657/messages';
+
+            //CONFIGURACION DEL MENSAJE
+            $mensaje = ''
+                    . '{'
+                    . '"messaging_product": "whatsapp", '
+                    . '"to": "'.$telefono.'", '
+                    . '"type": "template", '
+                    . '"template": {'
+                    . '    "name": "subir_documento",'
+                    . '    "language": { '
+                    . '     "code": "es_MX"'
+                    . '    },'
+                    . '"components": [
+                        {
+                            "type": "button",
+                            "sub_type": "url",
+                            "index": "0",
+                            "parameters": [
+                            {
+                                "type": "text",
+                                "text": "'. $idcliente .'"
+                            }
+                            ]
+                        }
+                        ]
+                        }
+                    }';
+
+
+
+            //DECLARAMOS LAS CABECERAS
+            $header = array("Authorization: Bearer " . $token, "Content-Type: application/json",);
+            //INICIAMOS EL CURL
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $mensaje);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
+            $response = json_decode(curl_exec($curl), true);
+            //IMPRIMIMOS LA RESPUESTA 
+            //print_r($response);
+            //OBTENEMOS EL CODIGO DE LA RESPUESTA
+            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            //CERRAMOS EL CURL
+            curl_close($curl);
+            //return $response;
     }
 
     private function mensajeDocumentoModificado($telefono, $idcliente)

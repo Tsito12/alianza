@@ -123,6 +123,7 @@
                                     <p id="montoMinimo" class="d-none">{{$convenio->montoMinimo}}</p>
                                     <p id="montoMaximo" class="d-none">{{$convenio->montoMaximo}}</p>
                                     <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
+                                    <p id="fechaTermino" class="d-none">{{$convenio->fechaTermino}}</p>
                                     <input type="number" name="plazo" id="plazo" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" class="meses-input" value="12" tabindex="-1" required readonly>
                                     <div id="boton-mas" class="meses-boton">+</div>
                                     <span> meses</span>                                
@@ -199,6 +200,7 @@
             number.value = numero.toString().replace(exp,rep);
             let idInputBueno = number.id.replaceAll('feik','');
             document.getElementById(idInputBueno).value=numero;
+            actualizarMontos();
             return numero.toString().replace(exp,rep);
         }
 

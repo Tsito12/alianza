@@ -11,7 +11,7 @@
 <body class="reg">
     <header>
         <div class="logo-contenedor">
-            <img src="{{ asset('img/sacimex.png') }}">
+            <a href="{{route('home')}}"><img src="{{ asset('img/sacimex.png') }}"></a>
         </div>
         <h2>Tu crédito de confianza.</h2>
     </header>
