@@ -25,7 +25,8 @@ class TelefonoController extends Controller
         $telefonoAsesor = "52"."9513566175";        // de mientras mi numero
         //$telefonoAsesor = "52"."9511173957";      -> telefono de la contadora Elizabeth
         $error = "El codigo de verificación es incorrecto";
-        if($request->input('verificacion')==$codigo) 
+        $numeroVerificacion = $request->input('1').$request->input('2').$request->input('3').$request->input('4');
+        if($numeroVerificacion==$codigo) 
         {
             $cliente->verificado = true;
             $cliente->save();

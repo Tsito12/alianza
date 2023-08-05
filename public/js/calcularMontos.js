@@ -6,7 +6,8 @@ const inputRange = document.getElementById('range');
 const inputNumberRange = document.getElementById('pagodeseado');
 const botonMas = document.getElementById('boton-mas');
 const botonMenos = document.getElementById('boton-menos');
-const inputMeses = document.getElementById('plazo');
+const inputMeses = document.getElementById('range-meses');
+const mesesNumero = document.getElementById('number-meses');
 const plazoMinimo = document.getElementById('plazoMinimo');
 const plazoMaximo = document.getElementById('plazoMaximo');
 const plazoMinimoVal = document.getElementById('plazoMinimo').innerText;
@@ -69,6 +70,11 @@ const actualizarValores = () => {
     calcularCreditoMaximo();
 };
 
+const actualizarMeses = () => {
+    mesesNumero.value = inputMeses.value;
+    
+};
+
 const sumar = () => {
     if((parseInt(inputMeses.value) < plazoMaximo.innerText)&&verificarFechaTermino(parseInt(inputMeses.value))) inputMeses.value++;
 
@@ -96,12 +102,15 @@ const manejarMouseUp = () => {
 };
 
 
-botonMas.addEventListener('mousedown', () => manejarMouseDown(sumar));
-botonMas.addEventListener('mouseup', manejarMouseUp);
-botonMas.addEventListener('mouseleave', manejarMouseUp);
+//botonMas.addEventListener('mousedown', () => manejarMouseDown(sumar));
+//botonMas.addEventListener('mouseup', manejarMouseUp);
+inputMeses.addEventListener('input',actualizarMeses);
+//botonMas.addEventListener('mouseleave', manejarMouseUp);
+/*
 botonMenos.addEventListener('mousedown', () => manejarMouseDown(restar));
 botonMenos.addEventListener('mouseup', manejarMouseUp);
 botonMenos.addEventListener('mouseleave', manejarMouseUp);
+*/
 inputTotalQuincena.addEventListener('change', actualizarMontos);
 inputMontoDisponible.addEventListener('change', actualizarMontos);
 inputRange.addEventListener('input', actualizarValores);
@@ -117,8 +126,20 @@ function verificarFechaTermino(meses)
     return true;
 }
 
-function calcularPlazoMinimo()
+function calcularPlazoMinimo(plazo)
 {
-    let plazoMinimoActual = plazoMinimo;
-
+    plazo = parseFloat(plazo);
+    const pagoQuincenal = parseFloat(inputNumberRange.value);
+    const pagoMensual = pagoQuincenal * 2;
+    const potencia = Math.pow(1 + tasaIva, plazo);
+    const va = parseInt(pagoMensual * ((potencia - 1) / (tasaIva * potencia)));
+    if(va<parseFloat(montoMinimo))
+    {
+        plazo++;
+        calcularPlazoMinimo(plazo);
+    }else
+    {
+        inputMeses.min=plazo;
+        return plazo;
+    }
 }

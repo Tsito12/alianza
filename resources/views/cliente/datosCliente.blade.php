@@ -34,7 +34,15 @@
                             {{Form::hidden('user_id',$usuario)}}
                             {{Form::hidden('ajuste', "0")}}
                             {{Form::hidden('convenio', $convenio->id)}}
-                            {{Form::hidden('confirmaciontelefono', rand(1,1000000))}}
+                            @php
+                                $caracteres = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                                $totalCaracteres = strlen($caracteres);
+                                $codigoVerificacion = '';
+                                for ($i=0; $i < 4; $i++) { 
+                                    $codigoVerificacion .= $caracteres[random_int(0, $totalCaracteres - 1)];
+                                }
+                            @endphp
+                            {{Form::hidden('confirmaciontelefono', $codigoVerificacion)}}
                             <p class="d-none" id="paso"></p>
                             <div class="inp-contenedor">
                                 <input type="text" id="nombre" name="nombre" value="{{ $cliente->nombre }}" class="inp sa" tabindex="-1" required>
@@ -136,7 +144,7 @@
                                 <label for="range-meses" class="pagos-etiqueta">¿A cuántos meses?</label>
                                 <input type="range" name="range-meses" id="range-meses" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" value="12" step="1" tabindex="-1">
                                 <div class="pagos-ssc">
-                                    <input value="12" type="number" name="number-meses" id="number-meses" class="meses-input" tabindex="-1" readonly required>
+                                    <input value="12" type="number" name="plazo" id="number-meses" class="meses-input" tabindex="-1" readonly required>
                                     <span class="meses-span">Meses</span>
                                 </div>
                             </div>           
