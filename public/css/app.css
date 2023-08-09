@@ -12033,12 +12033,17 @@ section {
   position: relative;
 }
 
-.volver-boton {
-  color: #005520;
-  font-family: 'Presidencia Fina', sans-serif;
-  font-size: 0.875em;
-  left: 20px;
-  letter-spacing: 1px;
-  position: absolute;
-  top: 20px;
+.kITrbH {
+    align-items: center;
+    color: #005520;
+    cursor: pointer;
+    display: flex;
+    font-family: 'Presidencia Firme', sans-serif;
+    font-size: 0.875em;
+    gap: 10px;
+    left: 20px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-decoration: none;
+    top: 90px;
 }
