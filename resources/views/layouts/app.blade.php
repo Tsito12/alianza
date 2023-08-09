@@ -1,6 +1,7 @@
 @php
     use App\Models\Cliente;
     use App\Models\Convenios;
+    use App\Models\User;
 @endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -64,19 +65,23 @@
                                     @php
                                         $cliente = Cliente::where('user_id',Auth::id())->first();
                                         $convenio = null;
-                                        if(!is_null($cliente))
+                                        $user = User::find(Auth::id());
+                                        if($user->tipo=="Admin"||$user->tipo=="Asesor"||$user->tipo=="Aliado")
+                                        {
+                                            $convenio = $user->convenio;
+                                        }else
                                         {
                                             $convenio = Convenios::find($cliente->convenio);
                                         }
                                     @endphp
                                     @if(!is_null(Auth::user()->name)&&Auth::user()->name!=="")
                                         {{ Auth::user()->name }}
-                                        @if (!is_null($convenio))
-                                            <br>
-                                            Convenio {{ strtoupper(Auth::user()->convenio) }}
-                                        @endif
                                     @else
                                     {{ Auth::user()->email }}
+                                    @endif
+                                    @if (!is_null($convenio))
+                                        <br>
+                                        Convenio {{ strtoupper(Auth::user()->convenio) }}
                                     @endif
                                     
                                 </a>

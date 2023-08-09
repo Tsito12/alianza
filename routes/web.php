@@ -52,4 +52,6 @@ Route::get('fechaYHora',[App\Http\Controllers\HomeController::class, 'fechaHoraA
 
 Route::get('documentosIntegracion', [SolicitudeController::class, 'abr'])->name('documentosIntegracion');
 
+Route::get('panelAliado',[SolicitudeController::class , 'Aliado'])->name('panelAliado');
+
 

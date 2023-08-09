@@ -44,6 +44,40 @@ class SolicitudeController extends Controller
             ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage());
     }
 
+    public function Aliado()
+    {
+        $aliado = User::find(Auth::id())->convenio;
+        $convenioAliado = Convenios::where('nombreCorto',$aliado)->first();
+        $solicitudes = Solicitude::join('clientes', 'solicitudes.idcliente','=','clientes.id')
+                       ->select('solicitudes.*')
+                       ->where('solicitudes.estado','En proceso')
+                       ->where('clientes.convenio',$convenioAliado->id)
+                       ->orderBy('solicitudes.updated_at')
+                       ->paginate($perPage = 10, $columns = ['*'], $pageName = 'enProceso');  
+        $solicitudesRechazadas = Solicitude::join('clientes','solicitudes.idcliente','=','clientes.id')
+                                 ->select('solicitudes.*')
+                                 ->where('solicitudes.estado','Modificada')
+                                 ->where('clientes.convenio',$convenioAliado->id)
+                                 ->orderBy('solicitudes.updated_at')
+                                 ->paginate($perPage = 2, $columns = ['*'], $pageName = 'rechazadas');
+        $solicitudesIntegracion = Solicitude::join('clientes','solicitudes.idcliente','=','clientes.id')
+                                  ->select('solicitudes.*')
+                                  ->where('solicitudes.estado','En integracion')
+                                  ->where('clientes.convenio',$convenioAliado->id)
+                                  ->orderBy('solicitudes.updated_at')
+                                  ->paginate($perPage = 2, $columns = ['*'], $pageName = 'enIntegracion');
+        if(auth()->user()->tipo=="Admin"||auth()->user()->tipo=="Aesor"||auth()->user()->tipo=="Aliado")
+        {
+            return view('solicitude.panelAdmin', compact('solicitudes', 'solicitudesRechazadas', 'solicitudesIntegracion'))
+            ->with('i', (request()->input('enProceso', 1) - 1) * $solicitudes->perPage())
+            ->with('j', (request()->input('rechazadas', 1) - 1) * $solicitudesRechazadas->perPage())
+            ->with('k', (request()->input('enIntegracion', 1) - 1) * $solicitudesIntegracion->perPage());
+        }
+
+        return view('solicitude.index', compact('solicitudes'))
+            ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage());
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -129,7 +163,7 @@ class SolicitudeController extends Controller
         $Transaccion = rand(10,10000000);
 
         //opcion para cuando se va a imprimir el pdf, para que no se vuelvan a realizar los calculos
-        if( !is_null(session('datosSolicitud'))  )
+        if( !is_null(session('datosSolicitud')&&isset($datos))  )
         {
             $opcion=$request->get('opcion');
             if(Auth::user()->tipo=="Cliente"){

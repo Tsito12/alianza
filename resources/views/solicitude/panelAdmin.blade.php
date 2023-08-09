@@ -84,10 +84,10 @@
                         <span>{{$convenio->nombreCorto}}</span>
                     </div>
                     <div class="columna">
-                        <span>${{$solicitude->prestamosolicitado}}</span>
+                        <span>${{number_format($solicitude->prestamosolicitado,2,'.',',')}}</span>
                     </div>
                     <div class="columna">
-                        <span>${{$solicitude->montorecibido}}</span>
+                        <span>${{number_format($solicitude->montorecibido,2,'.',',')}}</span>
                     </div>
                     <div class="columna">
                         <span>{{$solicitude->plazo}} Meses</span>
@@ -166,10 +166,10 @@
                     <span>{{$convenio->nombreCorto}}</span>
                 </div>
                 <div class="columna">
-                    <span>${{$solicitude->prestamosolicitado}}</span>
+                    <span>${{number_format($solicitude->prestamosolicitado,2,'.',',')}}</span>
                 </div>
                 <div class="columna">
-                    <span>${{$solicitude->montorecibido}}</span>
+                    <span>${{number_format($solicitude->montorecibido,2,'.',',')}}</span>
                 </div>
                 <div class="columna">
                     <span>{{$solicitude->plazo}} Meses</span>
@@ -248,10 +248,10 @@
                     <span>{{$convenio->nombreCorto}}</span>
                 </div>
                 <div class="columna">
-                    <span>${{$solicitude->prestamosolicitado}}</span>
+                    <span>${{number_format($solicitude->prestamosolicitado,2,'.',',')}}</span>
                 </div>
                 <div class="columna">
-                    <span>${{$solicitude->montorecibido}}</span>
+                    <span>${{number_format($solicitude->montorecibido,2,'.',',')}}</span>
                 </div>
                 <div class="columna">
                     <span>{{$solicitude->plazo}} Meses</span>
@@ -336,7 +336,7 @@
             }
             if(!isNaN(horas))
             {
-              filas[i].children[8].innerText=horas+":"+minutos+":"+segundos;
+              filas[i].children[8].children[0].innerText=horas+":"+minutos+":"+segundos;
             }
         }
         milisegundosActuales= milisegundosActuales+1000;

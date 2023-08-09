@@ -142,7 +142,14 @@
                                 <p id="tasa" class="d-none">{{$convenio->tasa}}</p>
                                 <p id="fechaTermino" class="d-none">{{$convenio->fechaTermino}}</p>
                                 <label for="range-meses" class="pagos-etiqueta">¿A cuántos meses?</label>
-                                <input type="range" name="range-meses" id="range-meses" min="{{$convenio->plazoMinimo}}" max="{{$convenio->plazoMaximo}}" value="12" step="1" tabindex="-1">
+                                @php
+                                    $fechaActual = date_create(date("Y-m-d"));
+                                    $fechaFin = date_create($convenio->fechaTermino);
+                                    $diferencia = date_diff($fechaActual, $fechaFin);
+                                    $plazoMaximo = ($diferencia->y*12)+($diferencia->m);
+                                    if($diferencia->invert==1) $plazoMaximo*=-1;
+                                @endphp
+                                <input type="range" name="range-meses" id="range-meses" min="{{$convenio->plazoMinimo}}" max="{{$plazoMaximo}}" value="12" step="1" tabindex="-1">
                                 <div class="pagos-ssc">
                                     <input value="12" type="number" name="plazo" id="number-meses" class="meses-input" tabindex="-1" readonly required>
                                     <span class="meses-span">Meses</span>

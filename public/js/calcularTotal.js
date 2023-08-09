@@ -20,7 +20,7 @@ const calcularCreditoMaximo = () => {
     {
         meses +=1;
         inputMeses.value=meses;
-        calcularPlazoMinimo(plazoMinimo.innerText);
+        //calcularPlazoMinimo(plazoMinimo.innerText);
         document.getElementById('number-meses').value=meses;
         //plazoMinimo.innerText=meses;
 
@@ -28,7 +28,7 @@ const calcularCreditoMaximo = () => {
     }else{
         //plazoMinimo.innerText=plazoMinimoVal;
     }
-
+    calcularPlazoMinimo(plazoMinimo.innerText);
     //plazoMinimo.innerText=plazoMinimoVal;
 
     if (va > maximoPermitido){

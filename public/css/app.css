@@ -713,7 +713,7 @@ progress {
   color: #6c757d;
 }
 .blockquote-footer::before {
-  content: "— ";
+  content: "— ";
 }
 
 .img-fluid {
@@ -3342,7 +3342,7 @@ textarea.form-control-lg {
 }
 
 .collapse:not(.show) {
-  display: none;
+  display: flex;
 }
 
 .collapsing {
@@ -11998,5 +11998,33 @@ textarea.form-control-lg {
   }
   .d-print-none {
     display: none !important;
+  }
+}
+
+@media (max-width: 770px) {
+  .titulo-saci {
+    display: none;  
+  }
+  
+  .navbar-collapse {
+    flex-basis: 50%;
+  }
+}
+
+@media (max-width: 395px) {
+  .titulo-saci {
+    display: none;  
+  }
+  
+  .navbar-collapse {
+    flex-basis: 50%;
+  }
+  
+  .nav-link {
+      font-size: 12px;
+  }
+  
+  .logo-contenedor {
+      width: 100px;
   }
 }

@@ -18,10 +18,16 @@ class TipoUsuario
     {
         if(auth()->user()->tipo=="Admin"){
             return redirect()->route('solicitudes.index');
-        } else
+        } 
+        if(auth()->user()->tipo=="Aliado")
+        {
+            return redirect()->route('panelAliado');
+        }
+        else
         {
             return $next($request);
         }
+
         return $next($request);
     }
 }
