@@ -23,6 +23,7 @@
     @section('content')
     
     <section>
+    <a href="https://www.google.com/search?sca_esv=555242323&rlz=1C1CHBF_esMX1061MX1061&q=gatitos&tbm=isch&source=lnms&sa=X&sqi=2&ved=2ahUKEwjCjNiyx9CAAxUmkWoFHakgDdMQ0pQJegQIDRAB&biw=1536&bih=707&dpr=1.25" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
         <div class="titulo-contenedor">
             <p id="titulo-paso" class="titulo">Paso 1. Ingrese sus datos personales.</p>
             <div id="contenedor-form" class="form-contenedor">

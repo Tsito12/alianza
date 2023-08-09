@@ -14,7 +14,7 @@
         }
     </style>
   <section>
-  <a class="volver-boton">Volver</a>
+  <a href="https://www.google.com/search?sca_esv=555242323&rlz=1C1CHBF_esMX1061MX1061&q=gatitos&tbm=isch&source=lnms&sa=X&sqi=2&ved=2ahUKEwjCjNiyx9CAAxUmkWoFHakgDdMQ0pQJegQIDRAB&biw=1536&bih=707&dpr=1.25" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
     <h3>Has verificado tu cuenta exitosamente.</h3>
     <div class="img-contenedor">
       <img src="{{asset('img/BotVerificacion.png')}}">
