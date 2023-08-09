@@ -28,6 +28,7 @@
         <h2>Tu crédito de confianza.</h2>
     </header>
     <section>
+    <a class="volver-boton">Volver</a>
     <form  action="{{ route('register') }}" method="POST" autocomplete="off" class="form">
         @csrf
         <h1 class="titulo">Regístrate y obtén tu pre-aprobación en minutos.</h1>

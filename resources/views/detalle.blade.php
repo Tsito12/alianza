@@ -22,6 +22,7 @@
 
 
 <section>
+<a class="volver-boton">Volver</a>
   <h1>Detalles del crédito.</h1>
        <div class="cuadro-contenedor">
            <div class="info-contenedor">

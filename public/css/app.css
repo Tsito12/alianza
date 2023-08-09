@@ -12028,3 +12028,17 @@ textarea.form-control-lg {
       width: 100px;
   }
 }
+
+section {
+  position: relative;
+}
+
+.volver-boton {
+  color: #005520;
+  font-family: 'Presidencia Fina', sans-serif;
+  font-size: 0.875em;
+  left: 20px;
+  letter-spacing: 1px;
+  position: absolute;
+  top: 20px;
+}

@@ -20,6 +20,7 @@
     <form action="{{route('confirmarTelefono')}}" method="POST">
         @csrf
         <section>
+        <a class="volver-boton">Volver</a>
             <div class="inp-contenedor">
               <h3>Ingresa tu código de verificación:</h3>
               <div class="inps">

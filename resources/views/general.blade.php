@@ -25,6 +25,7 @@
 </style>
 
 <section>
+    <a class="volver-boton">Volver</a>
     @php
         $solicitud = $solicitudes->first();
         $terminacion = '';
@@ -42,13 +43,6 @@
         }
     @endphp
     <h2>Estado de las solicitudes.</h2>
-    <div class="row">
-        <div class="float-left">
-            <a href="{{ route('file-upload') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-              {{ __('Subir archivos') }} 
-            </a>
-          </div>
-    </div>
     <div class="tabla-contenedor">
         <div class="solicitud-contenedor">
             <div class="info-contenedor">
@@ -82,16 +76,25 @@
             </div>
         </div>
     </div>
-    @php
-        $clase = "";
-        if($solicitud->estado=="En integracion") $clase="disabled";
-    @endphp
-    <a class="boton verde {{$clase}}" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> </a>
-    <form action="{{ route('solicitudes.destroy',$solicitud->id) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="boton rojo{{$clase}}"><i class="fa fa-fw fa-trash"></i> </button>
-    </form>
+    <div class="vYENMA">
+        <div class="botones-contenedor">
+        @php
+            $clase = "";
+            if($solicitud->estado=="En integracion") $clase="disabled";
+        @endphp
+        </div>
+        <a class="editar-boton {{$clase}}" href="{{ route('clientes.create') }}"><i class="fa fa-fw fa-edit"></i> </a>
+        <form action="{{ route('solicitudes.destroy',$solicitud->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="borrar-boton {{$clase}}"><i class="fa fa-fw fa-trash"></i> </button>
+        </form>
+        <a href="{{ route('file-upload') }}" class="archivos-boton">
+            {{ __('Subir archivos') }} 
+        </a>
+    </div>
+    
+    
 </section>
 <script type="text/javascript">
     const botonDetalles = document.getElementById('botonDetalles');
