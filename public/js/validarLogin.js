@@ -2,6 +2,7 @@ const emailInput = document.getElementById('email'),
       loginBoton = document.getElementById('boton-login'),
       alertaCorreo = document.getElementById('alerta-correo'),
       alertaConvenio = document.getElementById('alerta-convenio');
+      inputConvenio = $('.inp-contenedor')[2];
 
 const validarEmail = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,3 +31,26 @@ loginBoton.addEventListener('click', ev =>{
     alertaConvenio.textContent = validarConvenio().error;
   };
 });
+
+function quitarConveniosAdmin()
+{
+  let data = new FormData($('form')[0]);
+  fetch('/revisarTipoUsuario', {
+    method: 'POST',
+    body: data
+  }).then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if(data.tipo == "Administrativo")
+            {
+              $('.inp-contenedor')[2].remove();
+            } else
+            {
+              $('.inp-contenedor')[1].append(inputConvenio);
+            }
+            console.log(data);
+        }
+
+        );
+}

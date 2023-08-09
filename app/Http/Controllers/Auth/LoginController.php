@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -36,5 +38,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function buscarUsuario(Request $request)
+    {
+        $email = $request->input('email');
+        $usuario = User::where('email',$email)->first();
+        //return var_dump($usuario);
+        if(!is_null($usuario))
+        {
+            if($usuario->tipo=="Admin"||$usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
+            {
+                return ['tipo' => 'Administrativo'];
+            } 
+            else return ['tipo' => 'Cliente'];
+        }
+        else return ['error' => 'No existe un usuario con ese email'];
     }
 }

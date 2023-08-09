@@ -188,7 +188,7 @@ class SolicitudeController extends Controller
         }
         
         
-        //Consultas a la base de datos del online, o de el antiguo sacialianza, pero parece ser que llama a un metodo de safi
+        //Consultas a la base de datos del antiguo sacialianza, pero parece ser que llama a un metodo de safi
         $simulacion     = DB::connection('produccion')->select("
                 CALL CREPAGCRECAMORPRO($monto,$convenio,30,'M','D',$diaMes,'$fechaInicio',$Meses,3001,20235,'S','N','N',0.0,'S',@a,@b,@c,@d,@e,@f,@g,1,184,'$fechaInicio','192.168.100.184','/microfin/catalogoCliente.htm',13,-$Transaccion)
             ");

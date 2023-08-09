@@ -17,6 +17,7 @@
             src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -31,7 +32,7 @@
         @csrf
         <h1 class="titulo">Te damos la bienvenida a Sacimex</h1>
         <div class="inp-contenedor">
-            <input type="text" id="email" name="email" class="inp" required>
+            <input type="text" id="email" name="email" onchange="quitarConveniosAdmin()" class="inp" required>
             <label for="email" class="etq">Correo electrónico</label>
             @error('email')
                 <span class="invalid-feedback" role="alert">

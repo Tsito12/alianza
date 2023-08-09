@@ -8,6 +8,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelefonoController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\Asesor;
 
 /*
@@ -53,5 +54,7 @@ Route::get('fechaYHora',[App\Http\Controllers\HomeController::class, 'fechaHoraA
 Route::get('documentosIntegracion', [SolicitudeController::class, 'abr'])->name('documentosIntegracion');
 
 Route::get('panelAliado',[SolicitudeController::class , 'Aliado'])->name('panelAliado');
+
+Route::post('revisarTipoUsuario',[LoginController::class, 'buscarUsuario'])->name('revisarTipoUsuario');
 
 
