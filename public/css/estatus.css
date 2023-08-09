@@ -154,8 +154,54 @@ p {
     width: 250px;
 }
 
-.verde-texto {
+.verde {
     color: #257140;
+}
+
+.editar-boton {
+    background-color: green;
+    border-radius: 50%;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.borrar-boton {
+    background-color: red;
+    border: none;
+    border-radius: 50%;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.botones-contenedor {
+    display: flex;
+    gap: 20px;
+}
+
+.archivos-boton {
+    background-color: #00632F;
+    border-radius: 5px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: 'Presidencia Firme', sans-serif;
+    font-size: 1em;
+    letter-spacing: 1px;
+    padding: 9px 18px;
+    text-decoration: none;
+}
+
+.vYENMA {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
 }
 
 @media (max-height: 800px){

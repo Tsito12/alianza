@@ -27,6 +27,7 @@
         <h2>Tu crédito de confianza.</h2>
     </header>
     <section>
+    <a class="volver-boton">Volver</a>
     <form action="{{ route('login') }}" method="post" id="form-login" autocomplete="off" class="form">
         @csrf
         <h1 class="titulo">Te damos la bienvenida a Sacimex</h1>

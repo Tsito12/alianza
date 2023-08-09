@@ -16,6 +16,7 @@
 
 @section('content')
   <section>
+  <a class="volver-boton">Volver</a>
     <div class="contenedor-principal">
       <div class="titulo-contenedor">
         <h3>¿Cómo te gustaría que te contactáramos?</h3>

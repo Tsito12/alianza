@@ -26,6 +26,7 @@
     
     <p class="d-none" id="fechaServidor"></p>
       <section>
+      <a class="volver-boton">Volver</a>
         <div class="botones-contendor">
           <button onclick="cambiarTabla(1)">No atendidas</button>
           <button onclick="cambiarTabla(2)">En integración</button>

@@ -14,6 +14,7 @@
         }
     </style>
   <section>
+  <a class="volver-boton">Volver</a>
     <h3>Has verificado tu cuenta exitosamente.</h3>
     <div class="img-contenedor">
       <img src="{{asset('img/BotVerificacion.png')}}">

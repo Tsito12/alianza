@@ -27,7 +27,7 @@
       {{Form::hidden('idcliente',$documentosN['ine']->idcliente)}}
         <div class="tabla">
             <div class="filas">
-                <div class="nombre">INE</div>
+                <div class="nombre">INE (frente)</div>
                 <div class="input-contenedor">
                     <input type="hidden" id="documentoIne" name="documentoIne" value="{{$documentosN['ine']->id}}">
                     <div class="grid-x @if ($documentosN['ine']->estado=="Aprobado")  d-none @endif " id="subirIne">
@@ -58,6 +58,77 @@
                     <div class="visualizacion-contenedor">
                         <embed id="inepro" src="{{asset($ruta)}}"  frameborder="0">
                     </div>
+                    <a class="lupa"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    @endif
+            </div>
+            @if (Auth::user()->tipo=="Admin"&&$documentosN['ine']->estado!="")
+                <div class="filas">
+                    @if (($documentosN['ine']->documento)!="")
+                    <div class="botones-contenedor">
+                        <a id="aprobarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['ine']->estado=="Aprobado") pointer-events : none @endif">
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </a>
+                        <a id="rechazarIne" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['ine']->estado=="Rechazado") pointer-events : none @endif">
+                            <i class="fa-regular fa-thumbs-down"></i>
+                        </a>
+                    </div>
+                    <input id="motivoIne" name="motivoIne" type="text" placeholder="Observaciones" value="{{$documentosN['ine']->observaciones}}" class="observaciones">
+                    @endif
+                    
+                </div>        
+                @else
+                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!="")
+                        <div class="filas">
+                            <p class="text-center">Estado</p>
+                            <p class="text-center">{{$documentosN['ine']->estado}}</p>
+                            <label for="motivoIne" class="form-control">Observaciones</label>
+                            <input class="observaciones disabled" type="text" name="motivoIne" id="motivoIne" value="{{$documentosN['ine']->observaciones}}" readonly>
+                        </div>
+                    @endif
+            @endif    
+                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!=""&&Auth::user()->tipo=="Admin")
+                            <div>
+                                <p id="estadoIne" class="text-center">{{$documentosN['ine']->estado}}</p>
+                                <label for="motivoIne" class="form-control">Observaciones</label>
+                                <input class="form-control disabled" type="text" name="motivoIne" id="motivo2Ine" value="{{$documentosN['ine']->observaciones}}" readonly>
+                            </div>
+                    @endif
+            
+        </div>
+        <div class="tabla">
+            <div class="filas">
+                <div class="nombre">INE (dorso)</div>
+                <div class="input-contenedor">
+                    <input type="hidden" id="documentoIne" name="documentoIne" value="{{$documentosN['ine']->id}}">
+                    <div class="grid-x @if ($documentosN['ine']->estado=="Aprobado")  d-none @endif " id="subirIne">
+                        <input type="file" name="ine" id="ine" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
+                        <input type="text" name="hiddenine" value="{{$documentosN['ine']->documento}}" style="display: none;">
+                        <label for="ine" class="label-file">
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path fill="currentColor" d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
+                            </svg>
+                            <span>Subir archivo.</span>
+                        </label>
+                        <div class="contenedor-nombre"><span id="nombre-ine"></span></div>  
+                    </div>  
+                </div>
+                <div class="estado">
+                    <div class="estado">
+                        @if(($documentosN['ine']->documento)!="")
+                            @php
+                                $ruta = "storage/".str_replace("public/","",$documentosN['ine']->documento);
+                            @endphp              
+                            <h6>Ya se subió un documento</h6>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="filas">
+                @if(($documentosN['ine']->documento)!="")
+                    <div class="visualizacion-contenedor">
+                        <embed id="inepro" src="{{asset($ruta)}}"  frameborder="0">
+                    </div>
+                    <a class="lupa"><i class="fa-solid fa-magnifying-glass"></i></a>
                     @endif
             </div>
             @if (Auth::user()->tipo=="Admin"&&$documentosN['ine']->estado!="")
@@ -127,6 +198,7 @@
                     <div class="visualizacion-contenedor">
                         <embed id="ingresospro" src="{{asset($ruta)}}"  frameborder="0">
                     </div>
+                    <a class="lupa"><i class="fa-solid fa-magnifying-glass"></i></a>
                 @endif
             </div>
             @if ((Auth::user()->tipo=="Admin")&&($documentosN['ingresos']->documento)!="")
@@ -194,6 +266,7 @@
                     <div class="visualizacion-contenedor">
                         <embed id="domiciliopro" src="{{asset($ruta)}}"  frameborder="0">
                     </div>
+                    <a class="lupa"><i class="fa-solid fa-magnifying-glass"></i></a>
                 @endif
             </div>
             @if (Auth::user()->tipo=="Admin"&&$documentosN['domicilio']->estado!="")
@@ -261,6 +334,7 @@
                     <div class="visualizacion-contenedor">
                         <embed id="fotopro" src="{{asset($ruta)}}"  frameborder="0">
                     </div>
+                    <a class="lupa"><i class="fa-solid fa-magnifying-glass"></i></a>
                 @endif
             </div>
             @if (Auth::user()->tipo=="Admin"&&$documentosN['foto']->documento!="")
