@@ -49,7 +49,9 @@ class LoginController extends Controller
         {
             if($usuario->tipo=="Admin"||$usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
             {
-                return ['tipo' => 'Administrativo'];
+                return ['tipo' => 'Administrativo',
+                        'convenio' => $usuario->convenio            
+            ];
             } 
             else return ['tipo' => 'Cliente'];
         }

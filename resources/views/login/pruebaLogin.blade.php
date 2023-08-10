@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+@extends('layouts.app')
+@section('content')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ asset('css/input-styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/login.css') }}" rel="stylesheet">
@@ -17,16 +16,9 @@
             src: url('{{asset('fonts/PresidenciaFirme.otf')}}') format('opentype');
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <div class="logo-contenedor">
-            <a href="{{route('home')}}"><img src="{{ asset('img/sacimex.png') }}"></a>
-            
-        </div>
-        <h2>Tu crédito de confianza.</h2>
-    </header>
+
     <section>
     <a class="volver-boton">Volver</a>
     <form action="{{ route('login') }}" method="post" id="form-login" autocomplete="off" class="form">
@@ -84,6 +76,7 @@
         <img id="img-bot" src="{{asset('img/BotAyuda1.png')}}" alt="Bot de ayuda"/>
     </div>
     </section>
+    
 
 
     <!--Start of Tawk.to Script-->
@@ -101,7 +94,6 @@
     <!--End of Tawk.to Script-->
 
 
-</body>
 <script src="{{asset('js/validarLogin.js')}}"></script>
 
 <script>
@@ -135,7 +127,8 @@
 
     function llevarAlRegistro()
     {
-        let mensaje = document.getElementById("mensaje-error").innerText;
+        let areaMensajeError = document.getElementById("mensaje-error");
+        let mensaje = areaMensajeError==null?"":areaMensajeError.innerText;
         if(mensaje=="No se encontró un usuario con ese correo")
         {
             window.location.replace("/register");
@@ -147,4 +140,4 @@
 
     document.getElementsByTagName("body")[0].addEventListener("load",llevarAlRegistro());
   </script>
-</html>
+@endsection

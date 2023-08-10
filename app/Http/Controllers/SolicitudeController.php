@@ -163,7 +163,7 @@ class SolicitudeController extends Controller
         $Transaccion = rand(10,10000000);
 
         //opcion para cuando se va a imprimir el pdf, para que no se vuelvan a realizar los calculos
-        if( !is_null(session('datosSolicitud')&&isset($datos))  )
+        if( !is_null(session('datosSolicitud'))&&isset($datos)&&!empty($datos)  )
         {
             $opcion=$request->get('opcion');
             if(Auth::user()->tipo=="Cliente"){

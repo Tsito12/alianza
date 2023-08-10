@@ -27,11 +27,13 @@ class FileUploadController extends Controller
         $ingresos = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',2)->first();
         $domicilio = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',3)->first();
         $foto = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',4)->first();
+        $ine2 = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',5)->first();
         $documentosN = array(
             "ine" => $ine,
             "ingresos" => $ingresos,
             "domicilio" => $domicilio,
-            "foto" => $foto
+            "foto" => $foto,
+            "ine2" => $ine2
         );
         
         foreach($documentosN as &$documento)
@@ -190,6 +192,32 @@ class FileUploadController extends Controller
             //$this->mensajeDocumentoModificado($telefonoAsesor,$idcliente);
             $documentoIngresos->save();
         }
+        if(is_null($request->file('ine2')))
+        {
+            $ingresos=$request->input('hiddenine2');
+        } else
+        {
+            $nameIngresos = $request->file('ine2')->getClientOriginalName();
+            $pathIngresos = $request->file('ine2')->store('/files/'.$idcliente);
+            $ingresos = $pathIngresos;
+            $documentoIngresos = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',5)->first();
+            $estado = "Modificado";
+            $modifico = true;
+            $observaciones = "Documento modificado";
+            if(is_null($documentoIngresos))
+            {
+                $documentoIngresos = new Documentoscliente();
+                $estado="En revisión";
+                $observaciones = null;
+            }
+            $documentoIngresos->documento = $ingresos;
+            $documentoIngresos->tipodocumento = 5;
+            $documentoIngresos->idcliente = $idcliente;
+            $documentoIngresos->estado = $estado;
+            $documentoIngresos->observaciones = $observaciones;
+            //$this->mensajeDocumentoModificado($telefonoAsesor,$idcliente);
+            $documentoIngresos->save();
+        }
 
         
         
@@ -248,7 +276,10 @@ class FileUploadController extends Controller
                 $this->mensajeDocumentoRechazado("52".$cliente->telefono);
             }
             return response()->json([
-                'estado' => $request->input('movimiento')
+                'estado' => $request->input('movimiento'),
+                 'tipo documento' => $documento->tipo,
+                 'observaciones' => $documento->observaciones
+                
             ]);
         }catch(Exception $e)
         {

@@ -44,10 +44,11 @@ function quitarConveniosAdmin()
         .then((data) => {
             if(data.tipo == "Administrativo")
             {
-              $('.inp-contenedor')[2].remove();
+              $('.inp-contenedor')[2].style.display='none';
+              $('#convenio').val(data.convenio.toUpperCase());
             } else
             {
-              $('.inp-contenedor')[1].append(inputConvenio);
+              $('.inp-contenedor')[2].style.display='';
             }
             console.log(data);
         }
