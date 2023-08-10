@@ -19,6 +19,7 @@
 </style>
 <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 <section>
+<a href="https://www.google.com/search?sca_esv=555242323&rlz=1C1CHBF_esMX1061MX1061&q=gatitos&tbm=isch&source=lnms&sa=X&sqi=2&ved=2ahUKEwjCjNiyx9CAAxUmkWoFHakgDdMQ0pQJegQIDRAB&biw=1536&bih=707&dpr=1.25" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
     <form method="post" enctype="multipart/form-data" action="{{ url('store') }}" >
       @csrf
       @if (is_null($documentosN['ine']))
