@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Convenios;
 use App\Models\Solicitude;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ClienteController
@@ -21,7 +22,17 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::paginate();
+
+        $usuario = User::find(Auth::id());
+        $convenioUsuario = Convenios::where('nombreCorto',$usuario->convenio)->first();
+        if($usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
+        {
+            $clientes = Cliente::where('convenio',$convenioUsuario->id)->paginate();
+        }
+        else
+        {
+            $clientes = Cliente::paginate();
+        }
 
         return view('cliente.index', compact('clientes'))
             ->with('i', (request()->input('page', 1) - 1) * $clientes->perPage());

@@ -212,11 +212,15 @@ class SolicitudeController extends Controller
             $montoRecibir = ($monto)-($montoRetenciones+$MontoSeguro)-$consultaBuro;
 
             //     Se guardan los detalles de la solicitud - Comentar si es que algo truena
-            $solicitude->montoretenido=$montoRetenciones;
-            $solicitude->coberturariesgo=$MontoSeguro;
-            $solicitude->montorecibido=$montoRecibir;
-            $solicitude->pagoplazo = $MontoCuotaQuincenal;
-            $solicitude->save();
+            //     Se estan guardando de nuevo las solicitudes cada que se entra a ver el detalle
+            if(!isset($solicitude->montoretenido)||(is_null($solicitude->montoretenido))||($solicitude->montoretenido=="")||($solicitude->montoretenido==0))
+            {
+                $solicitude->montoretenido=$montoRetenciones;
+                $solicitude->coberturariesgo=$MontoSeguro;
+                $solicitude->montorecibido=$montoRecibir;
+                $solicitude->pagoplazo = $MontoCuotaQuincenal;
+                $solicitude->save();
+            }
 
             $datos = array(
                 'cuotasQuincenales' => $cuotasQuincenales,

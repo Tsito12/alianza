@@ -18,11 +18,13 @@
     use App\Models\User;
     use Illuminate\Support\Facades\Auth;
     use App\Models\Cliente;
+    use App\Models\Documentoscliente;
 @endphp
 
 
 <section>
-<a href="https://www.google.com/search?sca_esv=555242323&rlz=1C1CHBF_esMX1061MX1061&q=gatitos&tbm=isch&source=lnms&sa=X&sqi=2&ved=2ahUKEwjCjNiyx9CAAxUmkWoFHakgDdMQ0pQJegQIDRAB&biw=1536&bih=707&dpr=1.25" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
+    <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
+<a href="#" onclick="window.history.back()" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
   <h1>Detalles del crédito.</h1>
        <div class="cuadro-contenedor">
            <div class="info-contenedor">
@@ -68,14 +70,27 @@
 
         @php
             $user = User::find(Auth::id());
+            $documentos = Documentoscliente::where('idcliente',$solicitude->idcliente)->get();
+            $documentosOK = true;
+
+            foreach ($documentos as $documento) {
+                if($documento->estado!="Aprobado")
+                {
+                    $documentosOK = false;
+                    break;
+                }
+            }
         @endphp
         @if ($user->tipo=="Admin")
-            <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
-                {{ method_field('PATCH') }}
-                @csrf
-                <input name="estado" type="hidden"  value="En integracion" />
-                <button type="submit" class="boton btn btn-danger btn-sm"> {{ __('A integración') }}</button>
-            </form>
+            @if (($documentosOK))
+                <p>Los documentos ya han sido aprobados, puede pasar a la etapa de integración</p>
+                <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
+                    {{ method_field('PATCH') }}
+                    @csrf
+                    <input name="estado" type="hidden"  value="En integracion" />
+                    <button type="submit" class="boton btn btn-danger btn-sm"> {{ __('A integración') }}</button>
+                </form>
+            @endif
             <a class="boton" href="{{route('file-upload',['idcliente' => $cliente->id])}}">Ver archivos</a>
             
                 {{ method_field('PATCH') }}

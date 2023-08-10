@@ -26,7 +26,7 @@
     
     <p class="d-none" id="fechaServidor"></p>
       <section>
-      <a class="volver-boton">Volver</a>
+        <a href="#" onclick="window.history.back()" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
         <div class="botones-contendor">
           <button onclick="cambiarTabla(1)">No atendidas</button>
           <button onclick="cambiarTabla(2)">En integración</button>
@@ -76,7 +76,7 @@
                 @endphp
                 <div class="fila">
                     <div class="columna">
-                        <td>{{ ++$i }}</td>
+                        <span>{{ ++$i }}</span>
                     </div>
                     <div class="columna">
                       <span><a href="{{route('clientes.show', $cliente->id)}}">{{$cliente->nombre}}</a></span>
