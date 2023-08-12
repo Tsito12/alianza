@@ -28,7 +28,7 @@
         <h2>Tu crédito de confianza.</h2>
     </header>
     <section>
-    <a href="https://www.google.com/search?sca_esv=555242323&rlz=1C1CHBF_esMX1061MX1061&q=gatitos&tbm=isch&source=lnms&sa=X&sqi=2&ved=2ahUKEwjCjNiyx9CAAxUmkWoFHakgDdMQ0pQJegQIDRAB&biw=1536&bih=707&dpr=1.25" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
+    <a href="#" onclick="window.history.back()" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
     <form  action="{{ route('register') }}" method="POST" autocomplete="off" class="form">
         @csrf
         <h1 class="titulo">Regístrate y obtén tu pre-aprobación en minutos.</h1>

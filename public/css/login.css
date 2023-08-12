@@ -234,6 +234,21 @@ input[type="checkbox"]{
     width: 200px;
 }
 
+.kITrbH {
+    align-items: center;
+    color: #005520;
+    cursor: pointer;
+    display: flex;
+    font-family: 'Presidencia Firme', sans-serif;
+    font-size: 0.875em;
+    gap: 10px;
+    left: 20px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-decoration: none;
+    top: 90px;
+}
+
 @keyframes aparecerRobot {
     0% {
       right: -200px;

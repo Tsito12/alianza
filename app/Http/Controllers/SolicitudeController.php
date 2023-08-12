@@ -44,6 +44,11 @@ class SolicitudeController extends Controller
             ->with('i', (request()->input('page', 1) - 1) * $solicitudesPag->perPage());
     }
 
+    /**
+     * Obtiene las solicitudes que estan en proceso, modificadas y en integracion únicamente para un convenio
+     * ordenandolas por fecha de modificacion, de tal forma que se siga un primeras entradas primeras salidas
+     * @return \Illuminate\Http\Response
+     */
     public function Aliado()
     {
         $aliado = User::find(Auth::id())->convenio;
@@ -80,7 +85,7 @@ class SolicitudeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
+     * Método sin usar. El formumalrio para crear o editar solicitudes se maneja a traves de ClienteController
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -115,6 +120,12 @@ class SolicitudeController extends Controller
         request()->validate(Solicitude::$rules);
         $solicitude->save();
         */
+        //Esta primera parte guarda únicamente datos de
+        //Prestamo solicitado, Cretido maximo, plazo, pago minimo, pago maximo, pago deseado
+        //Los calculos para obtener y guardar monto retenido, cobertura de riesgo, monto recibido
+        //y pago por plazo se realizan en el método show
+        //Como anotación adicional, probablemente el proceso de como se realiza eso esta mal
+        //Intentar cambiar si considera adecuado y si logra entender como hacerlo XD
         request()->validate(Solicitude::$rules);
         $solicitude = Solicitude::create($request->all());
         /*

@@ -79,3 +79,18 @@ inputTelefono.addEventListener('input', () => {
         inputTelefono.value = inputTelefono.value.slice(0, maxLength);
     }
 });
+
+function soloNumeros(){
+    var e = event || window.event;  // get event object
+    var key = e.keyCode || e.which; // get key cross-browser
+    console.log(e.keyCode);
+    if ((key < 48 || key > 57) && key!=8 && (key < 96 || key > 105)) { //if it is not a number ascii code
+      //Prevent default action, which is inserting character
+      if(e.keyCode==189&&e.currentTarget==$('#ajustePasivosfeik')[0]&&$('#ajustePasivosfeik').val().length==0)
+      {
+        return;
+      }
+      if (e.preventDefault) e.preventDefault(); //normal browsers
+      e.returnValue = false; //IE
+    }
+  }

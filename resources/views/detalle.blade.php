@@ -25,6 +25,13 @@
 <section>
     <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 <a href="#" onclick="window.history.back()" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
+@php
+    $usuario = User::find(Auth::id());
+    $cliente = Cliente::find($solicitude->idcliente);
+@endphp
+    @if ($usuario->tipo=="Admin"||$usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
+        <h3>Cliente: {{$cliente->nombre}}</h3>
+    @endif
   <h1>Detalles del crédito.</h1>
        <div class="cuadro-contenedor">
            <div class="info-contenedor">

@@ -77,7 +77,7 @@
                         <!-- PASO 2 -->
                         <div class="paso">
                             <div class="inp-contenedor">
-                                <input type="text" id="ingresoquincenalfeik" value="{{ $cliente->ingresoquincenal }}" onload="formatoMexico(this)" name="ingresoquincenalfeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="ingresoquincenalfeik" value="{{ $cliente->ingresoquincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="ingresoquincenalfeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
                                 <input type="number" class="d-none" name="ingresoquincenal" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}">
                                 <label for="ingresoquincenal" class="etq">Ingresos quincenales</label>
                                 @error('ingresoquincenal')
@@ -90,7 +90,7 @@
                                 <p id="alerta-quincena" class="alerta"></p> 
                             </div>
                             <div class="inp-contenedor">
-                                <input type="text" id="disponiblequincenalfeik" value="{{ $cliente->disponiblequincenal }}" onload="formatoMexico(this)" name="disponiblequincenal" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="disponiblequincenalfeik" value="{{ $cliente->disponiblequincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="disponiblequincenal" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
                                 <input type="number" id="disponiblequincenal" class="d-none" name="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}">
                                 <label for="disponiblequincenal" class="etq">¿Cuánto te queda disponible?</label>
                                 @error('disponiblequincenal')
@@ -101,7 +101,21 @@
                                 <span class="bar sa"></span>
                                 <span class="quincena-span">$</span>
                                 <p id="alerta-disponible" class="alerta"></p> 
-                            </div>           
+                            </div>    
+                            <div class="inp-contenedor @if (auth()->user()->tipo!="Admin") d-none @endif">
+                                <input type="text" id="ajustePasivosfeik" value="" onload="formatoMexico(this)" name="ajustePasivosfeik" oninput="formatoMexico(this)" onkeydown="soloNumeros()" class="inp sa" tabindex="-1" required>
+                                <input type="number" id="ajustePasivos" class="d-none" name="ajustePasivos" value="">
+                                <label for="ajustePasivosfeik" class="etq">Ajuste (+ - ) quincenal por pasivos</label>
+                                @error('ajustePasivos')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                <span class="bar sa"></span>
+                                <span class="quincena-span">$</span>
+                                <p id="alerta-disponible" class="alerta"></p> 
+                            </div>      
+                               
                         </div>
                         <!--
                     </form>  -->

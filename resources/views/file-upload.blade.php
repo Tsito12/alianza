@@ -1,14 +1,10 @@
 @php
     use App\Models\Solicitude;
+    use App\Models\User;
+    use App\Models\Cliente;
 @endphp
 @extends('layouts.app')
 @section('content')
-<div>
-    <br>
-</div>
-<div>
-    <br>
-</div>
 <link href="{{asset('css/subirArchivos.css')}}" rel="stylesheet">
 <link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
 <title>Subir archivos</title>
@@ -32,6 +28,14 @@
           
       @endif
       {{Form::hidden('idcliente',$documentosN['ine']->idcliente)}}
+      <!-- Si el usuario es admin o seyor de la empresa del convenio, que se muestre el nombre del cliente-->
+      @php
+        $usuario = User::find(Auth::id());
+        $cliente = Cliente::find($documentosN['ine']->idcliente);
+    @endphp
+    @if ($usuario->tipo=="Admin"||$usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
+        <h3>Cliente: {{$cliente->nombre}}</h3>
+    @endif
         <div class="tabla">
             <div class="filas">
                 <div class="nombre">INE (frente)</div>

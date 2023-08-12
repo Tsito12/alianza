@@ -11,6 +11,7 @@ const mesesNumero = document.getElementById('number-meses');
 const plazoMinimo = document.getElementById('plazoMinimo');
 const plazoMaximo = document.getElementById('plazoMaximo');
 const plazoMinimoVal = document.getElementById('plazoMinimo').innerText;
+const inputAjustes = $('#ajustePasivos');
 
 var intervaloID;
 
@@ -26,9 +27,9 @@ const calcularMaximo = (min, max) => {
 };
 
 const calcularMontos = (disponible) => {
-    const pagoMinimo = Math.trunc(disponible * .1);
+    const pagoMinimo = Math.trunc((disponible + parseFloat(inputAjustes.val() )) * .1);
     const minimoRedondeado = Math.ceil(pagoMinimo/10) * 10;
-    const pagoMaximo = Math.trunc(disponible * .4);
+    const pagoMaximo = Math.trunc((disponible + parseFloat(inputAjustes.val() )) * .4);
     
     inputPagoMinimo.value = pagoMinimo;
     inputPagoMaximo.value = pagoMaximo;
