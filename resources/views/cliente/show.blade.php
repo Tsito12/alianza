@@ -2,6 +2,7 @@
     use App\Models\User;
     use App\Models\Convenios;
     use App\Models\Solicitude;  
+    use App\Models\Documentoscliente;
 @endphp
 @extends('layouts.app')
 
@@ -46,10 +47,6 @@
                             {{ $cliente->disponiblequincenal }}
                         </div>
                         <div class="form-group">
-                            <strong>Ajuste:</strong>
-                            {{ $cliente->ajuste }}
-                        </div>
-                        <div class="form-group">
                             <strong>Correo:</strong>
                             {{ User::find($cliente->user_id)->email }}
                         </div>
@@ -80,8 +77,21 @@
                             </form>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-info btn-sm" href="{{route('file-upload',['idcliente'=>$cliente->id])}}">Ver documentos</a>
+                            <form action="{{ route('clientes.destroy',$cliente->id) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm"> {{ __('Eliminar') }}</button>
+                            </form>
                         </div>
+                        @php
+                            $documentos = Documentoscliente::where('idcliente',$cliente->id)->get();
+                        @endphp
+                        @if(count($documentos)>0)
+                            <div class="float-right">
+                                <a class="btn btn-info btn-sm" href="{{route('file-upload',['idcliente'=>$cliente->id])}}">Ver documentos</a>
+                            </div>
+                        @endif
+                        
 
                     </div>
                 </div>

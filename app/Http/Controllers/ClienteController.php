@@ -29,9 +29,13 @@ class ClienteController extends Controller
         {
             $clientes = Cliente::where('convenio',$convenioUsuario->id)->paginate();
         }
-        else
+        else if ($usuario->tipo=="Admin")
         {
             $clientes = Cliente::paginate();
+        }
+        else
+        {
+            return redirect()->route('home');
         }
 
         return view('cliente.index', compact('clientes'))
@@ -178,8 +182,27 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = Cliente::find($id);
-
-        return view('cliente.show', compact('cliente'));
+        $usuario = User::find(Auth::id());
+        if ($usuario->tipo=="Admin")
+        {
+            return view('cliente.show', compact('cliente'));
+        }
+        elseif($usuario->tipo=="Aliado")
+        {
+            $convenioUsuario = Convenios::where('nombreCorto', strtoupper($usuario->convenio))->first();
+            if($cliente->convenio==$convenioUsuario->id)
+            {
+                return view('cliente.show', compact('cliente'));
+            }
+            else
+            {
+                return redirect()->route('home');
+            }
+        }
+        else
+        {
+            return redirect()->route('home');
+        }
     }
 
 

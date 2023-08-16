@@ -31,7 +31,7 @@
 <body>
     <header>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="logo-contenedor">
                 <a href="{{route('home')}}"><img src="{{asset('img/logo.png')}}"></a>
             </div>
@@ -77,11 +77,11 @@
                                     @if(!is_null(Auth::user()->name)&&Auth::user()->name!=="")
                                         {{ Auth::user()->name }}
                                     @else
-                                    {{ Auth::user()->email }}
+                                        <span style="font-family: 'Presidencia Fina', sans-serif">{{ Auth::user()->email }}</span>
                                     @endif
                                     @if (!is_null($convenio))
                                         <br>
-                                        Convenio {{ strtoupper(Auth::user()->convenio) }}
+                                        <span style="font-family: 'Presidencia Fina', sans-serif">Convenio {{ strtoupper(Auth::user()->convenio) }}</span>
                                     @endif
                                     
                                 </a>
