@@ -19,6 +19,7 @@
     use Illuminate\Support\Facades\Auth;
     use App\Models\Cliente;
     use App\Models\Documentoscliente;
+    use App\Models\Convenios;
 @endphp
 
 
@@ -28,6 +29,10 @@
 @php
     $usuario = User::find(Auth::id());
     $cliente = Cliente::find($solicitude->idcliente);
+    $convenio = Convenios::find($cliente->convenio);
+    $retenciones = $convenio->retenciones;
+    if(($solicitude->plazo<=6) && ($solicitude->plazo>3)) $retenciones =2;
+    elseif($solicitude->plazo==3) $retenciones=1;
 @endphp
     @if ($usuario->tipo=="Admin"||$usuario->tipo=="Aliado"||$usuario->tipo=="Asesor")
         <h3>Cliente: {{$cliente->nombre}}</h3>
@@ -36,20 +41,21 @@
        <div class="cuadro-contenedor">
            <div class="info-contenedor">
                <p>Monto total</p>
-               <h2>$ {{ number_format($datos['Monto'], 2, '.', ',') }}</h2>
+               <h2>$ {{ number_format($solicitude->prestamosolicitado, 2, '.', ',') }}</h2>
            </div>
            <div class="info-contenedor">
                <p>A un plazo de</p>
-               <h3>{{ $datos['cuotasQuincenales'] }} quincenas / {{ $datos['cuotasMensuales'] }} meses</h3>
+               <h3>{{ $solicitude->plazo*2 }} quincenas / {{ $solicitude->plazo }} meses</h3>
            </div>
            <div class="border"></div>
                <div class="info-contenedor-doble">
                 @php
+
                     $terminacion = "";
-                    if($datos['retenciones']>1) $terminacion="s";
+                    if($retenciones>1) $terminacion="s";
                 @endphp
-                   <p>{{ $datos['retenciones'] }} pago{{$terminacion}} retenido{{$terminacion}}:</p>
-                   <h3>$ {{ number_format($datos['montoRetenciones'], 2, '.', ',') }}</h3>
+                   <p>{{ $retenciones }} pago{{$terminacion}} retenido{{$terminacion}}:</p>
+                   <h3>$ {{ number_format($retenciones*$solicitude->pagoplazo, 2, '.', ',') }}</h3>
                </div>
                <div class="info-contenedor-doble">
                    <div class="tooltip">
@@ -57,20 +63,20 @@
                        <span class="tooltip-text">La cobertura de riesgo es un seguro de saldo deudor y gasto funerario.</span>
                    </div>
                    <p>Cobertura de riesgo:</p>
-                   <h3>$ {{ number_format($datos['MontoSeguro'], 2, '.', ',') }}</h3>
+                   <h3>$ {{ number_format($solicitude->coberturariesgo, 2, '.', ',') }}</h3>
                </div>
                <div class="info-contenedor-doble">
                 <p>Consulta de buró de crédito:</p>
-                <h3>$ {{ number_format($datos['pagoConsultaBuro'], 2, '.', ',') }}</h3>
+                <h3>$ {{ number_format(30, 2, '.', ',') }}</h3>
             </div>
            <div class="border"></div>
            <div class="info-contenedor">
                <p>Recibes</p>
-               <h2>$ {{ number_format($datos['montoRecibir'], 2, '.', ',') }}</h2>
+               <h2>$ {{ number_format($solicitude->montorecibido, 2, '.', ',') }}</h2>
            </div>
            <div class="info-contenedor-doble">
                <p>Pagando quincenalmente</p>
-               <h3>$ {{ number_format($datos['MontoCuotaQuincenal'], 2, '.', ',') }}</h3>
+               <h3>$ {{ number_format($solicitude->pagoplazo, 2, '.', ',') }}</h3>
            </div>
        </div>
 
@@ -78,7 +84,10 @@
         @php
             $user = User::find(Auth::id());
             $documentos = Documentoscliente::where('idcliente',$solicitude->idcliente)->get();
-            $documentosOK = true;
+            if(count($documentos)==0) $documentosOK = false;
+            else {
+                $documentosOK = true;
+            }
 
             foreach ($documentos as $documento) {
                 if($documento->estado!="Aprobado")
@@ -113,7 +122,9 @@
             </div>
 
             <a class="boton guardar"  href="{{ route('home') }}">Guardar Solicitud</a>
-            <a class="boton"  href="{{ route('clientes.create') }}">Editar</a>
+            @if ($user->tipo=="Cliente")
+                <a class="boton"  href="{{ route('clientes.create') }}">Editar</a>
+            @endif
  
         @if ($cliente->convenio!=10&&$user->tipo=="Cliente")
                 @if ($solicitude->estado=="Modificada")
@@ -121,7 +132,7 @@
                         {{ method_field('PATCH') }}
                         @csrf
                         <input name="estado" type="hidden"  value="En proceso" />
-                        <button type="submit" class="boton btn btn-succes btn-sm"> {{ __('Aceptar cambios') }}</button>
+                        <button type="submit" class="boton btn btn-succes btn-sm" onclick="window.location.href='/imprimirPDF/{{$solicitude->id}}'"> {{ __('Aceptar cambios') }}</button>
                     </form>
                 @else
 
@@ -131,7 +142,7 @@
                             {{ method_field('PATCH') }}
                             @csrf
                             <input name="estado" type="hidden"  value="En proceso" />
-                            <button type="submit" class="boton btn btn-succes btn-sm"> {{ __('Enviar') }}</button>
+                            <button type="submit" class="boton btn btn-succes btn-sm" onclick="window.location.href='/imprimirPDF/{{$solicitude->id}}'"> {{ __('Enviar') }}</button>
                         </form>
                     @else
                         <a class="boton" 
@@ -152,4 +163,9 @@
         @endif
         </div>
 </section>
+<script>
+    document.addEventListener('load',()=>{
+        window.open("/imprimirPDF/{{$solicitude->id}}");
+    });
+</script>
 @endsection

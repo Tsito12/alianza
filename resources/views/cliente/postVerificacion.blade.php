@@ -19,7 +19,7 @@
     <div class="img-contenedor">
       <img src="{{asset('img/BotVerificacion.png')}}">
     </div>
-    <a href="{{route('file-upload')}}">Aceptar</a>
+    <a class="boton-aceptar" href="{{route('file-upload')}}">Aceptar</a>
   </section>
 
 @endsection

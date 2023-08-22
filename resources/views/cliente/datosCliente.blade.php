@@ -163,6 +163,7 @@
                                     $diferencia = date_diff($fechaActual, $fechaFin);
                                     $plazoMaximo = ($diferencia->y*12)+($diferencia->m);
                                     if($diferencia->invert==1) $plazoMaximo*=-1;
+                                    if($plazoMaximo>$convenio->plazoMaximo) $plazoMaximo = $convenio->plazoMaximo;
                                 @endphp
                                 <input type="range" name="range-meses" id="range-meses" min="{{$convenio->plazoMinimo}}" max="{{$plazoMaximo}}" value="12" step="1" tabindex="-1">
                                 <div class="pagos-ssc">

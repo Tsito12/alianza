@@ -27,9 +27,10 @@ const calcularMaximo = (min, max) => {
 };
 
 const calcularMontos = (disponible) => {
-    const pagoMinimo = Math.trunc((disponible + parseFloat(inputAjustes.val() )) * .1);
+    let ajustes = (inputAjustes.val()=='')?0:inputAjustes.val();
+    const pagoMinimo = Math.trunc((disponible + parseFloat(ajustes )) * .1);
     const minimoRedondeado = Math.ceil(pagoMinimo/10) * 10;
-    const pagoMaximo = Math.trunc((disponible + parseFloat(inputAjustes.val() )) * .4);
+    const pagoMaximo = Math.trunc((disponible + parseFloat(ajustes )) * .4);
     
     inputPagoMinimo.value = pagoMinimo;
     inputPagoMaximo.value = pagoMaximo;

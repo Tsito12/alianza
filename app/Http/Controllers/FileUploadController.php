@@ -99,13 +99,17 @@ class FileUploadController extends Controller
             $ine = $pathIne;
             $estado = "Modificado";
             $observaciones = "Documento modificado";
-            $modifico = true;
+            //Se busca el tipo de documento para el cliente, si no existe se crea un nuevo registro, si ya existe, unicamente se va a modificar
             $documentoIne = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',1)->first();
             if(is_null($documentoIne))
             {
                 $documentoIne = new Documentoscliente();
                 $estado = "En revisión";
                 $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
             }
             $documentoIne->documento = $ine;
             $documentoIne->tipodocumento = 1;
@@ -124,13 +128,16 @@ class FileUploadController extends Controller
             $comprobanteDom = $pathComprobante;
             $documentoDom = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',3)->first();
             $estado = "Modificado";
-            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoDom))
             {
                 $documentoDom = new Documentoscliente();
                 $estado = "En revisión";
                 $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
             }
             $documentoDom->documento = $comprobanteDom;
             $documentoDom->tipodocumento = 3;
@@ -150,13 +157,16 @@ class FileUploadController extends Controller
             $foto = $pathFoto;
             $documentoFoto = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',4)->first();
             $estado = "Modificado";
-            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoFoto))
             {
                 $documentoFoto = new Documentoscliente();
                 $estado = "En revisión";
                 $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
             }
             $documentoFoto->documento = $foto;
             $documentoFoto->tipodocumento = 4;
@@ -176,13 +186,16 @@ class FileUploadController extends Controller
             $ingresos = $pathIngresos;
             $documentoIngresos = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',2)->first();
             $estado = "Modificado";
-            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoIngresos))
             {
                 $documentoIngresos = new Documentoscliente();
                 $estado="En revisión";
                 $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
             }
             $documentoIngresos->documento = $ingresos;
             $documentoIngresos->tipodocumento = 2;
@@ -202,13 +215,16 @@ class FileUploadController extends Controller
             $ingresos = $pathIngresos;
             $documentoIngresos = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',5)->first();
             $estado = "Modificado";
-            $modifico = true;
             $observaciones = "Documento modificado";
             if(is_null($documentoIngresos))
             {
                 $documentoIngresos = new Documentoscliente();
                 $estado="En revisión";
                 $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
             }
             $documentoIngresos->documento = $ingresos;
             $documentoIngresos->tipodocumento = 5;
@@ -259,7 +275,7 @@ class FileUploadController extends Controller
         $save->save();
  
         */
-        return redirect()->route('file-upload',['idcliente' => $idcliente])->with('status', 'File Has been uploaded successfully in laravel 8');
+        return redirect()->route('file-upload',['idcliente' => $idcliente])->with('status', 'File Has been uploaded successfully');
  
     }
 

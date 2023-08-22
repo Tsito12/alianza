@@ -88,7 +88,7 @@
                     
                 </div>        
                 @else
-                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!="")
+                    @if ($documentosN['ine']->estado!="")
                         <div class="filas">
                             <p class="text-center">Estado</p>
                             <p class="text-center">{{$documentosN['ine']->estado}}</p>
@@ -97,7 +97,7 @@
                         </div>
                     @endif
             @endif    
-                    @if ($documentosN['ine']->estado!="En revisión"&&$documentosN['ine']->estado!=""&&Auth::user()->tipo=="Admin")
+                    @if ($documentosN['ine']->estado!=""&&Auth::user()->tipo=="Admin")
                             <div>
                                 <p id="estadoIne" class="text-center">{{$documentosN['ine']->estado}}</p>
                                 <label for="motivoIne" class="form-control">Observaciones</label>
@@ -158,16 +158,16 @@
                     
                 </div>        
                 @else
-                    @if ($documentosN['ine2']->estado!="En revisión"&&$documentosN['ine2']->estado!="")
+                    @if ($documentosN['ine2']->estado!="")
                         <div class="filas">
                             <p class="text-center">Estado</p>
                             <p class="text-center">{{$documentosN['ine2']->estado}}</p>
-                            <label for="motivoIne" class="form-control">Observaciones</label>
+                            <label for="motivoIne2" class="form-control">Observaciones</label>
                             <input class="observaciones disabled" type="text" name="motivoIne2" id="motivoIne2" value="{{$documentosN['ine2']->observaciones}}" readonly>
                         </div>
                     @endif
             @endif    
-                    @if ($documentosN['ine2']->estado!="En revisión"&&$documentosN['ine2']->estado!=""&&Auth::user()->tipo=="Admin")
+                    @if ($documentosN['ine2']->estado!=""&&Auth::user()->tipo=="Admin")
                             <div>
                                 <p id="estadoIne2" class="text-center">{{$documentosN['ine2']->estado}}</p>
                                 <label for="motivoIne2" class="form-control">Observaciones</label>
@@ -227,7 +227,7 @@
                     
                 </div>        
             @else
-                @if ($documentosN['ingresos']->estado!="En revisión"&&$documentosN['ingresos']->estado!="")
+                @if ($documentosN['ingresos']->estado!="")
                     <div class="filas">
                         <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['ingresos']->estado}}</p>
@@ -236,7 +236,7 @@
                     </div>
                 @endif
             @endif
-            @if ($documentosN['ingresos']->estado!="En revisión"&&$documentosN['ingresos']->estado!=""&&Auth::user()->tipo=="Admin")
+            @if ($documentosN['ingresos']->estado!=""&&Auth::user()->tipo=="Admin")
                 <div class="filas">
                     <p id="estadoIngresos" class="text-center">{{$documentosN['ingresos']->estado}}</p>
                     <label for="motivo2Ingresos" class="form-control">Observaciones</label>
@@ -295,7 +295,7 @@
                     
                 </div>        
             @else
-                @if ($documentosN['domicilio']->estado!="En revisión"&&$documentosN['domicilio']->estado!="")
+                @if ($documentosN['domicilio']->estado!="")
                     <div class="filas">
                         <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['domicilio']->estado}}</p>
@@ -304,7 +304,7 @@
                     </div>
                 @endif
             @endif
-            @if ($documentosN['domicilio']->estado!="En revisión"&&$documentosN['domicilio']->estado!=""&&Auth::user()->tipo=="Admin")
+            @if ($documentosN['domicilio']->estado!=""&&Auth::user()->tipo=="Admin")
                     <div class="filas">
                         <p id="estadoDomicilio" class="text-center">{{$documentosN['domicilio']->estado}}</p>
                         <label for="motivoDomicilio" class="form-control">Observaciones</label>
@@ -363,7 +363,7 @@
                     
                 </div>        
             @else
-                @if ($documentosN['foto']->estado!="En revisión"&&$documentosN['foto']->documento!="")
+                @if ($documentosN['foto']->documento!="")
                     <div class="filas">
                         <p class="text-center">Estado</p>
                         <p class="text-center">{{$documentosN['foto']->estado}}</p>
@@ -372,7 +372,7 @@
                     </div>
                 @endif
             @endif
-            @if ($documentosN['foto']->estado!="En revisión"&&$documentosN['foto']->documento!=""&&Auth::user()->tipo=="Admin")
+            @if ($documentosN['foto']->documento!=""&&Auth::user()->tipo=="Admin")
                     <div class="filas">
                         <p id="estadoFoto" class="text-center">{{$documentosN['foto']->estado}}</p>
                         <label for="motivoFoto" class="form-control">Observaciones</label>
@@ -389,7 +389,7 @@
                     break;
                 }
             }
-            $solicitud = Solicitude::where('idcliente', $documentosN['ine']->idcliente)->first();
+            //$solicitud = Solicitude::where('idcliente', $documentosN['ine']->idcliente)->first();
             $solicitud = Solicitude::where('idcliente', $documentosN['ine']->idcliente)->first();
         @endphp
 

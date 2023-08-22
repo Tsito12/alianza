@@ -38,7 +38,7 @@ class ContactoController extends Controller
         if(str_contains($metodoContacto, "Whatsapp"))
         {
             $telefono = '52'.$cliente->telefono;
-            //$this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
+            $this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
             return redirect()->route('confirmarTelefono');
         } else
         {

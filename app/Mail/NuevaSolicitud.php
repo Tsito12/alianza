@@ -32,6 +32,8 @@ class NuevaSolicitud extends Mailable
     {
         $idcliente = $this->datos['idcliente'];
         $idsolicitud = $this->datos['idsolicitud'];
-        return $this->subject('Solicitud de crédito registrada')->view('emails.nuevaSolicitud')->attachFromStorage('public/files/'.$idcliente.'/solicitudes/'.$idsolicitud.'.pdf');
+        //Comentar-des Comentar según si sea en producción o no. La ruta cambia parece que así esta bien
+        //return $this->subject('Solicitud de crédito registrada')->view('emails.nuevaSolicitud')->attachFromStorage('files/'.$idcliente.'/solicitudes/'.$idsolicitud.'.pdf');
+        return $this->subject('Solicitud de crédito registrada')->view('emails.nuevaSolicitud')->attachFromStorage('files/'.$idcliente.'/solicitudes/'.$idsolicitud.'.pdf');
     }
 }

@@ -43,7 +43,7 @@ class Solicitude extends Model
      *
      * @var array
      */
-    protected $fillable = ['pagominimo','pagomaximo','pagodeseado','plazo','creditomaximo','prestamosolicitado','estado','idcliente'];
+    protected $fillable = ['pagominimo','pagomaximo','pagodeseado','plazo','creditomaximo','prestamosolicitado','estado','idcliente', 'convenio','ajustePasivos'];
 
 
     /**

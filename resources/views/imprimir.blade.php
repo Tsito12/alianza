@@ -160,30 +160,30 @@
         <table id="noBordeTabla" style="font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;">
             <tr>
                 <td width="45%"> <strong>Nombre del cliente:</strong></td>
-                <td width="55%" class="mayuscula">{{ $datos['NombreCompleto'] }}</td>
+                <td width="55%" class="mayuscula">{{ $cliente->nombre }}</td>
             </tr><tr>
                 <td width="45%"> <strong>Whatsapp:</strong></td>
                 <td width="55%">
-                    <a href="https://web.whatsapp.com/send/?phone=+52{{ $datos['whatsapp'] }}&text=Hola." target="_blank">{{ $datos['whatsapp'] }}</a>
+                    <a href="https://web.whatsapp.com/send/?phone=+52{{ $cliente->telefono }}&text=Hola." target="_blank">{{ $cliente->telefono }}</a>
                 </td>
             </tr><tr>
                 <td width="45%"> <strong>Ingreso quincenal:</strong></td>
-                <td width="55%">$ {{ number_format($datos['cuantoGana'], 2, '.', ',') }}</td>
+                <td width="55%">$ {{ number_format($cliente->ingresoquincenal, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td valign="center"> <strong>Disponible quincenal:</strong></td>
-                <td valign="center">$ {{ number_format($datos['cuantoDisponible'], 2, '.', ',') }}</td>
+                <td valign="center">$ {{ number_format($cliente->disponiblequincenal, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td valign="center"> <strong>Ajustes por pasivos (+ -):</strong></td>
-                <td valign="center">$ {{ number_format($datos['ajustePasivos'], 2, '.', ',') }}</td>
+                <td valign="center">$ {{ number_format($solicitude->ajustePasivos, 2, '.', ',') }}</td>
             </tr>
             @php
-                $porcentajeUsado = $datos['porcentajePago']*10;
+                $porcentajeUsado = 0.4*10;
             @endphp
             <tr style='text-decoration: underline'>
                 <td valign="center"> <strong>Total disponible:</strong></td>
-                <td valign="center"><strong>$ {{ number_format($datos['ajustePasivos']+$datos['cuantoDisponible'], 2, '.', ',') }}</strong>
+                <td valign="center"><strong>$ {{ number_format((($solicitude->ajustePasivos)+($cliente->disponiblequincenal)), 2, '.', ',') }}</strong>
                     <small>
                         @for($i=0;$i<$porcentajeUsado;$i++) 
                             {{-- * --}}
@@ -192,8 +192,8 @@
                 </td>
             </tr>
             <tr style='text-decoration: underline'>
-                <td valign="center"> <strong>Disponible calculado al {{ ($datos['porcentajePago'])*(100) }}%:</strong></td>
-                <td valign="center"><strong>$ {{ number_format($datos['pagoMaximo'], 2, '.', ',') }}</strong>
+                <td valign="center"> <strong>Disponible calculado al {{ (0.4)*(100) }}%:</strong></td>
+                <td valign="center"><strong>$ {{ number_format($solicitude->pagomaximo, 2, '.', ',') }}</strong>
                     <small>
                         @for($i=0;$i<$porcentajeUsado;$i++) 
                             {{-- * --}}
@@ -210,34 +210,34 @@
         <table id="noBordeTabla" style="font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;">
             <tr>
                 <td width="40%"><strong>Monto del crédito:</strong></td>
-                <td valign="center" class="texto-grande texto-verde">$ {{ number_format($datos['montoSolicitado'], 2, '.', ',') }}</td>
+                <td valign="center" class="texto-grande texto-verde">$ {{ number_format($solicitude->prestamosolicitado, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td valign="center"><strong>Plazo:</strong></td>
-                <td valign="center">{{ $datos['cuotasQuincenales'] }} quincenas / {{ $datos['cuotasMensuales'] }} meses</td>
+                <td valign="center">{{ $solicitude->plazo*2 }} quincenas / {{ $solicitude->plazo }} meses</td>
             </tr>
             <tr>
                 <td valign="center"><strong>Fecha inicio:</strong></td>
-                <td valign="center">{{ $datos['Par_FechaInicio'] }}</td>
+                <td valign="center">{{ $solicitude->fechainicio }}</td>
             </tr>
             <tr>
                 <td valign="center"><strong>Descuento quincenal:</strong></td>
-                <td valign="center"><strong>$ {{ number_format($datos['MontoCuotaQuincenal'], 2, '.', ',') }}</strong></td>
+                <td valign="center"><strong>$ {{ number_format($solicitude->pagoplazo*2, 2, '.', ',') }}</strong></td>
             </tr>
             <tr>
-                <td valign="center"><strong>{{ $datos['retenciones'] }} Retenciones:</strong></td>
-                <td valign="center">- $ {{ number_format($datos['montoRetenciones'], 2, '.', ',') }}</td>
+                <td valign="center"><strong>{{ $solicitude->montoretenido/$solicitude->pagoplazo }} Retenciones:</strong></td>
+                <td valign="center">- $ {{ number_format($solicitude->pagoplazo, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td valign="center"><strong>Cobertura de riesgo:</strong></td>
-                <td valign="center">- $ {{ number_format($datos['MontoSeguro'], 2, '.', ',') }}</td>
+                <td valign="center">- $ {{ number_format($solicitude->coberturariesgo, 2, '.', ',') }}</td>
             </tr>
         </table>
         <br><br>
         <table id="noBordeTabla" style="font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;">
             <tr>
                 <td valign="center"><strong>Monto total a recibir:</strong></td>
-                <td valign="center" class="texto-grande texto-verde">$ {{ number_format($datos['montoRecibir'], 2, '.', ',') }}</td>
+                <td valign="center" class="texto-grande texto-verde">$ {{ number_format($solicitude->montorecibido, 2, '.', ',') }}</td>
             </tr>
         </table>
         <br><br><br>
@@ -254,7 +254,7 @@
         <br><br><br><br><br>
         <table id="noBordeTabla" style="font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;font-size: 11px;">
             <tr>
-                <td width="50%" class="texto-centro mayuscula subrayado">_________________{{ $datos['NombreCompleto'] }}_______________</td>
+                <td width="50%" class="texto-centro mayuscula subrayado">_________________{{ $cliente->nombre }}_______________</td>
             </tr>
             <tr>
                 <td width="50%" class="texto-centro">NOMBRE Y FIRMA DEL CLIENTE</td>

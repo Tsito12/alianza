@@ -128,6 +128,42 @@ class SolicitudeController extends Controller
         //Intentar cambiar si considera adecuado y si logra entender como hacerlo XD
         request()->validate(Solicitude::$rules);
         $solicitude = Solicitude::create($request->all());
+        //Parte para calcular retemciones y seguros
+        $cliente = Cliente::find($solicitude->idcliente);
+        $Meses = $solicitude->plazo;
+        $convenioT = Convenios::find($cliente->convenio);
+        $retenciones=$convenioT->retenciones;
+        if(($Meses<=6) && ($Meses>3)) $retenciones=2;
+        elseif($Meses==3) $retenciones=1;
+        else $retenciones = $convenioT->retenciones;
+        $diaMes = 1;
+        $fechaInicio = date("Y-m-d");
+        $Transaccion = rand(10,10000000);
+        //Se deben calcular los datos de los pagos, retencion y demás
+
+
+        $monto = $solicitude->prestamosolicitado;
+        
+        $convenio = $convenioT->InstitucionNominaID.".00";
+        $datos = $this->calcularRetencionesYSeguro(
+                $monto, 
+                $convenio, 
+                $diaMes,
+                $fechaInicio,
+                $Meses,
+                $Transaccion, 
+                $retenciones,
+                $solicitude,
+                $cliente
+        );
+        $this->imprimirPDF($solicitude->id);
+
+        $this->mandarCorreo($solicitude);
+        //Se supone que ajuste pasivo si lo toma de la vista
+        //fecha de inicio lo dejamos así, aunque se supone lo debería 
+        //Hacer el observer, pero lo dejamos así por si marca un día
+        //Inhabil o algo así
+        //Y el convenio también lo hace el observer
         /*
         if(is_null($solicitude->estado)||$solicitude->estado="")
         {
@@ -151,13 +187,13 @@ class SolicitudeController extends Controller
      */
     public function show(Request $request, $id)
     {
-
+        $datos = session('datosSolicitud');
         $solicitude = Solicitude::find($id);
         $cliente = Cliente::find($solicitude->idcliente);
         $Meses = $solicitude->plazo;
         $convenioT = Convenios::find($cliente->convenio);
         //$convenioT = Convenios::where('nombreCorto',$usuario->convenio)->first();
-        $retenciones=$convenioT->reetenciones;
+        $retenciones=$convenioT->retenciones;
         //Se deben calcular los datos de los pagos, retencion y demás
 
 
@@ -168,19 +204,41 @@ class SolicitudeController extends Controller
         $retenciones = $convenioT->retenciones;
         if(($Meses<=6) && ($Meses>3)) $retenciones=2;
         elseif($Meses==3) $retenciones=1;
+        else $retenciones = $convenioT->retenciones;
         //$convenio = 54.00;
         $diaMes = 1;
         $fechaInicio = date("Y-m-d");
         $Transaccion = rand(10,10000000);
 
+        if(!isset($solicitude->fechainicio))
+        {
+            $fechaInicio=date_create($solicitude->updated_at);
+            $fechaInicio = date_format($fechaInicio,"Y-m-d");
+            $datos = $this->calcularRetencionesYSeguro(
+                $monto,
+                $convenio, 
+                $diaMes,
+                $fechaInicio,
+                $Meses,
+                $Transaccion, 
+                $retenciones,
+                $solicitude,
+                $cliente
+            );
+        }
+
         //opcion para cuando se va a imprimir el pdf, para que no se vuelvan a realizar los calculos
+        //Ya no se para que se hace esto
+        //Se tiene un método individual para imprimir el pdf, y además hay que ver en que parte del 
+        //proceso se hace
         if( !is_null(session('datosSolicitud'))&&isset($datos)&&!empty($datos)  )
         {
             $opcion=$request->get('opcion');
             if(Auth::user()->tipo=="Cliente"){
                 //return redirect()->route('imprimirDatosSolicitud',$datos);
+                /*
                 $datos=session('datosSolicitud');
-                $pdf = PDF::loadView('imprimir', ['datos' => $datos]);
+                $pdf = PDF::loadView('imprimir', ['cliente' => $cliente, 'solicitude'=> $solicitude]);
                 $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date("H:i:s").'].pdf';
                 $descarga = $pdf->download($nombrepdf);
                 $contenido = $descarga->getOriginalContent();
@@ -192,13 +250,16 @@ class SolicitudeController extends Controller
                 ];
                 $mailCliente = Auth::user();
                 Mail::to($mailCliente)->send(new NuevaSolicitud($datosCorreo));
-                return $descarga;
+                */
+                //Verificar en que parte se envía el PDF
+                //return $descarga;
                 //imprimir($datos);
             }
             return view('detalle', compact('solicitude'))->with('datos',$datos)->with('cliente',$cliente)->with('convenios', $convenioT);
         }
         
         
+        /*
         //Consultas a la base de datos del antiguo sacialianza, pero parece ser que llama a un metodo de safi
         $simulacion     = DB::connection('produccion')->select("
                 CALL CREPAGCRECAMORPRO($monto,$convenio,30,'M','D',$diaMes,'$fechaInicio',$Meses,3001,20235,'S','N','N',0.0,'S',@a,@b,@c,@d,@e,@f,@g,1,184,'$fechaInicio','192.168.100.184','/microfin/catalogoCliente.htm',13,-$Transaccion)
@@ -212,7 +273,7 @@ class SolicitudeController extends Controller
             $MontoCuotaQuincenal = ($MontoCuotaMensual/2);
             $montoRetenciones = $retenciones*$MontoCuotaQuincenal;
 
-            //Conexion a SAFI en produccion
+            //Consultas a la base de datos del antiguo sacialianza
             $seguro     = DB::connection('produccion')->select("
                 CALL CALCSEGUROINDVPRO(DATEDIFF('$Par_FechaVenc','$Par_FechaInicio'),$monto,3001,@a,'S',@b,@c,1,0,'1900-01-01', '','SolicitudCreditoDAO',0,0);
             ");
@@ -224,7 +285,12 @@ class SolicitudeController extends Controller
 
             //     Se guardan los detalles de la solicitud - Comentar si es que algo truena
             //     Se estan guardando de nuevo las solicitudes cada que se entra a ver el detalle
-            if(!isset($solicitude->montoretenido)||(is_null($solicitude->montoretenido))||($solicitude->montoretenido=="")||($solicitude->montoretenido==0))
+            //     Hay que tener cuidado, porque cuando se actualiza una solicitud se pasaba por alto esta parte
+            if((!isset($solicitude->montoretenido))||
+                (is_null($solicitude->montoretenido))||
+                ($solicitude->montoretenido=="")||
+                ($solicitude->montoretenido==0)||
+                ($solicitude->estado=="Modificada"))
             {
                 $solicitude->montoretenido=$montoRetenciones;
                 $solicitude->coberturariesgo=$MontoSeguro;
@@ -265,19 +331,22 @@ class SolicitudeController extends Controller
                 'fechaInicio' => date("Y-m-d"),
                 //'button' => $request->button,
             );
-
             session(['datosSolicitud' => $datos]);
-            $pdf = PDF::loadView('imprimir', ['datos' => $datos]);
-            $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date("H:i:s").'].pdf';
+            */
+            /*
+            $fecha = date_create($solicitude->fechainicio);
+            $pdf = PDF::loadView('imprimir', ['cliente' => $cliente, 'solicitude'=> $solicitude]);
+            $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date_format($fecha,"d-m-Y").'].pdf';
             $descarga = $pdf->download($nombrepdf);
             $contenido = $descarga->getOriginalContent();
             $ruta = "files/".$cliente->id."/solicitudes/".$solicitude->id.'.pdf';
             Storage::put($ruta, $contenido);
+            */
             //En la vista, el botón imprimir, redirige a este mismo controlador, mismo metodo
             //pero se incluye un campo opcion, donde se da la opción para generar el pdf y mandarlo por correo
 
             
-        return view('detalle', compact('solicitude'))->with('datos',$datos)->with('cliente',$cliente)->with('convenios', $convenioT);  
+        return view('detalle', compact('solicitude'))->with('datos',$datos)->with('cliente',$cliente)->with('convenios', $convenioT)->with('solicitude',$solicitude);  
         return view('solicitude.show', compact('solicitude'))->with('datos',$datos)
                ->with('cliente',$cliente)->with('convenios', $convenioT);
     }
@@ -307,6 +376,8 @@ class SolicitudeController extends Controller
     {
         $estado = $request->input('estado');
         $prestamosolicitado = $request->input('prestamosolicitado');
+        //Me parece que esto es para cuando simplemente se cambian de estado, sin modificar datos del credito
+        // Y aplica solo para mandar a integración o para poner en proceso una solicitud
         if((($estado != "")&&(!is_null($estado)))&&((is_null($prestamosolicitado))||($prestamosolicitado=="")))
         {
             $SolicitudN = Solicitude::find($solicitude->id);
@@ -316,6 +387,8 @@ class SolicitudeController extends Controller
             $telefono = "52". $cliente->telefono;
             if($estado=="Modificada")
             {
+                $SolicitudN->estado = $estado;
+                $SolicitudN->save($request->all());
                 return $this->enviarMensajeSolicitudRechazada($telefono, $SolicitudN->id);
             }elseif($estado=="En integracion")
             {
@@ -330,21 +403,54 @@ class SolicitudeController extends Controller
                 //return $rutapdf;
             }
             return redirect()->route('home');
-        }else{
+        }
+        else
+        {
             /*
             request()->validate(Cliente::$rules);
 
             $cliente->update($request->all());
             */
+            //return 1;
             request()->validate(Solicitude::$rules);
             $solicitude->update($request->all());
-            if(Auth::user()->tipo=="Admin")
+            //Parte para calcular retemciones y seguros
+            $cliente = Cliente::find($solicitude->idcliente);
+            $Meses = $solicitude->plazo;
+            $convenioT = Convenios::find($cliente->convenio);
+            $retenciones=$convenioT->retenciones;
+            if(($Meses<=6) && ($Meses>3)) {$retenciones=2;}
+            elseif($Meses==3) {$retenciones=1;}
+            else {$retenciones = $convenioT->retenciones;}
+            $diaMes = 1;
+            $fechaInicio = date("Y-m-d");
+            $Transaccion = rand(10,10000000);
+            //Se deben calcular los datos de los pagos, retencion y demás
+
+
+            $monto = $solicitude->prestamosolicitado;
+            
+            $convenio = $convenioT->InstitucionNominaID.".00";
+            $datos = $this->calcularRetencionesYSeguro(
+                    $monto, 
+                    $convenio, 
+                    $diaMes,
+                    $fechaInicio,
+                    $Meses,
+                    $Transaccion, 
+                    $retenciones,
+                    $solicitude,
+                    $cliente
+            );
+            //$solicitude->ajustePasivos = $request->input('ajustePasivos');
+            $solicitude->save();
+            if(Auth::user()->tipo=="Admin")     //Aquí esta no el bugazo
             {
                 $cliente = Cliente::find($solicitude->idcliente);
                 $telefono = "52". $cliente->telefono;
                 $solicitude->estado="Modificada";
                 $solicitude->save();
-                $this->enviarMensajeSolicitudRechazada($telefono, $solicitude->id);
+                //$this->enviarMensajeSolicitudRechazada($telefono, $solicitude->id);
             }
             elseif (($solicitude->estado=="Modificada")&&(Auth::user()->tipo=="Cliente"))
             {
@@ -486,5 +592,151 @@ class SolicitudeController extends Controller
         $solicitud->estado="En integracion";
         $solicitud->save();
         return redirect()->route('home');
+    }
+
+    public function calcularRetencionesYSeguro($monto, $convenio, $diaMes,$fechaInicio,$Meses,$Transaccion, $retenciones, $solicitude, $cliente)
+    {
+        $simulacion     = DB::connection('produccion')->select("
+                CALL CREPAGCRECAMORPRO($monto,$convenio,30,'M','D',$diaMes,'$fechaInicio',$Meses,3001,20235,'S','N','N',0.0,'S',@a,@b,@c,@d,@e,@f,@g,1,184,'$fechaInicio','192.168.100.184','/microfin/catalogoCliente.htm',13,-$Transaccion)
+            ");
+            DB::disconnect('produccion');
+            $cuotasMensuales = count($simulacion);
+            $cuotasQuincenales = count($simulacion)*2;
+            $Par_FechaInicio = $simulacion[0]->Par_FechaInicio;
+            $Par_FechaVenc = $simulacion[0]->Par_FechaVenc;
+            $MontoCuotaMensual = $simulacion[0]->MontoCuota;
+            $MontoCuotaQuincenal = ($MontoCuotaMensual/2);
+            $montoRetenciones = $retenciones*$MontoCuotaQuincenal;
+
+            //Consultas a la base de datos del antiguo sacialianza
+            $seguro     = DB::connection('produccion')->select("
+                CALL CALCSEGUROINDVPRO(DATEDIFF('$Par_FechaVenc','$Par_FechaInicio'),$monto,3001,@a,'S',@b,@c,1,0,'1900-01-01', '','SolicitudCreditoDAO',0,0);
+            ");
+            DB::disconnect('produccion');
+
+            $MontoSeguro = $seguro[0]->MontoSeguro;
+            $consultaBuro = 30;             //Pago de la consulta a buró de crédito, de momento son 30 peso, pero puede cambiar
+            $montoRecibir = ($monto)-($montoRetenciones+$MontoSeguro)-$consultaBuro;
+
+            $solicitude->montoretenido=$montoRetenciones;
+            $solicitude->coberturariesgo=$MontoSeguro;
+            $solicitude->montorecibido=$montoRecibir;
+            $solicitude->pagoplazo = $MontoCuotaQuincenal;
+            $solicitude->save();
+
+            $datos = array(
+                'cuotasQuincenales' => $cuotasQuincenales,
+                'cuotasMensuales' => $cuotasMensuales,
+                'Par_FechaInicio' => $Par_FechaInicio,
+                'Par_FechaVenc' => $Par_FechaVenc,
+                'MontoCuotaMensual' => $MontoCuotaMensual,
+                'MontoCuotaQuincenal' => $MontoCuotaQuincenal,
+                'MontoSeguro' => $MontoSeguro,
+                'Monto' => $monto,
+                'retenciones' => $retenciones,
+                'montoRetenciones' => $montoRetenciones,
+                'montoRecibir' => $montoRecibir,
+                'pagoConsultaBuro' => 30,
+
+
+                'NombreCompleto' => strtoupper($cliente->nombre),
+                'whatsapp' => $cliente->telefono,
+                'cuantoGana' => $cliente->ingresoquincenal,
+                'cuantoDisponible' => $cliente->disponiblequincenal,
+                'ajustePasivos' => $cliente->ajuste,
+                'pagoMinimo' => $solicitude->pagominimo,
+                'porcentajePago' => 0.4,        //Porcentaje que estaba por defecto
+                'pagoMaximo' => $solicitude->pagomaximo,
+                'pagoQuincenal' => $solicitude->pagodeseado,
+                'meses' => $solicitude->plazo,
+                'creditoMaximo' => $solicitude->creditomaximo,
+                'plazoCredito' => $solicitude->meses,
+                'montoSolicitado' => $solicitude->prestamosolicitado,
+                'diaPago' => 1,
+                'fechaInicio' => date("Y-m-d"),
+                //'button' => $request->button,
+            );
+            //Se supone que ajuste pasivo si lo toma de la vista
+            //fecha de inicio lo dejamos así, aunque se supone lo debería 
+            //Hacer el observer, pero lo dejamos así por si marca un día
+            //Inhabil o algo así
+            $solicitude->fechainicio = $datos['Par_FechaInicio'];
+            $solicitude->fechavencimiento = $datos['Par_FechaVenc'];
+            $solicitude->convenio = $cliente->convenio;
+            $solicitude->save();
+            //session(['datosSolicitud' => $datos]);
+            return $datos;
+    }
+
+    public function llenarDatos($solicitud)
+    {
+        $cliente = Cliente::find($solicitude->idcliente);
+        $datos = array(
+            'cuotasQuincenales' => $solicitude->plazo*2,
+            'cuotasMensuales' => $solicitude->plazo,
+            'Par_FechaInicio' => $Par_FechaInicio,
+            'Par_FechaVenc' => $Par_FechaVenc,
+            'MontoCuotaMensual' => $MontoCuotaMensual,
+            'MontoCuotaQuincenal' => $MontoCuotaQuincenal,
+            'MontoSeguro' => $MontoSeguro,
+            'Monto' => $monto,
+            'retenciones' => $retenciones,
+            'montoRetenciones' => $montoRetenciones,
+            'montoRecibir' => $montoRecibir,
+            'pagoConsultaBuro' => 30,
+
+
+            'NombreCompleto' => strtoupper($cliente->nombre),
+            'whatsapp' => $cliente->telefono,
+            'cuantoGana' => $cliente->ingresoquincenal,
+            'cuantoDisponible' => $cliente->disponiblequincenal,
+            'ajustePasivos' => $cliente->ajuste,
+            'pagoMinimo' => $solicitude->pagominimo,
+            'porcentajePago' => 0.4,        //Porcentaje que estaba por defecto
+            'pagoMaximo' => $solicitude->pagomaximo,
+            'pagoQuincenal' => $solicitude->pagodeseado,
+            'meses' => $solicitude->plazo,
+            'creditoMaximo' => $solicitude->creditomaximo,
+            'plazoCredito' => $solicitude->meses,
+            'montoSolicitado' => $solicitude->prestamosolicitado,
+            'diaPago' => 1,
+            'fechaInicio' => date("Y-m-d"),
+            //'button' => $request->button,
+        );
+        //Se supone que ajuste pasivo si lo toma de la vista
+        //fecha de inicio lo dejamos así, aunque se supone lo debería 
+        //Hacer el observer, pero lo dejamos así por si marca un día
+        //Inhabil o algo así
+        $solicitude->fechainicio = $datos['Par_FechaInicio'];
+        $solicitude->fechavencimiento = $datos['Par_FechaVenc'];
+        $solicitude->convenio = $cliente->convenio;
+        return $datos;
+    }
+
+    public function imprimirPDF($solicitud)
+    {
+        $solicitude = Solicitude::find($solicitud);
+        $cliente = Cliente::find($solicitude->idcliente);
+        $monto = $solicitude->prestamosolcitado;
+        $Meses = $solicitude->plazo;
+        $fecha = date_create($solicitude->fechainicio);
+        $pdf = PDF::loadView('imprimir', ['cliente' => $cliente, 'solicitude'=> $solicitude]);
+        $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date_format($fecha,"d-m-Y").'].pdf';
+        $descarga = $pdf->download($nombrepdf);
+        $contenido = $descarga->getOriginalContent();
+        $ruta = "files/".$cliente->id."/solicitudes/".$solicitude->id.'.pdf';
+        Storage::put($ruta, $contenido);
+        return $descarga;
+    }
+
+    private function mandarCorreo($solicitude)
+    {
+        $cliente = Cliente::find($solicitude->idcliente);
+        $datosCorreo = [
+            'idcliente' => $cliente->id,
+            'idsolicitud' =>$solicitude->id,
+        ];
+        $mailCliente = Auth::user();
+        Mail::to($mailCliente)->send(new NuevaSolicitud($datosCorreo));
     }
 }

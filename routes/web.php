@@ -57,4 +57,4 @@ Route::get('panelAliado',[SolicitudeController::class , 'Aliado'])->name('panelA
 
 Route::post('revisarTipoUsuario',[LoginController::class, 'buscarUsuario'])->name('revisarTipoUsuario');
 
-
+Route::get('imprimirPDF/{solicitude}', [SolicitudeController::class, 'imprimirPDF'])->name('imprimirPDF');

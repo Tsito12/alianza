@@ -69,13 +69,13 @@
                                         if($user->tipo=="Admin"||$user->tipo=="Asesor"||$user->tipo=="Aliado")
                                         {
                                             $convenio = $user->convenio;
-                                        }else
+                                        }else if(!is_null($cliente)) 
                                         {
                                             $convenio = Convenios::find($cliente->convenio);
                                         }
                                     @endphp
                                     @if(!is_null(Auth::user()->name)&&Auth::user()->name!=="")
-                                        {{ Auth::user()->name }}
+                                        <span>{{ Auth::user()->name }}</span>
                                     @else
                                         <span style="font-family: 'Presidencia Fina', sans-serif">{{ Auth::user()->email }}</span>
                                     @endif

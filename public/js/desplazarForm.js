@@ -77,6 +77,7 @@ const desplazarSiguiente = () => {
                 if(pasoGuardado<3)
                 {
                     console.log("Se debería enviar el formulario para el cliente");
+                    if(inputAjustes.val()=='') inputAjustes.val(0);
                     //inputMeses.value=12;
                     //document.getElementById('number-meses').value=12;
                     calcularPlazoMinimo(plazoMinimo.innerText);

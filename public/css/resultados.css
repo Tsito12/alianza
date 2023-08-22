@@ -4,6 +4,12 @@
     padding: 0;
 }
 
+span {
+    color: #000;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 1em;
+}
+
 body {
     background-color: #F2F3F4;
     font-size: 20px;

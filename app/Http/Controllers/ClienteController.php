@@ -96,6 +96,7 @@ class ClienteController extends Controller
                 
             } else
             {
+                //return var_dump($solicitud);
                 $resultado = (new SolicitudeController)->update($request,$solicitud);
             }
             return $resultado;
