@@ -52,7 +52,7 @@
                 </span>
             @enderror
             <span class="bar"></span>
-            <input id="checkbox" name="checkbox" type="checkbox">
+            <input id="checkbox" name="checkbox" type="checkbox" tabindex="-1">
             <label for="checkbox" class="label-checkbox"><img id="ojo" src="{{ asset('img/view.png')}}"></label>
             <p id="alerta-contrasena" class="alerta"></p>
         </div>
