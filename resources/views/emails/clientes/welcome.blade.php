@@ -11,5 +11,5 @@ Haz iniciado tu solicitud de préstamo en {{ config('app.name') }}
 Continuar solicitud
 @endcomponent
 
-Saludos, {{ config('app.name') }}
+Saludos, Sacimex
 @endcomponent

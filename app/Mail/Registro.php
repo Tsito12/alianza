@@ -30,6 +30,6 @@ class Registro extends Mailable
      */
     public function build()
     {
-        return $this->subject('Nuevo usuario registrado')->view('emails.pruebaCorreo');
+        return $this->subject('Nuevo usuario registrado')->markdown('emails.pruebaCorreo');
     }
 }
