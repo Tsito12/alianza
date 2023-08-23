@@ -21,7 +21,7 @@
 </style>
 <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 <section>
-<a href="#" onclick="window.history.back()" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
+<a href="{{url()->previous()}}" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
     <form method="post" enctype="multipart/form-data" action="{{ url('store') }}" >
       @csrf
       @if (is_null($documentosN['ine']))
