@@ -12,6 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
+        'webhook',
+        'https://52fa-187-217-222-19.ngrok-free.app/webhook'
         //
     ];
 }

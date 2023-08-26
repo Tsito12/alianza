@@ -8,6 +8,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelefonoController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\Webhook;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\Asesor;
 
@@ -58,3 +59,7 @@ Route::get('panelAliado',[SolicitudeController::class , 'Aliado'])->name('panelA
 Route::post('revisarTipoUsuario',[LoginController::class, 'buscarUsuario'])->name('revisarTipoUsuario');
 
 Route::get('imprimirPDF/{solicitude}', [SolicitudeController::class, 'imprimirPDF'])->name('imprimirPDF');
+
+Route::post('webhook',[Webhook::class, 'prueba'])->name('prueba');
+
+Route::get('webhook',[Webhook::class, 'feik'])->name('feik');
