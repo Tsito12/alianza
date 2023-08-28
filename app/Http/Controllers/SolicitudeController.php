@@ -389,6 +389,8 @@ class SolicitudeController extends Controller
             {
                 $SolicitudN->estado = $estado;
                 $SolicitudN->save($request->all());
+                $this->imprimirPDF($solicitudN->id);
+                $this->mandarCorreo($solicitudN);
                 return $this->enviarMensajeSolicitudRechazada($telefono, $SolicitudN->id);
             }elseif($estado=="En integracion")
             {
@@ -396,6 +398,9 @@ class SolicitudeController extends Controller
             }
             if($estado=="En proceso")
             {
+                $this->imprimirPDF($solicitudN->id);
+                $this->mandarCorreo($solicitudN);
+                TelefonoController::enviarMensajeSolicitarRecibo($telefono);
                 $url = str_replace("/solicitudes/".$solicitude->id,"",$request->url());
                 
                 $rutapdf = $url."/storage/public/files/".$cliente->id."/solicitudes/".$solicitude->id.".pdf";
@@ -444,13 +449,15 @@ class SolicitudeController extends Controller
             );
             //$solicitude->ajustePasivos = $request->input('ajustePasivos');
             $solicitude->save();
-            if(Auth::user()->tipo=="Admin")     //Aquí esta no el bugazo
+            if(Auth::user()->tipo=="Admin")
             {
                 $cliente = Cliente::find($solicitude->idcliente);
                 $telefono = "52". $cliente->telefono;
                 $solicitude->estado="Modificada";
                 $solicitude->save();
-                //$this->enviarMensajeSolicitudRechazada($telefono, $solicitude->id);
+                $this->imprimirPDF($solicitude->id);
+                $this->mandarCorreo($solicitude);
+                $this->enviarMensajeSolicitudRechazada($telefono, $solicitude->id);
             }
             elseif (($solicitude->estado=="Modificada")&&(Auth::user()->tipo=="Cliente"))
             {

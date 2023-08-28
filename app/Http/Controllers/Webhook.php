@@ -37,8 +37,10 @@ class Webhook extends Controller
                     if(isset($solicitude))
                     {
                         error_log("Solicitud ".$solicitude->id);
-                        $response['cliente'] = $cliente;
-                        $response['solicitud'] = $solicitude;
+                        $response = [
+                            'clientes' => array($cliente),
+                            'solicitudes' => array($solicitude)
+                        ]; 
                         self::mandarPDF($telefonoCliente, $solicitude);
                     }
                     else
@@ -93,6 +95,7 @@ class Webhook extends Controller
     {
         $telefono;
         error_log($telefono);
+        //$ruta = "https://convenio.opcionessacimex.com/storage/public/files/".$solicitude->idcliente."/solicitudes/".$solicitude->id.".pdf";
         $ruta = "https://4585-187-217-222-19.ngrok-free.app/storage/files/".$solicitude->idcliente."/solicitudes/".$solicitude->id.".pdf";
         $token = 'EAADTQdf3uewBAFPzoi5in5hwB0lrGPDvmdK7i2j4kYbU4EonEZCq74KnMMVYnCIt1iDvONklkU6hFOHvtDW1782IPIZAdiLSeFZAJ6r8aYAzQtP6mNU9fdfvQZBZC2CgcZBMEGOSnDVHairOOmPeezA8FhJKXNV7L0tbZBlBoAtbbXuRdlhBxTFVYD2XcyifgOqeNdg0jfYCQZDZD';
             //Telefono del cliente
