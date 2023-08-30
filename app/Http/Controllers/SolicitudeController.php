@@ -389,8 +389,8 @@ class SolicitudeController extends Controller
             {
                 $SolicitudN->estado = $estado;
                 $SolicitudN->save($request->all());
-                $this->imprimirPDF($solicitudN->id);
-                $this->mandarCorreo($solicitudN);
+                $this->imprimirPDF($SolicitudN->id);
+                $this->mandarCorreo($SolicitudN);
                 return $this->enviarMensajeSolicitudRechazada($telefono, $SolicitudN->id);
             }elseif($estado=="En integracion")
             {
@@ -398,8 +398,8 @@ class SolicitudeController extends Controller
             }
             if($estado=="En proceso")
             {
-                $this->imprimirPDF($solicitudN->id);
-                $this->mandarCorreo($solicitudN);
+                $this->imprimirPDF($SolicitudN->id);
+                $this->mandarCorreo($SolicitudN);
                 TelefonoController::enviarMensajeSolicitarRecibo($telefono);
                 $url = str_replace("/solicitudes/".$solicitude->id,"",$request->url());
                 
@@ -728,6 +728,7 @@ class SolicitudeController extends Controller
         $Meses = $solicitude->plazo;
         $fecha = date_create($solicitude->fechainicio);
         $pdf = PDF::loadView('imprimir', ['cliente' => $cliente, 'solicitude'=> $solicitude]);
+        //return view('imprimir', ['cliente' => $cliente, 'solicitude'=> $solicitude]);
         $nombrepdf=strtoupper($cliente->nombre).'$'.number_format($monto, 2, '.', ',').$Meses.'Meses['.date_format($fecha,"d-m-Y").'].pdf';
         $descarga = $pdf->download($nombrepdf);
         $contenido = $descarga->getOriginalContent();

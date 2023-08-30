@@ -8,7 +8,7 @@ use App\Models\Documentos;
 use App\Models\Documentoscliente;
 use App\Models\Cliente;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Auth;
 
 //prueba para subir archivos
 class FileUploadController extends Controller
@@ -465,5 +465,21 @@ class FileUploadController extends Controller
             //CERRAMOS EL CURL
             curl_close($curl);
             //return $response;
+    }
+
+    public function probarFirma()
+    {
+        return view('firma');
+    }
+
+    public function guardarFirma(Request $request)
+    {
+        $firmaimg = $request->input('signature');
+        $data = substr($firmaimg, strpos($firmaimg, ',') + 1);
+        $data = base64_decode($data);
+        $cliente = Cliente::where('user_id', Auth::id())->first();
+        $ruta = "files/".$cliente->id."/firma/firma.png";
+        Storage::put($ruta, $data);
+        return $firmaimg;
     }
 }

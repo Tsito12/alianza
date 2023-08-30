@@ -254,6 +254,9 @@
         <br><br><br><br><br>
         <table id="noBordeTabla" style="font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;font-size: 11px;">
             <tr>
+                <td width="50%" class="texto-centro"> <img width="300" height="100" src="{{storage_path()."/app/public/files/".$cliente->id."/firma/firma.png"}}" alt="firma del cliente" srcset=""> </td>
+            </tr>
+            <tr>
                 <td width="50%" class="texto-centro mayuscula subrayado">_________________{{ $cliente->nombre }}_______________</td>
             </tr>
             <tr>

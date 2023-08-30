@@ -63,3 +63,6 @@ Route::get('imprimirPDF/{solicitude}', [SolicitudeController::class, 'imprimirPD
 Route::post('webhook',[Webhook::class, 'prueba'])->name('prueba');
 
 Route::get('webhook',[Webhook::class, 'feik'])->name('feik');
+
+Route::get('firma',[FileUploadController::class, 'probarFirma'])->name('firma')->middleware('auth');
+Route::post('guardarFirma',[FileUploadController::class, 'guardarFirma'])->name('guardarFirma')->middleware('auth');
