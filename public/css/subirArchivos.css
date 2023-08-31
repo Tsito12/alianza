@@ -64,6 +64,12 @@ embed {
     width: 100%;
 }
 
+li {
+    color: #000;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 0.875em;
+}
+
 .logo-contenedor {
     width: 150px;
 }
@@ -135,6 +141,7 @@ embed {
     box-shadow:  5px 5px 10px #B3B4B5, -5px -5px 10px #FFFFFF;
     display: grid;
     grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(2, auto);
     padding: 30px;
 }
 
@@ -208,13 +215,29 @@ embed {
     width: 150px;    
 }
 
-.filas {
+.gjjCVU {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cVrddT {
     align-items: center;
     display: flex;
     flex-direction: column;
     gap: 20px;
     justify-content: center;
     width: 200px;
+}
+
+.qKabfr {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    grid-area: 2 / 1 / 3 / 4;
+    padding: 50px 0 30px;
 }
 
 .botones-contenedor {
@@ -261,6 +284,22 @@ embed {
     font-size: 1em;
     padding: 10px;
     text-decoration: none;
+}
+
+.ExfRZh {
+    width: 150px;
+}
+
+.yYBCkR {
+    object-fit: cover;
+    width: 100%;
+}
+
+.oErWzH {
+    color: #000;
+    font-family: 'Presidencia Fina', sans-serif;
+    font-size: 0.75em;
+    text-align: center;
 }
 
 @media (max-width: 500px){
