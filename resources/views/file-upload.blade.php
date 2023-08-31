@@ -406,7 +406,7 @@
                     </ul>
                     <div class="gjjCVU">
                         <div class="ExfRZh">
-                            <img class="yYBCkR" src="./img/EjemploFoto.png"/>
+                            <img class="yYBCkR" src="{{ asset('img/EjemploFoto.png') }}"/>
                         </div>
                         <p class="oErWzH">Imagen de ejemplo.</p>
                     </div>
