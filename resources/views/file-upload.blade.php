@@ -7,6 +7,8 @@
 @section('content')
 <link href="{{asset('css/subirArchivos.css')}}" rel="stylesheet">
 <link href="{{ asset('img/SacimexImagotipo.png') }}" rel="icon">
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <title>Subir archivos</title>
 <style>
     @font-face {
@@ -416,7 +418,7 @@
             <div class="cVrddT">
                 <div class="nombre">Identificación de beneficiario</div>
                 <div class="input-contenedor">
-                    <input type="hidden" id="ineBeneficiario" name="ineBeneficiario" value="{{$documentosN['ineBeneficiario']->id}}">
+                    <input type="hidden" id="documentoIneBeneficiario" name="documentoIneBeneficiario" value="{{$documentosN['ineBeneficiario']->id}}">
                     <div class="grid-x @if ($documentosN['ineBeneficiario']->estado=="Aprobado")  d-none @endif " id="subirIneBeneficiario">
                         <input type="file" name="ineBeneficiario" id="ineBeneficiario" class="input-file" accept="image/png, .jpeg, .jpg, .pdf"/>
                         <input type="text" name="hiddenineBeneficiario" value="{{$documentosN['ineBeneficiario']->documento}}" style="display: none;">
@@ -448,18 +450,18 @@
                     <a class="lupa" href="{{$ruta}}" target="_blank"><i class="fa-solid fa-magnifying-glass"></i></a>
                     @endif
             </div>
-            @if (Auth::user()->tipo=="Admin"&&$documentosN['ine']->estado!="")
+            @if (Auth::user()->tipo=="Admin"&&$documentosN['ineBeneficiario']->estado!="")
                 <div class="cVrddT">
                     @if (($documentosN['ineBeneficiario']->documento)!="")
                     <div class="botones-contenedor">
-                        <a id="aprobarineBeneficiario" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['ine']->estado=="Aprobado") pointer-events : none @endif">
+                        <a id="aprobarineBeneficiario" onclick="movimiento(this)" href="#" class=" boton-ap-re verde" style="@if($documentosN['ineBeneficiario']->estado=="Aprobado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-up"></i>
                         </a>
-                        <a id="rechazarineBeneficiario" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['ine']->estado=="Rechazado") pointer-events : none @endif">
+                        <a id="rechazarineBeneficiario" onclick="movimiento(this)" href="#" class=" boton-ap-re rojo" style="@if($documentosN['ineBeneficiario']->estado=="Rechazado") pointer-events : none @endif">
                             <i class="fa-regular fa-thumbs-down"></i>
                         </a>
                     </div>
-                    <input id="motivoineBeneficiario" name="motivoineBeneficiario" type="text" placeholder="Observaciones" value="{{$documentosN['ine']->observaciones}}" class="observaciones">
+                    <input id="motivoineBeneficiario" name="motivoineBeneficiario" type="text" placeholder="Observaciones" value="{{$documentosN['ineBeneficiario']->observaciones}}" class="observaciones">
                     @endif
                     
                 </div>        
@@ -469,15 +471,15 @@
                             <p class="text-center">Estado</p>
                             <p class="text-center">{{$documentosN['ineBeneficiario']->estado}}</p>
                             <label for="motivoineBeneficiario" class="form-control">Observaciones</label>
-                            <input class="observaciones disabled" type="text" name="motivoineBeneficiario" id="motivoineBeneficiario" value="{{$documentosN['ine']->observaciones}}" readonly>
+                            <input class="observaciones disabled" type="text" name="motivoineBeneficiario" id="motivoineBeneficiario" value="{{$documentosN['ineBeneficiario']->observaciones}}" readonly>
                         </div>
                     @endif
             @endif    
-                    @if ($documentosN['ine']->estado!=""&&Auth::user()->tipo=="Admin")
+                    @if ($documentosN['ineBeneficiario']->estado!=""&&Auth::user()->tipo=="Admin")
                             <div>
-                                <p id="estadoIne" class="text-center">{{$documentosN['ine']->estado}}</p>
-                                <label for="motivoIne" class="form-control">Observaciones</label>
-                                <input class="form-control disabled" type="text" name="motivoIne" id="motivo2Ine" value="{{$documentosN['ine']->observaciones}}" readonly>
+                                <p id="estadoineBeneficiario" class="text-center">{{$documentosN['ineBeneficiario']->estado}}</p>
+                                <label for="motivoineBeneficiario" class="form-control">Observaciones</label>
+                                <input class="form-control disabled" type="text" name="motivo2ineBeneficiario" id="motivo2ineBeneficiario" value="{{$documentosN['ineBeneficiario']->observaciones}}" readonly>
                             </div>
                     @endif
                 <div class="qKabfr">
@@ -505,6 +507,7 @@
                 @endif" href="{{route('documentosIntegracion', ['idsolicitud' => $solicitud])}}">A integracion</a>
 
     
+                <div id="map" style="height: 500px;width: 500px;" ></div>
 </section>
 
 <script>
@@ -536,6 +539,12 @@ document.getElementById('ine2').addEventListener('change', ev => {
 const archivo = ev.target.files[0];
 const nombreArchivo = archivo ? archivo.name : '';
 document.getElementById('nombre-ine2').textContent = nombreArchivo;
+});
+
+document.getElementById('ineBeneficiario').addEventListener('change', ev => {
+const archivo = ev.target.files[0];
+const nombreArchivo = archivo ? archivo.name : '';
+document.getElementById('nombre-ineBeneficiario').textContent = nombreArchivo;
 });
 
 function movimiento(boton)
@@ -578,6 +587,12 @@ function movimiento(boton)
             documentoid = document.getElementById("documentoFoto").value;
             motivo = document.getElementById("motivoFoto").value;
             if(resultado=="Rechazado"||resultado=="En revision") document.getElementById("subirFoto").classList.remove("d-none");
+            else document.getElementById("subirFoto").classList.add("d-none");
+        break;
+        case "ineBeneficiario":
+            documentoid = document.getElementById("documentoIneBeneficiario").value;
+            motivo = document.getElementById("motivoineBeneficiario").value;
+            if(resultado=="Rechazado"||resultado=="En revision") document.getElementById("subirIneBeneficiario").classList.remove("d-none");
             else document.getElementById("subirFoto").classList.add("d-none");
         break;
     }
@@ -632,20 +647,91 @@ function documentosListos(boton)
 
     }else
     {
-        const ine = document.getElementById("estadoIne").innerText;
-        const ingresos = document.getElementById("estadoIngresos").innerText;
-        const domicilio = document.getElementById("estadoDomicilio").innerText;
-        const foto = document.getElementById("estadoFoto").innerText;
-        const ine2 = document.getElementById("estadoIne2").innerText;
-        let documentos = [ine,ingresos,domicilio,foto];
+        const ine = document.getElementById("estadoIne")?.innerText;
+        const ingresos = document.getElementById("estadoIngresos")?.innerText;
+        const domicilio = document.getElementById("estadoDomicilio")?.innerText;
+        const foto = document.getElementById("estadoFoto")?.innerText;
+        const ine2 = document.getElementById("estadoIne2")?.innerText;
+        const benef = document.getElementById("estadoBeneficiario")?.innerText;
+        let documentos = [ine,ine2,ingresos,domicilio,foto,benef];
         for(let i = 0; i < documentos.length; i++)
         {
             console.log(documentos[i]);
-            if(documentos[i].indexOf("Aprobado")==-1) todoListo = false;
+            if(typeof(documentos[i])!='undefined')
+            {
+                if(documentos[i].indexOf("Aprobado")==-1) todoListo = false;
+            }
         }
     }
     console.log(todoListo);
     return todoListo;
 }
+</script>
+
+<script>
+let ubi=null;
+const funcionInit = () => {
+	if (!"geolocation" in navigator) {
+		return alert("Tu navegador no soporta el acceso a la ubicación. Intenta con otro");
+	}
+
+	const onUbicacionConcedida = ubicacion => {
+		console.log("Tengo la ubicación: ", ubicacion);
+        ubi = ubicacion.coords;
+        return ubi;
+	}
+  
+	const onErrorDeUbicacion = err => {
+		console.log("Error obteniendo ubicación: ", err);
+        return "Valio burguer";
+	}
+
+	const opcionesDeSolicitud = {
+		enableHighAccuracy: true, // Alta precisión
+		maximumAge: 0, // No queremos caché
+		timeout: 5000 // Esperar solo 5 segundos
+	};
+	// Solicitar
+	//navigator.geolocation.getCurrentPosition(onUbicacionConcedida, onErrorDeUbicacion, opcionesDeSolicitud);
+
+};
+
+const getCoords = async () => {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+    
+        return {
+          long: pos.coords.longitude,
+          lat: pos.coords.latitude,
+        };
+    };
+
+async function Abr()
+{
+    const coords = await getCoords();
+    console.log(coords);
+}
+Abr();
+// Ahora se llamaría con un await funcionInit();
+
+
+async function startMap()
+{
+    const coordenadas = await getCoords();
+    console.log(coordenadas);
+    var map = L.map('map').
+    setView([coordenadas.lat, coordenadas.long],
+    15);
+
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+    }).addTo(map);
+    L.control.scale().addTo(map);
+    L.marker([coordenadas.lat, coordenadas.long],{draggable: true}).addTo(map);
+}
+
+
+startMap();
 </script>
 @endsection

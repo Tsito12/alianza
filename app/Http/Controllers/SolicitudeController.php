@@ -389,6 +389,8 @@ class SolicitudeController extends Controller
             {
                 $SolicitudN->estado = $estado;
                 $SolicitudN->save($request->all());
+                $cliente->convenio = $request->input('convenio');
+                $cliente->save();
                 $this->imprimirPDF($SolicitudN->id);
                 $this->mandarCorreo($SolicitudN);
                 return $this->enviarMensajeSolicitudRechazada($telefono, $SolicitudN->id);
@@ -421,6 +423,8 @@ class SolicitudeController extends Controller
             $solicitude->update($request->all());
             //Parte para calcular retemciones y seguros
             $cliente = Cliente::find($solicitude->idcliente);
+            $cliente->convenio=$request->input('convenio');
+            $cliente->save();
             $Meses = $solicitude->plazo;
             $convenioT = Convenios::find($cliente->convenio);
             $retenciones=$convenioT->retenciones;

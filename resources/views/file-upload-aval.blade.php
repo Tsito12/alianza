@@ -22,7 +22,7 @@
 <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 <section>
 <a href="{{url()->previous()}}" class="kITrbH"><i class="fa-solid fa-arrow-left"></i><span>Volver</span></a>
-    <form method="post" enctype="multipart/form-data" action="{{ url('store') }}" >
+    <form method="post" enctype="multipart/form-data" action="{{ url('documentosAval') }}" >
       @csrf
       @if (is_null($documentosN['ine']))
           
@@ -368,12 +368,6 @@ const nombreArchivo = archivo ? archivo.name : '';
 document.getElementById('nombre-ine').textContent = nombreArchivo;
 });
 
-document.getElementById('ingresos').addEventListener('change', ev => {
-const archivo = ev.target.files[0];
-const nombreArchivo = archivo ? archivo.name : '';
-document.getElementById('nombre-ingresos').textContent = nombreArchivo;
-});
-
 document.getElementById('comprobantedomicilio').addEventListener('change', ev => {
 const archivo = ev.target.files[0];
 const nombreArchivo = archivo ? archivo.name : '';
@@ -416,12 +410,6 @@ function movimiento(boton)
             if(resultado=="Rechazado"||resultado=="En revision") document.getElementById("subirIne2").classList.remove("d-none");
             else document.getElementById("subirIne2").classList.add("d-none");
         break;
-        case "Ingresos":
-            documentoid = document.getElementById("documentoIngresos").value;
-            motivo = document.getElementById("motivoIngresos").value;
-            if(resultado=="Rechazado"||resultado=="En revision") document.getElementById("subirIngresos").classList.remove("d-none");
-            else document.getElementById("subirIngresos").classList.add("d-none");
-        break;
         case "Domicilio":
             documentoid = document.getElementById("documentoDomicilio").value;
             motivo = document.getElementById("motivoDomicilio").value;
@@ -441,7 +429,7 @@ function movimiento(boton)
     formData.append("documento", documentoid);
     formData.append("movimiento", resultado);
     formData.append("motivo", motivo);
-    fetch('/cambiarEstado', {
+    fetch('/cambiarEstadoAval', {
                         method: 'POST',
                         body: formData
                      }).then((response) => {

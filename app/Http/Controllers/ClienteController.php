@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\User;
+use App\Models\InformacionFinanciera;
+use App\Models\Comunicacion;
 use Illuminate\Http\Request;
 use App\Models\Convenios;
 use App\Models\Solicitude;
@@ -55,7 +57,7 @@ class ClienteController extends Controller
         {
             $cliente = Cliente::find($solicitud->idcliente);
             $usuario = User::find($cliente->user_id);
-            $convenio = Convenios::find($cliente->convenio);
+            $convenio = Convenios::where('nombreCorto',$usuario->convenio)->first();
             $iduser = $usuario->id;
         } else
         {
@@ -124,6 +126,16 @@ class ClienteController extends Controller
             $cliente = Cliente::find($request->input('idcliente'));
             request()->validate(Cliente::$rules);
             $cliente->update($request->all());
+            //Area para modificar datos financieros
+            $infoFinanciera = InformacionFinanciera::where('idcliente',$cliente->id)->first();
+            $infoFinanciera->ingresoquincenal = $request->input('ingresoquincenal');
+            $infoFinanciera->disponiblequincenal = $request->input('disponiblequincenal');
+            $infoFinanciera->ajuste = $request->input('ajuste');
+            $infoFinanciera->save();
+            $comunicacion = Comunicacion::where('idcliente',$cliente->id);
+            $comunicacion->codigoverificacion = $request->input('confirmaciontelefono'); //pendiente
+            $comunicacion->save();
+            
         } else
         {
             request()->validate(Cliente::$rules);
@@ -131,6 +143,16 @@ class ClienteController extends Controller
             $usuario = User::find($iduser);
             $usuario->name=$cliente->nombre;
             $usuario->save();
+            $infoFinanciera = new InformacionFinanciera();
+            $infoFinanciera->ingresoquincenal = $request->input('ingresoquincenal');
+            $infoFinanciera->disponiblequincenal = $request->input('disponiblequincenal');
+            $infoFinanciera->ajuste = $request->input('ajuste');
+            $infoFinanciera->idcliente = $cliente->id;
+            $infoFinanciera->save();
+            $comunicacion = new Comunicacion();
+            $comunicacion->codigoverificacion = $request->input('confirmaciontelefono'); //pendiente
+            $comunicacion->idcliente = $cliente->id;
+            $comunicacion->save();
         }
         
 

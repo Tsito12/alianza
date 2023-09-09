@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\Comunicacion;
 use Illuminate\Support\Facades\Auth;
 
 class TelefonoController extends Controller
@@ -19,6 +20,7 @@ class TelefonoController extends Controller
     public function verificar(Request $request)
     {
         $cliente = Cliente::where('user_id',Auth::id())->first();
+        $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
         //$solicitud = Solicitude::where('idcliente',$cliente->id)->first();
         $codigo = $cliente->confirmaciontelefono;
         $telefono = "52".$cliente->telefono;
@@ -28,9 +30,11 @@ class TelefonoController extends Controller
         $numeroVerificacion = $request->input('1').$request->input('2').$request->input('3').$request->input('4');
         if($numeroVerificacion==$codigo) 
         {
+            $comunicacion->verificado=true;
+            $comunicacion->save();
             $cliente->verificado = true;
             $cliente->save();
-            if($cliente->convenio!=10)
+            if(true)
             {
                 $this->enviarMensajeSolicitudEnviada($telefonoAsesor, $cliente->id);
                 self::enviarMensajeSolicitarRecibo($telefono);
@@ -142,7 +146,7 @@ class TelefonoController extends Controller
             //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
             $response = json_decode(curl_exec($curl), true);
             //IMPRIMIMOS LA RESPUESTA 
-            print_r($response);
+            //print_r($response);
             //OBTENEMOS EL CODIGO DE LA RESPUESTA
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             //CERRAMOS EL CURL

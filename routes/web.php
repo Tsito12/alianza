@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\SolicitudeController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\AvalController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelefonoController;
@@ -66,3 +67,7 @@ Route::get('webhook',[Webhook::class, 'feik'])->name('feik');
 
 Route::get('firma',[FileUploadController::class, 'probarFirma'])->name('firma')->middleware('auth');
 Route::post('guardarFirma',[FileUploadController::class, 'guardarFirma'])->name('guardarFirma')->middleware('auth');
+
+Route::get('documentosAval', [AvalController::class, 'index'])->name('documentosAval')->middleware('auth');
+Route::post('documentosAval', [AvalController::class, 'guardar']);
+Route::post('cambiarEstadoAval', [AvalController::class, 'cambiarEstado']);

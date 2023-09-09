@@ -28,12 +28,14 @@ class FileUploadController extends Controller
         $domicilio = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',3)->first();
         $foto = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',4)->first();
         $ine2 = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',5)->first();
+        $beneficiario = Documentoscliente::where('idcliente', $idcliente)->where('tipodocumento',6)->first();
         $documentosN = array(
             "ine" => $ine,
             "ingresos" => $ingresos,
             "domicilio" => $domicilio,
             "foto" => $foto,
-            "ine2" => $ine2
+            "ine2" => $ine2,
+            "ineBeneficiario" => $beneficiario
         );
         
         foreach($documentosN as &$documento)
@@ -233,6 +235,33 @@ class FileUploadController extends Controller
             $documentoIngresos->observaciones = $observaciones;
             //$this->mensajeDocumentoModificado($telefonoAsesor,$idcliente);
             $documentoIngresos->save();
+        }if(is_null($request->file('ineBeneficiario')))
+        {
+            $beneficiario=$request->input('hiddenineBeneficiario');
+        } else
+        {
+            $nameBeneficiario = $request->file('ineBeneficiario')->getClientOriginalName();
+            $pathBeneficiario = $request->file('ineBeneficiario')->store('/files/'.$idcliente);
+            $beneficiario = $pathBeneficiario;
+            $documentoBeneficiario = Documentoscliente::where('idcliente',$request->idcliente)->where('tipodocumento',6)->first();
+            $estado = "Modificado";
+            $observaciones = "Documento modificado";
+            if(is_null($documentoBeneficiario))
+            {
+                $documentoBeneficiario = new Documentoscliente();
+                $estado="En revisión";
+                $observaciones = null;
+            }
+            else
+            {
+                $modifico = true;
+            }
+            $documentoBeneficiario->documento = $beneficiario;
+            $documentoBeneficiario->tipodocumento = 6;
+            $documentoBeneficiario->idcliente = $idcliente;
+            $documentoBeneficiario->estado = $estado;
+            $documentoBeneficiario->observaciones = $observaciones;
+            $documentoBeneficiario->save();
         }
 
         
@@ -240,6 +269,7 @@ class FileUploadController extends Controller
         //$datosCliente = ClienteP::where('iduser',$userid)->first();
         //Se supone que esta parte ya no sirve, así se manejó antiguamente, pero se cambio el esquema de la db
         //Se quedo provisional pero tengo la idea de que no hace nada
+        /*
         $Buscardocumentos = Documentos::where('idcliente',$idcliente)->first();
         if(is_null($Buscardocumentos))
         {
@@ -260,7 +290,7 @@ class FileUploadController extends Controller
             $documentos->idcliente=$idcliente;
             $documentos->save();
         }
-
+        */
         
  
         if($modifico)

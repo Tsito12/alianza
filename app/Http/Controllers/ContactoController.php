@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Solicitude;
 use App\Models\User;
+use App\Models\Comunicacion;
 use Illuminate\Support\Facades\Auth;
 
 class ContactoController extends Controller
@@ -30,9 +31,12 @@ class ContactoController extends Controller
         if(!is_null($llamada)) $metodoContacto.= "Llamada ";
         if(!is_null($sms)) $metodoContacto.= "SMS ";
         $cliente = Cliente::where('user_id',Auth::id())->first();
+        $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
         $solicitud = Solicitude::where('idcliente',$cliente->id)->first();
         $solicitud->estado="En proceso";
         $solicitud->save();
+        $comunicacion->metodocomunicacion = $metodoContacto;
+        $comunicacion->save();
         $cliente->metodocomunicacion = $metodoContacto;
         $cliente->save();
         if(str_contains($metodoContacto, "Whatsapp"))
@@ -106,7 +110,7 @@ class ContactoController extends Controller
             //OBTENEMOS LA RESPUESTA DEL ENVIO DE INFORMACION
             $response = json_decode(curl_exec($curl), true);
             //IMPRIMIMOS LA RESPUESTA 
-            print_r($response);
+            //print_r($response);
             //OBTENEMOS EL CODIGO DE LA RESPUESTA
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             //CERRAMOS EL CURL

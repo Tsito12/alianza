@@ -20,6 +20,7 @@
     use App\Models\Cliente;
     use App\Models\Documentoscliente;
     use App\Models\Convenios;
+    use App\Models\Comunicacion;
 @endphp
 
 
@@ -84,6 +85,7 @@
         @php
             $user = User::find(Auth::id());
             $documentos = Documentoscliente::where('idcliente',$solicitude->idcliente)->get();
+            $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
             if(count($documentos)==0) $documentosOK = false;
             else {
                 $documentosOK = true;
@@ -126,7 +128,7 @@
                 <a class="boton"  href="{{ route('clientes.create') }}">Editar</a>
             @endif
  
-        @if ($cliente->convenio!=10&&$user->tipo=="Cliente")
+        @if ($user->tipo=="Cliente")
                 @if ($solicitude->estado=="Modificada")
                     <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
                         {{ method_field('PATCH') }}
@@ -137,7 +139,7 @@
                 @else
 
 
-                    @if ($cliente->verificado)
+                    @if ($comunicacion->verificado)
                         <form action="{{ route('solicitudes.update',$solicitude->id) }}" method="POST">
                             {{ method_field('PATCH') }}
                             @csrf
@@ -148,9 +150,9 @@
                         <a class="boton" 
                         
                         @if ($cliente->convenio==10)
-                            href="{{ '/clientes/create' }}"
+                            href="{{ route('contacto') }}"
                         @else
-                            @if (!$cliente->verificado)
+                            @if (!$comunicacion->verificado)
                                 href="{{ route('contacto') }}"
                             @endif
                         @endif
