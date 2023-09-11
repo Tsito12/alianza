@@ -22,7 +22,7 @@ class TelefonoController extends Controller
         $cliente = Cliente::where('user_id',Auth::id())->first();
         $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
         //$solicitud = Solicitude::where('idcliente',$cliente->id)->first();
-        $codigo = $cliente->confirmaciontelefono;
+        $codigo = $comunicacion->codigoverificacion;
         $telefono = "52".$cliente->telefono;
         $telefonoAsesor = "52"."9513566175";        // de mientras mi numero
         //$telefonoAsesor = "52"."9511173957";      -> telefono de la contadora Elizabeth
@@ -32,8 +32,8 @@ class TelefonoController extends Controller
         {
             $comunicacion->verificado=true;
             $comunicacion->save();
-            $cliente->verificado = true;
-            $cliente->save();
+            //$cliente->verificado = true;
+            //$cliente->save();
             if(true)
             {
                 $this->enviarMensajeSolicitudEnviada($telefonoAsesor, $cliente->id);

@@ -364,6 +364,7 @@ class SolicitudeController extends Controller
 
         return view('solicitude.edit', compact('solicitude'))->with('idcliente',$solicitude->idcliente);
     }
+    
 
     /**
      * Update the specified resource in storage.

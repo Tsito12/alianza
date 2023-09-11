@@ -37,12 +37,12 @@ class ContactoController extends Controller
         $solicitud->save();
         $comunicacion->metodocomunicacion = $metodoContacto;
         $comunicacion->save();
-        $cliente->metodocomunicacion = $metodoContacto;
-        $cliente->save();
+        //$cliente->metodocomunicacion = $metodoContacto;
+        //$cliente->save();
         if(str_contains($metodoContacto, "Whatsapp"))
         {
             $telefono = '52'.$cliente->telefono;
-            $this->enviarMensajeConfirmacionNumero($telefono, $cliente->confirmaciontelefono);
+            $this->enviarMensajeConfirmacionNumero($telefono, $comunicacion->codigoverificacion);
             return redirect()->route('confirmarTelefono');
         } else
         {

@@ -72,7 +72,16 @@ class ClienteController extends Controller
             $cliente->nombre="";
             $cliente->telefono="";
         }
-        return view('cliente.datosCliente', compact('cliente'))->with('usuario',$iduser)->with('cliente',$cliente)->with('convenio', $convenio);
+        else
+        {
+            $datosFinancieros = InformacionFinanciera::where('idcliente',$cliente->id)->first();
+            $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
+        }
+        return view('cliente.datosCliente', compact('cliente'))->with('usuario',$iduser)
+               ->with('cliente',$cliente)
+               ->with('convenio', $convenio)
+               ->with('datosFinancieros', $datosFinancieros)
+               ->with('comunicacion', $comunicacion);
     }
 
     /**
@@ -132,7 +141,7 @@ class ClienteController extends Controller
             $infoFinanciera->disponiblequincenal = $request->input('disponiblequincenal');
             $infoFinanciera->ajuste = $request->input('ajuste');
             $infoFinanciera->save();
-            $comunicacion = Comunicacion::where('idcliente',$cliente->id);
+            $comunicacion = Comunicacion::where('idcliente',$cliente->id)->first();
             $comunicacion->codigoverificacion = $request->input('confirmaciontelefono'); //pendiente
             $comunicacion->save();
             

@@ -77,7 +77,7 @@
                         <!-- PASO 2 -->
                         <div class="paso">
                             <div class="inp-contenedor">
-                                <input type="text" id="ingresoquincenalfeik" value="{{ $cliente->ingresoquincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="ingresoquincenalfeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="ingresoquincenalfeik" value="{{ $datosFinancieros->ingresoquincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="ingresoquincenalfeik" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
                                 <input type="number" class="d-none" name="ingresoquincenal" id="ingresoquincenal" value="{{ $cliente->ingresoquincenal }}">
                                 <label for="ingresoquincenal" class="etq">Ingresos quincenales</label>
                                 @error('ingresoquincenal')
@@ -90,7 +90,7 @@
                                 <p id="alerta-quincena" class="alerta"></p> 
                             </div>
                             <div class="inp-contenedor">
-                                <input type="text" id="disponiblequincenalfeik" value="{{ $cliente->disponiblequincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="disponiblequincenal" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
+                                <input type="text" id="disponiblequincenalfeik" value="{{ $datosFinancieros->disponiblequincenal }}" onload="formatoMexico(this)" onkeydown="soloNumeros()" name="disponiblequincenal" oninput="formatoMexico(this)" class="inp sa" tabindex="-1" required>
                                 <input type="number" id="disponiblequincenal" class="d-none" name="disponiblequincenal" value="{{ $cliente->disponiblequincenal }}">
                                 <label for="disponiblequincenal" class="etq">¿Cuánto te queda disponible?</label>
                                 @error('disponiblequincenal')

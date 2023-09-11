@@ -32,7 +32,6 @@ class Cliente extends Model
 		'telefono' => 'required',
 		//'ingresoquincenal' => 'required',
 		//'disponiblequincenal' => 'required',
-		'confirmaciontelefono' => 'required',
 		'user_id' => 'required',
     ];
 
@@ -43,7 +42,7 @@ class Cliente extends Model
      *
      * @var array
      */
-    protected $fillable = ['nombre', 'convenio', 'telefono','ingresoquincenal','disponiblequincenal','ajuste','user_id','confirmaciontelefono'];
+    protected $fillable = ['nombre', 'convenio', 'telefono','user_id'];
 
 
     /**

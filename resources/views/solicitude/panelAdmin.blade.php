@@ -313,7 +313,7 @@
             //$(filas[i].children[9]).load("/fechaYHora");
             let fechaMovimiento = new Date(filas[i].children[7].innerText);
             let fechaActual = new Date(filas[i].children[9].innerText);
-            if(milisegundosActuales==0)
+            if(milisegundosActuales==0||isNaN(milisegundosActuales))
             {
               milisegundosActuales=fechaActual.getTime();
             }
@@ -338,6 +338,10 @@
             if(!isNaN(horas))
             {
               filas[i].children[8].children[0].innerText=horas+":"+minutos+":"+segundos;
+            }
+            else
+            {
+              //filas[i].children[8].children[0].innerText=fechaMovimiento+" "+milisegundosActuales;
             }
         }
         milisegundosActuales= milisegundosActuales+1000;
