@@ -3,28 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="{{asset('css/visitaDomiciliar.css)}}" rel="stylesheet">
+  <link href="{{asset('css/visitaDomiciliar.css')}}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <title>Saci-Alianza</title>
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
-  <style>
-    @font-face {
-        font-family: 'Presidencia Fina';
-        src: url('{{asset('fonts/PresidenciaFina.css)}}') format('opentype');
-    }
-
-    @font-face {
-        font-family: 'Presidencia Firme';
-        src: url('{{asset('fonts/PresidenciaFirme.css)}}') format('opentype');
-    }
-  </style>
 </head>
 <body>
   <header>
     <div class="iKcRBf">
-        <img src="{{asset('img/SacimexLogo.png)}}">
+      <img src="{{asset('img/SacimexLigoBlanco.png')}}">
+    </div>
+    <button id="session-button" class="OmErIE">
+      <img src="{{asset('img/BotonSesion.png')}}">
+    </button>
+    <div id="session-options" class="lmhoLI">
+      <p>programador.desarrollo@opcionessacimex.com</p>
+      <p>00-DEMO</p>
+      <a class="TIELDW">Cerrar sesión</a>
     </div>
   </header>
+  <div id="close-menu" class="tereIN"></div>
   <section>
     <div class="eowNgz">
       <button id="menu-button-1" class="menu-button JDDzRY">Datos del cliente</button>
@@ -190,11 +189,11 @@
       <div id="spouse-section" class="meNtIC">
         <div class="VPkfBr">
           <label for="full-name_spouse-section" class="nDvBVt">Nombre completo:</label>
-          <input id="full-name_spouse-section" class="darMiL" type="text" required/>
+          <input id="full-name_spouse-section" class="darMiL" type="text" disabled/>
         </div>
         <div class="VPkfBr">
           <label for="matrimonial-regime_spouse-section" class="nDvBVt">Régimen matrimonial:</label>
-          <select id="matrimonial-regime_spouse-section" class="MbIanG">
+          <select id="matrimonial-regime_spouse-section" class="MbIanG" disabled>
             <option value="Bienes mancomunados">Bienes mancomunados</option>
             <option value="Unión Libre">Unión Libre</option>
             <option value="Bienes separados">Bienes separados</option>
@@ -202,19 +201,19 @@
         </div>
         <div class="VPkfBr">
           <label for="birthdate_spouse-section" class="nDvBVt">Fecha de nacimiento:</label>
-          <input id="birthdate_spouse-section" class="darMiL" type="date" required/>
+          <input id="birthdate_spouse-section" class="darMiL" type="date" disabled/>
         </div>
         <div class="VPkfBr">
           <label for="phone-number_spouse-section" class="nDvBVt">Teléfono:</label>
-          <input id="phone-number_spouse-section" class="darMiL" type="tel" required/>
+          <input id="phone-number_spouse-section" class="darMiL" type="tel" disabled/>
         </div>
         <div class="VPkfBr">
           <label for="comercial-activity_spouse-section" class="nDvBVt">Actividad comercial:</label>
-          <input id="comercial-activity_spouse-section" class="darMiL" type="text" required/>
+          <input id="comercial-activity_spouse-section" class="darMiL" type="text" disabled/>
         </div>
         <div class="VPkfBr">
           <label for="housing_spouse-section" class="nDvBVt">Tipo de vivienda:</label>
-          <select id="housing_spouse-section" class="MbIanG">
+          <select id="housing_spouse-section" class="MbIanG" disabled>
             <option value="Primaria">Propia</option>
             <option value="Rentada">Rentada</option>
             <option value="Familiar">Familiar</option>
@@ -223,11 +222,11 @@
         </div>
         <div class="VPkfBr">
           <label for="home-value_spouse-section" class="nDvBVt">Valor vivienda:</label>
-          <input id="home-value_spouse-section" class="darMiL" type="number" required/>
+          <input id="home-value_spouse-section" class="darMiL" type="number"/>
         </div>
         <div class="VPkfBr">
           <label for="economic-dependents_spouse-section" class="nDvBVt">Dependientes económicos:</label>
-          <input id="economic-dependents_spouse-section" class="darMiL" type="text" required/>
+          <input id="economic-dependents_spouse-section" class="darMiL" type="text"/>
         </div>
         <button id="next-button_spouse-section" class="XiNesP">
           <span>Siguiente</span>
@@ -401,9 +400,11 @@
     </form>
   </section>
 </body>
-<script src="{{asset('js/changeSection.js)}}"></script>
-<script src="{{asset('js/changeButtonColor.js)}}"></script>
-<script src="{{asset('js/verifyInputData.js)}}"></script>
+<script src="{{asset('js/changeSection.js')}}"></script>
+<script src="{{asset('js/changeButtonColor.js')}}"></script>
+<script src="{{asset('js/verifyInputData.js')}}"></script>
+<script src="{{asset('js/userButton.js')}}"></script>
+<script src="{{asset('js/handleCivilStatusSelect.js')}}"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     changeButtonColor();

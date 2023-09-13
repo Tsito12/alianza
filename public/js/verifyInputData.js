@@ -26,14 +26,30 @@ const verifyLaborSection = () => {
 };
 
 const verifySpouseSection = () => {
-  if($('#full-name_spouse-section').val().trim() === '') return false;
-  if($('#birthdate_spouse-section').val().trim() === '') return false;
-  if($('#phone-number_spouse-section').val().trim() === '') return false;
-  if($('#comercial-activity_spouse-section').val().trim() === '') return false;
-  if($('#home-value_spouse-section').val().trim() === '') return false;
-  if($('#economic-dependents_spouse-section').val().trim() === '') return false;
+  const value = $('#civil-status_client-section').val();
 
-  return true;
+  if(value === 'Soltero' || value === 'Divorciado') {
+    $('#full-name_spouse-section').val('');
+    $('#birthdate_spouse-section').val('');
+    $('#phone-number_spouse-section').val('');
+    $('#comercial-activity_spouse-section').val('');
+
+    if($('#home-value_spouse-section').val().trim() === '') return false;
+    if($('#economic-dependents_spouse-section').val().trim() === '') return false;
+
+    return true;
+  };
+
+  if(value === 'Casado' || value === 'Unión libre'){
+    if($('#full-name_spouse-section').val().trim() === '') return false;
+    if($('#birthdate_spouse-section').val().trim() === '') return false;
+    if($('#phone-number_spouse-section').val().trim() === '') return false;
+    if($('#comercial-activity_spouse-section').val().trim() === '') return false;
+    if($('#home-value_spouse-section').val().trim() === '') return false;
+    if($('#economic-dependents_spouse-section').val().trim() === '') return false;
+
+    return true;
+  };
 };
 
 const verifyReferencesSection = () => {
@@ -54,26 +70,6 @@ const verifyReferencesSection = () => {
   if($('#bills_beneficiary_references-section').val().trim() === '') return false;
 
   return true;
-};
-
-const showButtonClientSection = () => {
-  if( verifyClientSection() ){
-    $('#next-button_client-section').addClass('ISHIpl');
-    $('#next-button_client-section').removeClass('XiNesP');
-  } else {
-    $('#next-button_client-section').removeClass('ISHIpl');
-    $('#next-button_client-section').addClass('XiNesP');
-  };
-};
-
-const showButtonLaborSection = () => {
-  if( verifyLaborSection() ){
-    $('#next-button_labor-section').addClass('ISHIpl');
-    $('#next-button_labor-section').removeClass('XiNesP');
-  } else {
-    $('#next-button_labor-section').removeClass('ISHIpl');
-    $('#next-button_labor-section').addClass('XiNesP');
-  };
 };
 
 const verifyPLDSection = () => {
@@ -100,6 +96,27 @@ const verifyAllSections = () => {
   if(!verifyPLDSection()) return false;
 
   return true;
+};
+
+
+const showButtonClientSection = () => {
+  if( verifyClientSection() ){
+    $('#next-button_client-section').addClass('ISHIpl');
+    $('#next-button_client-section').removeClass('XiNesP');
+  } else {
+    $('#next-button_client-section').removeClass('ISHIpl');
+    $('#next-button_client-section').addClass('XiNesP');
+  };
+};
+
+const showButtonLaborSection = () => {
+  if( verifyLaborSection() ){
+    $('#next-button_labor-section').addClass('ISHIpl');
+    $('#next-button_labor-section').removeClass('XiNesP');
+  } else {
+    $('#next-button_labor-section').removeClass('ISHIpl');
+    $('#next-button_labor-section').addClass('XiNesP');
+  };
 };
 
 const showButtonSpouseSection = () => {
@@ -146,6 +163,7 @@ const handleInputsClientSection = () => {
   $('#municipality_client-section').on('input', () => {showButtonClientSection(); showButtonSend();});
   $('#phone-number_client-section').on('input', () => {showButtonClientSection(); showButtonSend();});
   $('#email_client-section').on('input', () => {showButtonClientSection(); showButtonSend();});
+  $('#civil-status_client-section').on('input', () => {showButtonSpouseSection(); showButtonSend();});
 };
 
 const handleInputsLaborSection = () => {
@@ -204,3 +222,13 @@ handleInputsLaborSection();
 handleInputsSpouseSection();
 handleInputsReferencesSection();
 handleInputsPldSection();
+
+$('input[name="pld-4"]').on('change', (ev) => {
+  if(ev.target.value === 'si') $('#pld-4-text_pld-section').prop('disabled', false);
+  if(ev.target.value === 'no') $('#pld-4-text_pld-section').prop('disabled', true);
+})
+
+$('input[name="pld-5"]').on('change', (ev) => {
+  if(ev.target.value === 'si') $('#pld-5-text_pld-section').prop('disabled', false);
+  if(ev.target.value === 'no') $('#pld-5-text_pld-section').prop('disabled', true);
+})
