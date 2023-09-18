@@ -79,7 +79,7 @@ class AvalController extends Controller
            } else
            {
                $nameIne = $request->file('ine')->getClientOriginalName();
-               $pathIne = $request->file('ine')->store('/files/'.$idcliente, 'public');
+               $pathIne = $request->file('ine')->store('/files/'.$idcliente."/Aval", 'public');
                $ine = $pathIne;
                $estado = "Modificado";
                $observaciones = "Documento modificado";
@@ -108,7 +108,7 @@ class AvalController extends Controller
            } else
            {
                $nameComprobante = $request->file('comprobantedomicilio')->getClientOriginalName();
-               $pathComprobante = $request->file('comprobantedomicilio')->store('/files/'.$idcliente);
+               $pathComprobante = $request->file('comprobantedomicilio')->store('/files/'.$idcliente."/Aval");
                $comprobanteDom = $pathComprobante;
                $documentoDom = AvalDocumento::where('idcliente',$request->idcliente)->where('tipodocumento',3)->first();
                $estado = "Modificado";
@@ -137,7 +137,7 @@ class AvalController extends Controller
            } else
            {
                $nameFoto = $request->file('fotografia')->getClientOriginalName();
-               $pathFoto = $request->file('fotografia')->store('/files/'.$idcliente);
+               $pathFoto = $request->file('fotografia')->store('/files/'.$idcliente."/Aval");
                $foto = $pathFoto;
                $documentoFoto = AvalDocumento::where('idcliente',$request->idcliente)->where('tipodocumento',4)->first();
                $estado = "Modificado";
@@ -166,7 +166,7 @@ class AvalController extends Controller
            } else
            {
                $nameIngresos = $request->file('ine2')->getClientOriginalName();
-               $pathIngresos = $request->file('ine2')->store('/files/'.$idcliente);
+               $pathIngresos = $request->file('ine2')->store('/files/'.$idcliente."/Aval");
                $ingresos = $pathIngresos;
                $documentoIngresos = AvalDocumento::where('idcliente',$request->idcliente)->where('tipodocumento',5)->first();
                $estado = "Modificado";

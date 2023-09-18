@@ -4,7 +4,6 @@
 @endphp
 <link href="{{asset('css/estatus.css')}}" rel="stylesheet">
 @extends('layouts.app')
-<link href="{{asset('css/tablasAsesor.css')}}" rel="stylesheet">
 <script src="https://kit.fontawesome.com/56eee1d2a7.js" crossorigin="anonymous"></script>
 @section('template_title')
     Solicitudes

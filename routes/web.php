@@ -9,6 +9,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelefonoController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\VisitaDomiciliarController;
 use App\Http\Controllers\Webhook;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\Asesor;
@@ -71,3 +72,6 @@ Route::post('guardarFirma',[FileUploadController::class, 'guardarFirma'])->name(
 Route::get('documentosAval', [AvalController::class, 'index'])->name('documentosAval')->middleware('auth');
 Route::post('documentosAval', [AvalController::class, 'guardar']);
 Route::post('cambiarEstadoAval', [AvalController::class, 'cambiarEstado']);
+
+Route::get('visitadomiciliar', [VisitaDomiciliarController::class, 'index']);
+Route::post('visitadomiciliar', [VisitaDomiciliarController::class, 'guardarDatos']);

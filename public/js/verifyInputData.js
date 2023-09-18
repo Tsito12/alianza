@@ -232,3 +232,14 @@ $('input[name="pld-5"]').on('change', (ev) => {
   if(ev.target.value === 'si') $('#pld-5-text_pld-section').prop('disabled', false);
   if(ev.target.value === 'no') $('#pld-5-text_pld-section').prop('disabled', true);
 })
+
+$('#birthdate_client-section').on('change', (ev) => {
+  let birthdate = new Date(ev.target.value + " ");
+  let today = new Date();
+  let year_difference = today.getFullYear() - birthdate.getFullYear();
+  let one_or_zero = (today.getMonth() < birthdate.getMonth()) ||
+                    (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate()) ? 1 : 0;
+  let age = year_difference - one_or_zero;
+  console.log(age);
+  $('#age_client-section').val(age);
+});
